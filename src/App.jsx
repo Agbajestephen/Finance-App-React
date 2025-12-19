@@ -1,4 +1,3 @@
-import ThemeToggle from './component/ThemeToggle.jsx';
 
 
 function App() {
