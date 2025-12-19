@@ -1,8 +1,3 @@
-// 
-import React, { useState } from 'react';
-import { Search, Bell, User, Menu, X } from 'lucide-react';
-import { Outlet, Link } from 'react-router-dom';
-
 function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
