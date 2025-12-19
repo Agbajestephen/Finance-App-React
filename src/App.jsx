@@ -1,4 +1,3 @@
-import Login from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
 import ThemeToggle from './component/ThemeToggle.jsx';
 
