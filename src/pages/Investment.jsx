@@ -1,7 +1,7 @@
 import React from 'react';  
 import DashboardLayout from '../components/DashboardLayout';  
 
-function Investments() {
+function Investment() {
   return (
     <DashboardLayout>
       <h1 className="text-2xl font-bold mb-4">Investments</h1>
@@ -17,4 +17,4 @@ function Investments() {
   );
 }
 
-export default Investments;
+export default Investment;
