@@ -1,37 +1,41 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DashboardLayout from '../components/DashboardLayout.jsx'; 
-import Dashboard from './pages/Dashboard.jsx';
-import Transactions from './pages/Transactions';
-import Signup from './pages/Signup';
-import Accounts from './pages/Accounts';
-import Investments from './pages/Investments';
-import CreditCards from './pages/CreditCards';
-import Loans from './pages/Loans';
-import Services from './pages/Services';
-import MyPrivileges from './pages/MyPrivileges';
-import Setting from './pages/Setting';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainLayout from "./components/MainLayout.jsx";
+import DashboardLayout from "./components/DashboardLayout.jsx";
+
+import Dashboard from "./pages/Dashboard.jsx";
+import Investment from "./pages/Investment.jsx";
+import Accounts from "./pages/Accounts.jsx";
+import Transactions from "./pages/Transactions.jsx";
+import CreditCards from "./pages/CreditCards.jsx";
+import Loans from "./pages/Loans.jsx";
+import Services from "./pages/Services.jsx";
+import MyPrivileges from "./pages/MyPrivileges.jsx";
+import Setting from "./pages/Setting.jsx";
+import Signup from "./pages/Signup.jsx";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/signup" element={<Signup />} />
-        
-        {/* Dashboard layout routes */}
-        <Route path="/" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="accounts" element={<Accounts />} />
-          <Route path="investments" element={<Investments />} />
-          <Route path="credit-cards" element={<CreditCards />} />
-          <Route path="loans" element={<Loans />} />
-          <Route path="services" element={<Services />} />
-          <Route path="privileges" element={<MyPrivileges />} />
-          <Route path="setting" element={<Setting />} />
-        </Route>
-      </Routes>
+      <MainLayout>
+        <Routes>
+          {/* Public */}
+          <Route path="/signup" element={<Signup />} />
+
+          {/* Dashboard */}
+          <Route path="/" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="investment" element={<Investment />} />
+            <Route path="accounts" element={<Accounts />} />
+            <Route path="transactions" element={<Transactions />} />
+            <Route path="credit-cards" element={<CreditCards />} />
+            <Route path="loans" element={<Loans />} />
+            <Route path="services" element={<Services />} />
+            <Route path="my-privileges" element={<MyPrivileges />} />
+            <Route path="setting" element={<Setting />} />
+          </Route>
+        </Routes>
+      </MainLayout>
     </Router>
   );
 }
