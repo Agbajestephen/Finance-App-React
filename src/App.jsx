@@ -18,17 +18,10 @@ import Signup from "./pages/Signup.jsx";
 function App() {
   return (
     <Router>
-      {/* A simple navigation bar for demonstration */}
-      {/* <nav className="navbar bg-base-300 justify-center px-4">
-        <div className="flex space-x-4">
-          <Link to="/" className="btn btn-ghost">Welcome</Link>
-          <Link to="/login" className="btn btn-ghost">Login</Link>
-          <Link to="/signup" className="btn btn-ghost">Sign Up</Link>
-        </div>
-      </nav> */}
-      <div>
-        <ThemeToggle />
-      </div>
+      <MainLayout>
+        <Routes>
+          {/* Public */}
+          <Route path="/signup" element={<Signup />} />
 
       <Routes>
         <Route path="/" element={<Welcome />} />
