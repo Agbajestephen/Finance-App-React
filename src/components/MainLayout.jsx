@@ -1,7 +1,11 @@
 // MainLayout.jsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+
 import ThemeToggle from "./ThemeToggle.jsx";
+
+import ThemeToggle from './component/ThemeToggle.jsx';
+
 
 const MainLayout = ({ children }) => {
   const location = useLocation();
