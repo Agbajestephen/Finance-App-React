@@ -77,7 +77,7 @@ export default function Setting() {
           <h2 className="card-title">Security</h2>
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Notifications</span>
+              <span className="label-text">Require PIN for transfers</span>
             </label>
             <input
               type="checkbox"
