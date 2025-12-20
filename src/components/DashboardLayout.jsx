@@ -23,6 +23,7 @@ function DashboardLayout() {
     },
     {
       id: "credit-cards",
+      label: "Credit Cards",
   ];
 
   const handleSearch = (e) => {
