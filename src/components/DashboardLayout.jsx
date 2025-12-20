@@ -158,7 +158,6 @@ function DashboardLayout() {
                 </Link>
               ))}
             </div>
-            
             {/* Stats/Info Section */}
             <div className="mt-8 p-4 bg-base-100 rounded-lg">
               <div className="stats shadow">
