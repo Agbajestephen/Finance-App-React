@@ -73,7 +73,8 @@ export default function Setting() {
 
       {/* Security */}
       <div className="card bg-base-100 shadow">
-        <div className="card-body">
+        <div className="card-body space-y-4">
+          <h2 className="card-title">Security</h2>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Notifications</span>
