@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 
-// import { db } from "../firebase"; // initialized Firebase app/db
 // import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "../state/useAuth"; // your custom auth hook
 import ThemeToggle from "../components/ThemeToggle";
