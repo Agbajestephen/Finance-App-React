@@ -89,6 +89,7 @@ function DashboardLayout() {
             <Search size={20} />
           </button>
 
+          {/* Theme Toggle */}
           {/* Notifications */}
           <div className="dropdown dropdown-end">
             <button className="btn btn-ghost btn-circle">
