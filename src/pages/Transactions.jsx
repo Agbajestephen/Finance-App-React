@@ -1,4 +1,3 @@
-import DashboardLayout from "../components/DashboardLayout";
 
 function Transactions() {
   return (
