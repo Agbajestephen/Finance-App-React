@@ -91,6 +91,7 @@ function DashboardLayout() {
 
           {/* Theme Toggle */}
           <ThemeToggle />
+
           {/* Notifications */}
           <div className="dropdown dropdown-end">
             <button className="btn btn-ghost btn-circle">
