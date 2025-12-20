@@ -87,7 +87,6 @@ const Accounts = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
   );
 };
 
