@@ -35,4 +35,3 @@ function Investment() {
   );
 }
 
-export default Investments;
