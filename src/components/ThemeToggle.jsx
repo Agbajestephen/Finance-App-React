@@ -1,7 +1,6 @@
 // src/components/ThemeToggle.jsx
 import React, { useEffect, useState } from "react";
 
-  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') || 'light';
