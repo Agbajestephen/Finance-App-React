@@ -243,5 +243,3 @@ export default function Setting() {
     </div>
   );
 }
-
-export default Setting;
