@@ -183,7 +183,20 @@ export default function Setting() {
               <option value="fr">French</option>
             </select>
           </div>
-          <button className="btn btn-primary mt-6">Save Changes</button>
+          <div className="form-control">
+            <label className="label"><span className="label-text">Display currency</span></label>
+            <select
+              className="select select-bordered w-full"
+              value={form.preferences.currency}
+              onChange={e => setField("preferences.currency", e.target.value)}
+            >
+              <option>USD</option>
+              <option>NGN</option>
+              <option>EUR</option>
+              <option>GBP</option>
+            </select>
+          </div>
+          <button className="btn btn-primary" onClick={save}>Save preferences</button>
         </div>
       </div>
     </div>
