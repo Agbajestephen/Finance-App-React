@@ -8,6 +8,7 @@ function DashboardLayout() {
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: "📊", path: "/" },
+    {
   ];
 
   const handleSearch = (e) => {
