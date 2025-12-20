@@ -4,6 +4,7 @@ import MainLayout from "./components/MainLayout.jsx";
 import DashboardLayout from "./components/DashboardLayout.jsx";
 
 import Welcome from "./pages/Welcome.jsx";
+import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Investment from "./pages/Investment.jsx";
 import Accounts from "./pages/Accounts.jsx";
