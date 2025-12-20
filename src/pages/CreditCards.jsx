@@ -1,4 +1,3 @@
-import DashboardLayout from '../components/DashboardLayout';
 function CreditCards() {
   return (
     <DashboardLayout>
