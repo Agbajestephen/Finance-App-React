@@ -117,6 +117,7 @@ function DashboardLayout() {
                 <Link to="/setting">Settings</Link>
               </li>
               <li>
+                <a>Logout</a>
             </ul>
           </div>
         </div>
