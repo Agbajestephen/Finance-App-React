@@ -13,6 +13,7 @@ function DashboardLayout() {
       label: "Transactions",
       icon: "💳",
       path: "/transactions",
+    },
   ];
 
   const handleSearch = (e) => {
