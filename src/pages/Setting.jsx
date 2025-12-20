@@ -199,6 +199,47 @@ export default function Setting() {
           <button className="btn btn-primary" onClick={save}>Save preferences</button>
         </div>
       </div>
+
+      {/* Payments */}
+      <div className="card bg-base-100 shadow">
+        <div className="card-body space-y-4">
+          <h2 className="card-title">Payments</h2>
+          <div className="form-control">
+            <label className="label"><span className="label-text">Default account ID</span></label>
+            <input
+              className="input input-bordered"
+              value={form.payments.defaultAccountId}
+              onChange={e => setField("payments.defaultAccountId", e.target.value)}
+              placeholder="e.g., ACC-123456"
+            />
+          </div>
+          <div className="form-control">
+            <label className="label"><span className="label-text">Only allow saved beneficiaries</span></label>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={form.payments.allowedBeneficiariesOnly}
+              onChange={e => setField("payments.allowedBeneficiariesOnly", e.target.checked)}
+            />
+          </div>
+          <button className="btn btn-primary" onClick={save}>Save payments</button>
+        </div>
+      </div>
+
+      {/* Admin-only controls */}
+      {role === "admin" && (
+        <div className="card bg-base-100 shadow">
+          <div className="card-body space-y-4">
+            <h2 className="card-title">Admin controls</h2>
+            <p className="text-sm">Override risk flags, freeze accounts, enforce resets.</p>
+            <div className="flex gap-3">
+              <button className="btn btn-warning">Freeze selected account</button>
+              <button className="btn btn-error">Force password reset</button>
+              <button className="btn">View fraud logs</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
