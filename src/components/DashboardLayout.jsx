@@ -30,6 +30,7 @@ function DashboardLayout() {
     { id: "loans", label: "Loans", icon: "💰", path: "/loans" },
     { id: "services", label: "Services", icon: "⚙️", path: "/services" },
     {
+      id: "privileges",
   ];
 
   const handleSearch = (e) => {
