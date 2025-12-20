@@ -26,6 +26,7 @@ function DashboardLayout() {
       label: "Credit Cards",
       icon: "💳",
       path: "/credit-cards",
+    },
     { id: "loans", label: "Loans", icon: "💰", path: "/loans" },
   ];
 
