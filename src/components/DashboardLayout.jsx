@@ -128,6 +128,7 @@ function DashboardLayout() {
         {/* Sidebar Menu */}
         <div
           className={`
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
           lg:translate-x-0
           fixed lg:static 
           inset-y-0 left-0 
