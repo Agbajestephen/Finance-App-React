@@ -118,6 +118,7 @@ function DashboardLayout() {
               </li>
               <li>
                 <a>Logout</a>
+              </li>
             </ul>
           </div>
         </div>
