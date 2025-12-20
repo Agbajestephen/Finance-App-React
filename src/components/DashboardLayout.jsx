@@ -21,6 +21,7 @@ function DashboardLayout() {
       icon: "📈",
       path: "/investments",
     },
+    {
   ];
 
   const handleSearch = (e) => {
