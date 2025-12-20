@@ -19,6 +19,7 @@ function DashboardLayout() {
       id: "investments",
       label: "Investments",
       icon: "📈",
+      path: "/investments",
   ];
 
   const handleSearch = (e) => {
