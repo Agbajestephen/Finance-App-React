@@ -1,7 +1,6 @@
 // src/components/ThemeToggle.jsx
 import React, { useEffect, useState } from "react";
 
-function ThemeToggle() {
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
