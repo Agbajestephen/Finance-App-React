@@ -44,4 +44,3 @@ function SignUp() {
   );
 }
 
-export default Signup;
