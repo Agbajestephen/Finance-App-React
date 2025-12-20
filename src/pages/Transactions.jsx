@@ -29,6 +29,7 @@ function Transactions() {
           </table>
         </div>
       </div>
+    </>
   );
 }
 
