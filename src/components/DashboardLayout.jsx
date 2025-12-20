@@ -138,7 +138,6 @@ function DashboardLayout() {
           z-40
           h-[calc(100vh-64px)]
           overflow-y-auto
-        `}>
           <div className="p-4">
             <div className="space-y-2">
               {menuItems.map((item) => (
