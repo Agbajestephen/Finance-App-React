@@ -7,7 +7,6 @@ function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const menuItems = [
-    { id: 'services', label: 'Services', icon: '⚙️', path: '/services' },
     { id: 'privileges', label: 'My Privileges', icon: '👑', path: '/privileges' },
     { id: 'setting', label: 'Setting', icon: '⚙️', path: '/setting' },
   ];
