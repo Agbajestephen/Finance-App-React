@@ -22,6 +22,7 @@ function DashboardLayout() {
       path: "/investments",
     },
     {
+      id: "credit-cards",
   ];
 
   const handleSearch = (e) => {
