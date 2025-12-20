@@ -29,7 +29,6 @@ function Transactions() {
           </table>
         </div>
       </div>
-    </DashboardLayout>
   );
 }
 
