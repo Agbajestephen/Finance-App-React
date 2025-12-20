@@ -102,10 +102,85 @@ export default function Setting() {
             <label className="label">
               <span className="label-text">Enable international transfers</span>
             </label>
-            <select className="select select-bordered w-full">
-              <option>English</option>
-              <option>Spanish</option>
-              <option>French</option>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={form.security.internationalTransfersEnabled}
+              onChange={e => setField("security.internationalTransfersEnabled", e.target.checked)}
+            />
+          </div>
+          <button className="btn btn-primary" onClick={save}>Save security</button>
+        </div>
+      </div>
+
+      {/* Notifications */}
+      <div className="card bg-base-100 shadow">
+        <div className="card-body space-y-4">
+          <h2 className="card-title">Notifications</h2>
+          {["deposits","withdrawals","transfers","fraudAlerts"].map(key => (
+            <div key={key} className="form-control">
+              <label className="label"><span className="label-text">Notify on {key}</span></label>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                checked={form.notifications[key]}
+                onChange={e => setField(`notifications.${key}`, e.target.checked)}
+              />
+            </div>
+          ))}
+          <div className="flex gap-4">
+            <label className="label cursor-pointer">
+              <span className="label-text">Email</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary ml-2"
+                checked={form.notifications.email}
+                onChange={e => setField("notifications.email", e.target.checked)}
+              />
+            </label>
+            <label className="label cursor-pointer">
+              <span className="label-text">SMS</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary ml-2"
+                checked={form.notifications.sms}
+                onChange={e => setField("notifications.sms", e.target.checked)}
+              />
+            </label>
+            <label className="label cursor-pointer">
+              <span className="label-text">Push</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary ml-2"
+                checked={form.notifications.push}
+                onChange={e => setField("notifications.push", e.target.checked)}
+              />
+            </label>
+          </div>
+          <button className="btn btn-primary" onClick={save}>Save notifications</button>
+        </div>
+      </div>
+
+      {/* Preferences */}
+      <div className="card bg-base-100 shadow">
+        <div className="card-body space-y-4">
+          <h2 className="card-title">Preferences</h2>
+          <div className="form-control">
+            <label className="label"><span className="label-text">Theme</span></label>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+            </div>
+          </div>
+          <div className="form-control">
+            <label className="label"><span className="label-text">Language</span></label>
+            <select
+              className="select select-bordered w-full"
+              value={form.preferences.language}
+              onChange={e => setField("preferences.language", e.target.value)}
+            >
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
             </select>
           </div>
           <button className="btn btn-primary mt-6">Save Changes</button>
