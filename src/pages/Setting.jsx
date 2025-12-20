@@ -88,7 +88,7 @@ export default function Setting() {
           </div>
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Dark Mode</span>
+              <span className="label-text">Daily transfer limit</span>
             </label>
             <input type="checkbox" className="toggle toggle-primary" />
           </div>
