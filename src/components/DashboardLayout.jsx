@@ -25,6 +25,7 @@ function DashboardLayout() {
       id: "credit-cards",
       label: "Credit Cards",
       icon: "💳",
+      path: "/credit-cards",
   ];
 
   const handleSearch = (e) => {
