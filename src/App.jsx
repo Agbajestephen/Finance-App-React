@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/MainLayout.jsx";
 import DashboardLayout from "./components/DashboardLayout.jsx";
 
-
 import Dashboard from "./pages/Dashboard.jsx";
 import Investment from "./pages/Investment.jsx";
 import Accounts from "./pages/Accounts.jsx";
@@ -13,7 +12,7 @@ import Loans from "./pages/Loans.jsx";
 import Services from "./pages/Services.jsx";
 import MyPrivileges from "./pages/MyPrivileges.jsx";
 import Setting from "./pages/Setting.jsx";
-import Signup from "./pages/Signup.jsx";
+import Signup from "./pages/SignUp.jsx";
 
 function App() {
   return (
@@ -21,7 +20,10 @@ function App() {
       <MainLayout>
         <Routes>
           {/* Public */}
+          <Route path="/" element={<Welcome />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          
 
           {/* dashboard */}
           <Route path="dashboard" element={<Dashboard />} />
