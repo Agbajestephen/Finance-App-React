@@ -98,7 +98,7 @@ export default function Setting() {
               min={0}
             />
           </div>
-          <div className="form-control mt-4">
+          <div className="form-control">
             <label className="label">
               <span className="label-text">Language</span>
             </label>
