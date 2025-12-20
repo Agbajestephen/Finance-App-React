@@ -79,7 +79,12 @@ export default function Setting() {
             <label className="label">
               <span className="label-text">Notifications</span>
             </label>
-            <input type="checkbox" className="toggle toggle-primary" defaultChecked />
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={form.security.requirePinForTransfers}
+              onChange={e => setField("security.requirePinForTransfers", e.target.checked)}
+            />
           </div>
           <div className="form-control mt-4">
             <label className="label">
