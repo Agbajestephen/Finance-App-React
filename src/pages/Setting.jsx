@@ -86,7 +86,7 @@ export default function Setting() {
               onChange={e => setField("security.requirePinForTransfers", e.target.checked)}
             />
           </div>
-          <div className="form-control mt-4">
+          <div className="form-control">
             <label className="label">
               <span className="label-text">Dark Mode</span>
             </label>
