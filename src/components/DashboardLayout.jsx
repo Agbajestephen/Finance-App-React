@@ -143,6 +143,7 @@ function DashboardLayout() {
           <div className="p-4">
             <div className="space-y-2">
               {menuItems.map((item) => (
+                <Link
                   key={item.id}
                   to={item.path}
                   className={`
