@@ -7,7 +7,6 @@ function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const menuItems = [
-    { id: 'transactions', label: 'Transactions', icon: '💳', path: '/transactions' },
     { id: 'accounts', label: 'Accounts', icon: '🏦', path: '/accounts' },
     { id: 'investments', label: 'Investments', icon: '📈', path: '/investments' },
     { id: 'credit-cards', label: 'Credit Cards', icon: '💳', path: '/credit-cards' },
