@@ -4,6 +4,7 @@ import { Outlet, Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle.jsx";
 function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/' },
