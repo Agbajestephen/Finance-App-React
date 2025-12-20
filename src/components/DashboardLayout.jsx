@@ -17,6 +17,7 @@ function DashboardLayout() {
     { id: "accounts", label: "Accounts", icon: "🏦", path: "/accounts" },
     {
       id: "investments",
+      label: "Investments",
   ];
 
   const handleSearch = (e) => {
