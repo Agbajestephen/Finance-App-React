@@ -37,7 +37,7 @@ function Dashboard() {
               <div className="stat-value">$1,234</div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </DashboardLayout>
   );
