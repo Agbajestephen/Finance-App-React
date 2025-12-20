@@ -35,7 +35,6 @@ function SignUp() {
               <button type="submit" className="btn btn-primary">Create Account</button>
             </div>
             <p className="text-center mt-4">
-              Already have an account? <a href="/login" className="link link-primary">Sign in here</a>.
             </p>
           </form>
         </div>
