@@ -101,6 +101,7 @@ function DashboardLayout() {
               </div>
             </button>
           </div>
+
           {/* User Profile */}
           <div className="dropdown dropdown-end">
             <button className="btn btn-ghost btn-circle avatar">
