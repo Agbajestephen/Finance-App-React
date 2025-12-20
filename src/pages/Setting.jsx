@@ -90,7 +90,13 @@ export default function Setting() {
             <label className="label">
               <span className="label-text">Daily transfer limit</span>
             </label>
-            <input type="checkbox" className="toggle toggle-primary" />
+            <input
+              type="number"
+              className="input input-bordered"
+              value={form.security.dailyTransferLimit}
+              onChange={e => setField("security.dailyTransferLimit", Number(e.target.value))}
+              min={0}
+            />
           </div>
           <div className="form-control mt-4">
             <label className="label">
