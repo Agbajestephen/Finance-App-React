@@ -1,4 +1,3 @@
-function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert('Signup logic would run here!');
