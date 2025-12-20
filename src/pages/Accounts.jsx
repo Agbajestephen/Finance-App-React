@@ -3,7 +3,6 @@ import React from "react";
 
 const Accounts = () => {
   return (
-    <DashboardLayout>
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-6">Accounts</h1>
         
