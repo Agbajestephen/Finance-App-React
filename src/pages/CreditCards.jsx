@@ -30,7 +30,7 @@ function CreditCards() {
           </tbody>
         </table>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
 
