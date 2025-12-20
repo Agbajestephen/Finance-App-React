@@ -113,6 +113,7 @@ function DashboardLayout() {
               <li>
                 <Link to="/setting">Profile</Link>
               </li>
+              <li>
             </ul>
           </div>
         </div>
