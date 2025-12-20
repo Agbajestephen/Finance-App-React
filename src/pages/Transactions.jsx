@@ -20,7 +20,9 @@ function Transactions() {
                 <td>2024-01-15</td>
                 <td>Amazon Purchase</td>
                 <td>$129.99</td>
-                <td><span className="badge badge-success">Completed</span></td>
+                <td>
+                  <span className="badge badge-success">Completed</span>
+                </td>
               </tr>
               {/* More rows */}
             </tbody>
