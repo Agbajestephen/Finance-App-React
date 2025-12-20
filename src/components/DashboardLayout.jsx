@@ -28,6 +28,7 @@ function DashboardLayout() {
       path: "/credit-cards",
     },
     { id: "loans", label: "Loans", icon: "💰", path: "/loans" },
+    { id: "services", label: "Services", icon: "⚙️", path: "/services" },
   ];
 
   const handleSearch = (e) => {
