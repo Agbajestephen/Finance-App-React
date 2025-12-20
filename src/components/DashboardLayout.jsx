@@ -18,6 +18,7 @@ function DashboardLayout() {
     {
       id: "investments",
       label: "Investments",
+      icon: "📈",
   ];
 
   const handleSearch = (e) => {
