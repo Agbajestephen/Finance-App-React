@@ -68,8 +68,10 @@ export default function Setting() {
   if (loading) return <div className="loading loading-spinner" />;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Settings</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Settings</h1>
+
+      {/* Security */}
       <div className="card bg-base-100 shadow">
         <div className="card-body">
           <div className="form-control">
