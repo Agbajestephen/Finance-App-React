@@ -127,6 +127,7 @@ function DashboardLayout() {
       <div className="flex">
         {/* Sidebar Menu */}
         <div
+          className={`
           lg:translate-x-0
           fixed lg:static 
           inset-y-0 left-0 
