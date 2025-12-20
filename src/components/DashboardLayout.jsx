@@ -31,6 +31,7 @@ function DashboardLayout() {
     { id: "services", label: "Services", icon: "⚙️", path: "/services" },
     {
       id: "privileges",
+      label: "My Privileges",
   ];
 
   const handleSearch = (e) => {
