@@ -112,6 +112,7 @@ function DashboardLayout() {
             <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
               <li>
                 <Link to="/setting">Profile</Link>
+              </li>
             </ul>
           </div>
         </div>
