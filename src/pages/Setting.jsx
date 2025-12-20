@@ -100,7 +100,7 @@ export default function Setting() {
           </div>
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Language</span>
+              <span className="label-text">Enable international transfers</span>
             </label>
             <select className="select select-bordered w-full">
               <option>English</option>
