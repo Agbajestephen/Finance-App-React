@@ -110,6 +110,7 @@ function DashboardLayout() {
               </div>
             </button>
             <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li>
             </ul>
           </div>
         </div>
