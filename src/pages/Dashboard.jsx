@@ -39,7 +39,7 @@ function Dashboard() {
           </div>
         </main>
       </div>
-    </DashboardLayout>
+    </div>
   );
 }
 
