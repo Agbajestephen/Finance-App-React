@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase"; // ✅ this works now
 
 function Dashboard() {
   const [cards, setCards] = useState([]);
