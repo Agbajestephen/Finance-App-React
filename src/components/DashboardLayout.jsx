@@ -102,7 +102,7 @@ function DashboardLayout() {
       </div>
 
       <div className="flex">
-        {/* Sidebar Menu */}
+        {/* SIDEBAR */}
         <div
           className={`
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
