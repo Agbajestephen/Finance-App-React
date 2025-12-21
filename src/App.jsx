@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/MainLayout.jsx";
 import DashboardLayout from "./components/DashboardLayout.jsx";
 
+import Welcome from "./pages/Welcome.jsx";
+import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Investment from "./pages/Investment.jsx";
 import Accounts from "./pages/Accounts.jsx";
@@ -12,8 +14,7 @@ import Loans from "./pages/Loans.jsx";
 import Services from "./pages/Services.jsx";
 import MyPrivileges from "./pages/MyPrivileges.jsx";
 import Setting from "./pages/Setting.jsx";
-import SignUp from "./pages/SignUp.jsx";
-import Login from "./pages/Login.jsx";   // ✅ added
+import Signup from "./pages/SignUp.jsx";
 
 function App() {
   return (
@@ -21,14 +22,15 @@ function App() {
       <MainLayout>
         <Routes>
           {/* Public */}
-          <Route path="/signup" element={<SignUp />} />   {/* ✅ lowercase path */}
+          <Route path="/" element={<Welcome />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Dashboard */}
-          <Route path="dashboard" element={<Dashboard />} />
+         
 
           {/* DashboardLayout */}
-          <Route path="/" element={<DashboardLayout />}>
+          <Route path="/" element={<DashboardLayout />}>      
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="investment" element={<Investment />} />
             <Route path="accounts" element={<Accounts />} />
             <Route path="transactions" element={<Transactions />} />
