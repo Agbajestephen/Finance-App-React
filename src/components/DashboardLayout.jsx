@@ -139,9 +139,7 @@ function DashboardLayout() {
               <div className="stats shadow">
                 <div className="stat">
                   <div className="stat-title">Active Items</div>
-                  <div className="stat-value text-primary">
-                    {menuItems.length}
-                  </div>
+                  <div className="stat-value text-primary">{menuItems.length}</div>
                   <div className="stat-desc">Total menu items</div>
                 </div>
               </div>
