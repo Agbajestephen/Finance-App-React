@@ -158,7 +158,7 @@ function DashboardLayout() {
         </main>
       </div>
 
-      {/* Overlay for mobile sidebar */}
+      {/* MOBILE OVERLAY */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 lg:hidden z-30"
