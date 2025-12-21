@@ -1,6 +1,8 @@
+import React from 'react';  
+import DashboardLayout from '../components/DashboardLayout';
 function Loans() {
   return (
-    <div>
+    <DashboardLayout>
       <h1 className="text-2xl font-bold mb-4">Loans</h1>
       <div className="alert alert-info">
         <div>
@@ -8,7 +10,7 @@ function Loans() {
         </div>
       </div>
       <button className="btn btn-primary mt-4">Apply for Loan</button>
-    </div>
+    </DashboardLayout>
   );
 }
 
