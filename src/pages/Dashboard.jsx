@@ -4,7 +4,6 @@ function Dashboard() {
       {/* Header */}
       <header className="flex justify-between items-center p-4 bg-gray-800">
         <h1 className="text-xl font-bold">Softbank</h1>
-        {/* Theme toggle button */}
         <button className="bg-gray-700 px-3 py-1 rounded">Toggle Theme</button>
       </header>
 
