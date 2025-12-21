@@ -13,23 +13,35 @@ import {
   Legend,
 } from "chart.js";
 
-function Dashboard() {
-  const [transactions, setTransactions] = useState([]);
+// Register chart.js modules
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-  useEffect(() => {
-    const transactionsRef = ref(db, "transactions");
-    onValue(transactionsRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log("Fetched data:", data); // 👀 check what comes back
-      if (data) {
-        const list = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        setTransactions(list);
-      }
-    });
-  }, []);
+// ✅ Define chart data
+const weeklyActivityData = {
+  labels: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
+  datasets: [
+    {
+      label: "Deposits",
+      data: [500, 700, 400, 800, 600, 900, 750],
+      backgroundColor: "rgba(54, 162, 235, 0.6)",
+    },
+    {
+      label: "Withdrawals",
+      data: [300, 400, 200, 500, 300, 600, 450],
+      backgroundColor: "rgba(255, 99, 132, 0.6)",
+    },
+  ],
+};
 
   return (
     <div>
