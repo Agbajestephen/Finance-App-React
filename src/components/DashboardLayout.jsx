@@ -123,7 +123,6 @@ function DashboardLayout() {
                 <NavLink
                   key={item.id}
                   to={item.path}
-                  className={`
                   className={({ isActive }) =>
                     `flex items-center gap-3 p-3 rounded-lg transition-all ${
                       isActive ? "bg-primary text-white" : "hover:bg-base-300"
