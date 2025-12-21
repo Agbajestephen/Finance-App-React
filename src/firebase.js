@@ -8,7 +8,7 @@ const firebaseConfig = {
   authDomain: "soft-bank-d5c1a.firebaseapp.com",
   databaseURL: "https://soft-bank-d5c1a-default-rtdb.firebaseio.com", // ✅ add this line
   projectId: "soft-bank-d5c1a",
-  storageBucket: "soft-bank-d5c1a.firebasestorage.app",
+  storageBucket: "soft-bank-d5c1a.appspot.com", // ✅ fix domain (should end with .appspot.com)
   messagingSenderId: "47046753820",
   appId: "1:47046753820:web:c7c9d3be9370ac5f80e9d9",
   measurementId: "G-ZDNTBLQZXK"
