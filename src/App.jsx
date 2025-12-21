@@ -29,6 +29,7 @@ function App() {
          
 
           {/* DashboardLayout */}
+          <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="investment" element={<Investment />} />
             <Route path="accounts" element={<Accounts />} />
