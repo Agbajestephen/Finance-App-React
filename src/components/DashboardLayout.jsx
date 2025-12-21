@@ -129,10 +129,8 @@ function DashboardLayout() {
                   `}
                 >
                   <div className="text-lg">{item.icon}</div>
-                  <span className="font-medium text-base-content">
-                    {item.label}
-                  </span>
-                </Link>
+                  <span className="font-medium">{item.label}</span>
+                </NavLink>
               ))}
             </div>
 
