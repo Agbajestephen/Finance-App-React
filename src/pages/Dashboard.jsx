@@ -22,17 +22,12 @@ function Dashboard() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">My Cards</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {cards.map(card => (
-          <div key={card.id} className="card bg-base-100 shadow">
-            <div className="card-body">
-              <h3 className="card-title text-primary">${card.balance}</h3>
-              <p>Card Holder: {card.holder}</p>
-              <p>Valid Thru: {card.validThru}</p>
-              <p>Card Number: {card.number}</p>
-            </div>
-          </div>
+      <h2 className="text-xl font-bold mb-4">Recent Transactions</h2>
+      <ul>
+        {transactions.map((t) => (
+          <li key={t.id}>
+            {t.description} — ${t.amount}
+          </li>
         ))}
       </div>
     </div>
