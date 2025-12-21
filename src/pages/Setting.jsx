@@ -1,8 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 
-
-import { useAuth } from "../state/useAuth"; // your custom auth hook
+import { useAuth } from "../state/useAuth";
 import ThemeToggle from "../components/ThemeToggle";
 
 export default function Setting() {
@@ -39,7 +37,7 @@ export default function Setting() {
       if (!user) return;
       const ref = doc(db, "settings", user.uid);
       const snap = await getDoc(ref);
-      if (snap.exists()) setForm(prev => ({ ...prev, ...snap.data() }));
+      if (snap.exists()) setForm((prev) => ({ ...prev, ...snap.data() }));
       setLoading(false);
     };
     load();
@@ -53,7 +51,7 @@ export default function Setting() {
   };
 
   const setField = (path, value) => {
-    setForm(prev => {
+    setForm((prev) => {
       const next = structuredClone(prev);
       const keys = path.split(".");
       let obj = next;
@@ -82,7 +80,9 @@ export default function Setting() {
               type="checkbox"
               className="toggle toggle-primary"
               checked={form.security.requirePinForTransfers}
-              onChange={e => setField("security.requirePinForTransfers", e.target.checked)}
+              onChange={(e) =>
+                setField("security.requirePinForTransfers", e.target.checked)
+              }
             />
           </div>
           <div className="form-control">
@@ -93,7 +93,9 @@ export default function Setting() {
               type="number"
               className="input input-bordered"
               value={form.security.dailyTransferLimit}
-              onChange={e => setField("security.dailyTransferLimit", Number(e.target.value))}
+              onChange={(e) =>
+                setField("security.dailyTransferLimit", Number(e.target.value))
+              }
               min={0}
             />
           </div>
@@ -105,10 +107,17 @@ export default function Setting() {
               type="checkbox"
               className="toggle toggle-primary"
               checked={form.security.internationalTransfersEnabled}
-              onChange={e => setField("security.internationalTransfersEnabled", e.target.checked)}
+              onChange={(e) =>
+                setField(
+                  "security.internationalTransfersEnabled",
+                  e.target.checked
+                )
+              }
             />
           </div>
-          <button className="btn btn-primary" onClick={save}>Save security</button>
+          <button className="btn btn-primary" onClick={save}>
+            Save security
+          </button>
         </div>
       </div>
 
@@ -116,17 +125,23 @@ export default function Setting() {
       <div className="card bg-base-100 shadow">
         <div className="card-body space-y-4">
           <h2 className="card-title">Notifications</h2>
-          {["deposits","withdrawals","transfers","fraudAlerts"].map(key => (
-            <div key={key} className="form-control">
-              <label className="label"><span className="label-text">Notify on {key}</span></label>
-              <input
-                type="checkbox"
-                className="toggle toggle-primary"
-                checked={form.notifications[key]}
-                onChange={e => setField(`notifications.${key}`, e.target.checked)}
-              />
-            </div>
-          ))}
+          {["deposits", "withdrawals", "transfers", "fraudAlerts"].map(
+            (key) => (
+              <div key={key} className="form-control">
+                <label className="label">
+                  <span className="label-text">Notify on {key}</span>
+                </label>
+                <input
+                  type="checkbox"
+                  className="toggle toggle-primary"
+                  checked={form.notifications[key]}
+                  onChange={(e) =>
+                    setField(`notifications.${key}`, e.target.checked)
+                  }
+                />
+              </div>
+            )
+          )}
           <div className="flex gap-4">
             <label className="label cursor-pointer">
               <span className="label-text">Email</span>
@@ -134,7 +149,9 @@ export default function Setting() {
                 type="checkbox"
                 className="toggle toggle-primary ml-2"
                 checked={form.notifications.email}
-                onChange={e => setField("notifications.email", e.target.checked)}
+                onChange={(e) =>
+                  setField("notifications.email", e.target.checked)
+                }
               />
             </label>
             <label className="label cursor-pointer">
@@ -143,7 +160,9 @@ export default function Setting() {
                 type="checkbox"
                 className="toggle toggle-primary ml-2"
                 checked={form.notifications.sms}
-                onChange={e => setField("notifications.sms", e.target.checked)}
+                onChange={(e) =>
+                  setField("notifications.sms", e.target.checked)
+                }
               />
             </label>
             <label className="label cursor-pointer">
@@ -152,11 +171,15 @@ export default function Setting() {
                 type="checkbox"
                 className="toggle toggle-primary ml-2"
                 checked={form.notifications.push}
-                onChange={e => setField("notifications.push", e.target.checked)}
+                onChange={(e) =>
+                  setField("notifications.push", e.target.checked)
+                }
               />
             </label>
           </div>
-          <button className="btn btn-primary" onClick={save}>Save notifications</button>
+          <button className="btn btn-primary" onClick={save}>
+            Save notifications
+          </button>
         </div>
       </div>
 
@@ -165,17 +188,21 @@ export default function Setting() {
         <div className="card-body space-y-4">
           <h2 className="card-title">Preferences</h2>
           <div className="form-control">
-            <label className="label"><span className="label-text">Theme</span></label>
+            <label className="label">
+              <span className="label-text">Theme</span>
+            </label>
             <div className="flex items-center gap-3">
               <ThemeToggle />
             </div>
           </div>
           <div className="form-control">
-            <label className="label"><span className="label-text">Language</span></label>
+            <label className="label">
+              <span className="label-text">Language</span>
+            </label>
             <select
               className="select select-bordered w-full"
               value={form.preferences.language}
-              onChange={e => setField("preferences.language", e.target.value)}
+              onChange={(e) => setField("preferences.language", e.target.value)}
             >
               <option value="en">English</option>
               <option value="es">Spanish</option>
@@ -183,11 +210,13 @@ export default function Setting() {
             </select>
           </div>
           <div className="form-control">
-            <label className="label"><span className="label-text">Display currency</span></label>
+            <label className="label">
+              <span className="label-text">Display currency</span>
+            </label>
             <select
               className="select select-bordered w-full"
               value={form.preferences.currency}
-              onChange={e => setField("preferences.currency", e.target.value)}
+              onChange={(e) => setField("preferences.currency", e.target.value)}
             >
               <option>USD</option>
               <option>NGN</option>
@@ -195,7 +224,9 @@ export default function Setting() {
               <option>GBP</option>
             </select>
           </div>
-          <button className="btn btn-primary" onClick={save}>Save preferences</button>
+          <button className="btn btn-primary" onClick={save}>
+            Save preferences
+          </button>
         </div>
       </div>
 
@@ -204,24 +235,34 @@ export default function Setting() {
         <div className="card-body space-y-4">
           <h2 className="card-title">Payments</h2>
           <div className="form-control">
-            <label className="label"><span className="label-text">Default account ID</span></label>
+            <label className="label">
+              <span className="label-text">Default account ID</span>
+            </label>
             <input
               className="input input-bordered"
               value={form.payments.defaultAccountId}
-              onChange={e => setField("payments.defaultAccountId", e.target.value)}
+              onChange={(e) =>
+                setField("payments.defaultAccountId", e.target.value)
+              }
               placeholder="e.g., ACC-123456"
             />
           </div>
           <div className="form-control">
-            <label className="label"><span className="label-text">Only allow saved beneficiaries</span></label>
+            <label className="label">
+              <span className="label-text">Only allow saved beneficiaries</span>
+            </label>
             <input
               type="checkbox"
               className="toggle toggle-primary"
               checked={form.payments.allowedBeneficiariesOnly}
-              onChange={e => setField("payments.allowedBeneficiariesOnly", e.target.checked)}
+              onChange={(e) =>
+                setField("payments.allowedBeneficiariesOnly", e.target.checked)
+              }
             />
           </div>
-          <button className="btn btn-primary" onClick={save}>Save payments</button>
+          <button className="btn btn-primary" onClick={save}>
+            Save payments
+          </button>
         </div>
       </div>
 
@@ -230,9 +271,13 @@ export default function Setting() {
         <div className="card bg-base-100 shadow">
           <div className="card-body space-y-4">
             <h2 className="card-title">Admin controls</h2>
-            <p className="text-sm">Override risk flags, freeze accounts, enforce resets.</p>
+            <p className="text-sm">
+              Override risk flags, freeze accounts, enforce resets.
+            </p>
             <div className="flex gap-3">
-              <button className="btn btn-warning">Freeze selected account</button>
+              <button className="btn btn-warning">
+                Freeze selected account
+              </button>
               <button className="btn btn-error">Force password reset</button>
               <button className="btn">View fraud logs</button>
             </div>
