@@ -34,7 +34,6 @@ function DashboardLayout() {
       {/* TOP NAVIGATION BAR */}
       <div className="navbar bg-base-100 shadow-sm border-b sticky top-0 z-50">
         <div className="navbar-start">
-          {/* Mobile Menu Toggle */}
           <button
             className="btn btn-ghost btn-circle lg:hidden"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
