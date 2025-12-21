@@ -73,12 +73,34 @@ const balanceHistoryData = {
 
 function Dashboard() {
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Recent Transactions</h2>
-      <ul>
-        {transactions.map((t) => (
-          <li key={t.id}>
-            {t.description} — ${t.amount}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+      {/* My Cards */}
+      <div className="lg:col-span-1 space-y-4">
+        <div className="card bg-primary text-white p-4 shadow-md">
+          <div className="text-lg font-semibold">Balance: $5,756</div>
+          <div className="text-sm">Card Holder: Eddy Cusuma</div>
+          <div className="text-sm">Valid Thru: 12/22</div>
+          <div className="text-sm">Card Number: 3778 **** **** 1234</div>
+        </div>
+        <div className="card bg-primary text-white p-4 shadow-md">
+          <div className="text-lg font-semibold">Balance: $5,756</div>
+          <div className="text-sm">Card Holder: Eddy Cusuma</div>
+          <div className="text-sm">Valid Thru: 12/22</div>
+          <div className="text-sm">Card Number: 3778 **** **** 1234</div>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div className="lg:col-span-2 card bg-base-100 p-4 shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <ul className="space-y-3">
+          <li className="flex justify-between">
+            <span>Deposit from my Card</span>
+            <span className="text-red-500">- $850</span>
+          </li>
+          <li className="flex justify-between">
+            <span>Deposit Paypal</span>
+            <span className="text-green-500">+ $2,500</span>
           </li>
         ))}
       </ul>
