@@ -43,6 +43,35 @@ const weeklyActivityData = {
   ],
 };
 
+const expenseData = {
+  labels: ["Entertainment", "Bill Expense", "Others", "Investment"],
+  datasets: [
+    {
+      data: [30, 15, 35, 20],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 206, 86, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+      ],
+    },
+  ],
+};
+
+const balanceHistoryData = {
+  labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+  datasets: [
+    {
+      label: "Balance",
+      data: [4000, 4500, 4800, 5000, 5300, 5600, 5756],
+      borderColor: "rgba(75, 192, 192, 1)",
+      backgroundColor: "rgba(75, 192, 192, 0.2)",
+      fill: true,
+    },
+  ],
+};
+
+function Dashboard() {
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Recent Transactions</h2>
