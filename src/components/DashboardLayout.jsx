@@ -151,9 +151,8 @@ function DashboardLayout() {
           </div>
         </div>
 
-        {/* Main Content Area */}
-        <main className="flex-1 p-6">
-          {/* Content from child pages goes here */}
+        {/* MAIN CONTENT */}
+        <main className="flex-1 p-6 bg-base-100 text-base-content">
           <Outlet />
         </main>
       </div>
