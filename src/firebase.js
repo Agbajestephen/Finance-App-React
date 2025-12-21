@@ -16,4 +16,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+// ✅ Initialize Realtime Database
+const db = getDatabase(app);
+
+// Export db so you can use it in Dashboard.jsx
+export { db };
