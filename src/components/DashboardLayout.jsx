@@ -43,12 +43,11 @@ function DashboardLayout() {
         </div>
 
         <div className="navbar-center hidden md:flex">
-          {/* Search Bar */}
           <form onSubmit={handleSearch} className="form-control">
             <div className="input-group">
               <input
                 type="text"
-                placeholder="searchforsomething..."
+                placeholder="Search for something..."
                 className="input input-bordered w-96"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -63,7 +62,6 @@ function DashboardLayout() {
         <div className="navbar-end gap-2">
           <ThemeToggle />
 
-          {/* Notifications */}
           <div className="dropdown dropdown-end">
             <button className="btn btn-ghost btn-circle">
               <div className="indicator">
@@ -80,15 +78,9 @@ function DashboardLayout() {
               </div>
             </button>
             <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li>
-                <Link to="/setting">Profile</Link>
-              </li>
-              <li>
-                <Link to="/setting">Settings</Link>
-              </li>
-              <li>
-                <a>Logout</a>
-              </li>
+              <li><NavLink to="/setting">Profile</NavLink></li>
+              <li><NavLink to="/setting">Settings</NavLink></li>
+              <li><a href="/login">Logout</a></li>
             </ul>
           </div>
         </div>
