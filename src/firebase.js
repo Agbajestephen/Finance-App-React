@@ -3,7 +3,6 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database"; // ✅ use Realtime Database
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDCruI-clmlSfEbO8DbL3k_2-9SqHOaZPg",
   authDomain: "soft-bank-d5c1a.firebaseapp.com",
