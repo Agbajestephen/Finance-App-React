@@ -102,8 +102,51 @@ function Dashboard() {
             <span>Deposit Paypal</span>
             <span className="text-green-500">+ $2,500</span>
           </li>
-        ))}
-      </ul>
+          <li className="flex justify-between">
+            <span>Jemil Wilson</span>
+            <span className="text-green-500">+ $5,400</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Weekly Activity */}
+      <div className="lg:col-span-2 card bg-base-100 p-4 shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Weekly Activity</h2>
+        <Bar data={weeklyActivityData} />
+      </div>
+
+      {/* Expense Statistics */}
+      <div className="lg:col-span-1 card bg-base-100 p-4 shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Expense Statistics</h2>
+        <Pie data={expenseData} />
+      </div>
+
+      {/* Quick Transfer */}
+      <div className="lg:col-span-1 card bg-base-100 p-4 shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Quick Transfer</h2>
+        <div className="space-y-3">
+          {["Livia Bator (CEO)", "Randy Press (Director)", "Workman (Designer)"].map((name) => (
+            <div key={name} className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center">
+                {name.charAt(0)}
+              </div>
+              <span>{name}</span>
+            </div>
+          ))}
+          <input
+            type="number"
+            placeholder="Write Amount"
+            className="input input-bordered w-full mt-2"
+          />
+          <button className="btn btn-primary w-full">Send</button>
+        </div>
+      </div>
+
+      {/* Balance History */}
+      <div className="lg:col-span-2 card bg-base-100 p-4 shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Balance History</h2>
+        <Line data={balanceHistoryData} />
+      </div>
     </div>
   );
 }
