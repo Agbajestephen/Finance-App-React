@@ -1,4 +1,4 @@
-import
+import React from 'react';
 function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
