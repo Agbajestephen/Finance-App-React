@@ -124,9 +124,11 @@ function DashboardLayout() {
                   key={item.id}
                   to={item.path}
                   className={`
-                    flex items-center gap-3 p-3 rounded-lg transition-all
-                    hover:bg-base-300
-                  `}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 p-3 rounded-lg transition-all ${
+                      isActive ? "bg-primary text-white" : "hover:bg-base-300"
+                    }`
+                  }
                 >
                   <div className="text-lg">{item.icon}</div>
                   <span className="font-medium">{item.label}</span>
