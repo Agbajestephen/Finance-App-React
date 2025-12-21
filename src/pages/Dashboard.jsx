@@ -6,13 +6,18 @@ function Dashboard() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    const fetchCards = async () => {
-      const querySnapshot = await getDocs(collection(db, "cards"));
-      const cardData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setCards(cardData);
-    };
-
-    fetchCards();
+    const transactionsRef = ref(db, "transactions");
+    onValue(transactionsRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log("Fetched data:", data); // 👀 check what comes back
+      if (data) {
+        const list = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setTransactions(list);
+      }
+    });
   }, []);
 
   return (
