@@ -1,6 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { ref, onValue } from "firebase/database";
-import { db } from "../firebase"; // ✅ this works now
+import React from "react";
+import { Bar, Line, Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
 function Dashboard() {
   const [transactions, setTransactions] = useState([]);
