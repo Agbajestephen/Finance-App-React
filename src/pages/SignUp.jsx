@@ -1,7 +1,8 @@
+import
 function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Signup logic would run here!');
+    alert('SignUp logic would run here!');
   };
 
   return (
