@@ -8,7 +8,6 @@ function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "📊", path: "/" },
     {
       id: "transactions",
       label: "Transactions",
