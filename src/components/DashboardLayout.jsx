@@ -30,8 +30,8 @@ function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-base-100">
-      {/* TOPNAVIGATION BAR / HEADER*/}
+    <div className="min-h-screen bg-base-100 text-base-content">
+      {/* TOP NAVIGATION BAR */}
       <div className="navbar bg-base-100 shadow-sm border-b sticky top-0 z-50">
         <div className="navbar-start">
           {/* Mobile Menu Toggle */}
