@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
-import React from 'react';
-=======
 
->>>>>>> Stashed changes
+import React from 'react';
 function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
