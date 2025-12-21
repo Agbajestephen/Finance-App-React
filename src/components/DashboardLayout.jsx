@@ -11,18 +11,8 @@ function DashboardLayout() {
     { id: "dashboard", label: "Dashboard", icon: "📊", path: "/dashboard" },
     { id: "transactions", label: "Transactions", icon: "💳", path: "/transactions" },
     { id: "accounts", label: "Accounts", icon: "🏦", path: "/accounts" },
-    {
-      id: "investments",
-      label: "Investments",
-      icon: "📈",
-      path: "/investments",
-    },
-    {
-      id: "credit-cards",
-      label: "Credit Cards",
-      icon: "💳",
-      path: "/credit-cards",
-    },
+    { id: "investments", label: "Investments", icon: "📈", path: "/investment" },
+    { id: "credit-cards", label: "Credit Cards", icon: "💳", path: "/credit-cards" },
     { id: "loans", label: "Loans", icon: "💰", path: "/loans" },
     { id: "services", label: "Services", icon: "⚙️", path: "/services" },
     {
