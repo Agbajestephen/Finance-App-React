@@ -1,8 +1,8 @@
-import React from 'react';
-import DashboardLayout from '../components/DashboardLayout';
+import React from "react";
+
 function CreditCards() {
   return (
-    <DashboardLayout>
+    <>
       <h1 className="text-2xl font-bold mb-4">Credit Cards</h1>
       <div className="overflow-x-auto">
         <table className="table w-full">
@@ -30,7 +30,7 @@ function CreditCards() {
           </tbody>
         </table>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
 

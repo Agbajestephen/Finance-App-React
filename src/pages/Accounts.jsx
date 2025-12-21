@@ -1,9 +1,9 @@
 import React from "react";
-import DashboardLayout from "../components/DashboardLayout";
+
 
 const Accounts = () => {
   return (
-    <DashboardLayout>
+    <>
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-6">Accounts</h1>
         
@@ -87,7 +87,7 @@ const Accounts = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

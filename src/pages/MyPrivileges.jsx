@@ -1,12 +1,13 @@
+
+
 function MyPrivileges() {
-  const privileges = [
+   const privileges = [
     'Priority Customer Support',
     'Zero Account Fees',
     'Higher Withdrawal Limits',
     'Exclusive Investment Opportunities',
     'Airport Lounge Access',
   ];
-
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">My Privileges</h1>
