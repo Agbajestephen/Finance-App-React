@@ -3,7 +3,7 @@ import { ref, onValue } from "firebase/database";
 import { db } from "../firebase"; // ✅ this works now
 
 function Dashboard() {
-  const [cards, setCards] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     const transactionsRef = ref(db, "transactions");
