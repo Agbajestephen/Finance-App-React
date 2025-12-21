@@ -2,8 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/MainLayout.jsx";
 import DashboardLayout from "./components/DashboardLayout.jsx";
-
-
 import Dashboard from "./pages/Dashboard.jsx";
 import Investment from "./pages/Investment.jsx";
 import Accounts from "./pages/Accounts.jsx";
