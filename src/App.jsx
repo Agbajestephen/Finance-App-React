@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout.jsx";
 
 import Welcome from "./pages/Welcome.jsx";
-import ForgotPassword from "./pages/ForgetPassword.jsx";
+
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Investment from "./pages/Investment.jsx";
@@ -25,7 +25,7 @@ function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
 
         {/* DashboardLayout */}
         <Route element={<DashboardLayout />}>
