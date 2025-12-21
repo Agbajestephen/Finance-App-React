@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainLayout from "./components/MainLayout.jsx";
+
 import DashboardLayout from "./components/DashboardLayout.jsx";
 
 import Welcome from "./pages/Welcome.jsx";
+import ForgotPassword from "./pages/ForgetPassword.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Investment from "./pages/Investment.jsx";
@@ -19,29 +20,26 @@ import Signup from "./pages/SignUp.jsx";
 function App() {
   return (
     <Router>
-      <MainLayout>
-        <Routes>
-          {/* Public */}
-          <Route path="/" element={<Welcome />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<Welcome />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-         
-
-          {/* DashboardLayout */}
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="investment" element={<Investment />} />
-            <Route path="accounts" element={<Accounts />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="credit-cards" element={<CreditCards />} />
-            <Route path="loans" element={<Loans />} />
-            <Route path="services" element={<Services />} />
-            <Route path="privileges" element={<MyPrivileges />} />
-            <Route path="setting" element={<Setting />} />
-          </Route>
-        </Routes>
-      </MainLayout>
+        {/* DashboardLayout */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="investment" element={<Investment />} />
+          <Route path="accounts" element={<Accounts />} />
+          <Route path="transactions" element={<Transactions />} />
+          <Route path="credit-cards" element={<CreditCards />} />
+          <Route path="loans" element={<Loans />} />
+          <Route path="services" element={<Services />} />
+          <Route path="privileges" element={<MyPrivileges />} />
+          <Route path="setting" element={<Setting />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

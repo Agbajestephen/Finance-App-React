@@ -31,7 +31,7 @@ function SignUp() {
               <label className="label">
                 <span className="label-text">Password</span>
               </label>
-              <input type="password" placeholder="••••••••" className="input input-bordered" required />
+              <input type="password" placeholder="Enter Password" className="input input-bordered" required />
             </div>
             <div className="form-control mt-6">
               <button type="submit" className="btn btn-primary">Create Account</button>
