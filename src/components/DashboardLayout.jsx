@@ -105,17 +105,17 @@ function DashboardLayout() {
         {/* SIDEBAR */}
         <div
           className={`
-          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-          lg:translate-x-0
-          fixed lg:static 
-          inset-y-0 left-0 
-          w-64 
-          bg-base-200 
-          transition-transform duration-300 ease-in-out 
-          z-40
-          h-[calc(100vh-64px)]
-          overflow-y-auto
-        `}
+            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+            lg:translate-x-0
+            fixed lg:static 
+            inset-y-0 left-0 
+            w-64 
+            bg-base-200 
+            transition-transform duration-300 ease-in-out 
+            z-40
+            h-[calc(100vh-64px)]
+            overflow-y-auto
+          `}
         >
           <div className="p-4">
             <div className="space-y-2">
