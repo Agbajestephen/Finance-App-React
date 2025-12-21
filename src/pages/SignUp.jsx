@@ -1,7 +1,8 @@
-function Signup() {
+import React from 'react';
+function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Signup logic would run here!');
+    alert('SignUp logic would run here!');
   };
 
   return (
@@ -35,7 +36,7 @@ function Signup() {
               <button type="submit" className="btn btn-primary">Create Account</button>
             </div>
             <p className="text-center mt-4">
-              Already have an account? <a href="/login" className="link link-primary">Sign in here</a>.
+              Already have an account? <a href="/login" className="link link-primary">log in here</a>.
             </p>
           </form>
         </div>
@@ -44,4 +45,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignUp;
