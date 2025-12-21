@@ -36,7 +36,6 @@ function DashboardLayout() {
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          {/* Logo/Brand */}
           <div className="flex items-center gap-2 ml-2">
             <div className="text-2xl font-bold text-primary">softbank</div>
             <div className="hidden md:block text-lg font-semibold text-base-content">
