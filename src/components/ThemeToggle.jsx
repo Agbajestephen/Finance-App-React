@@ -1,44 +1,30 @@
+import React, { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
 
-import React, { useEffect, useState } from "react";
+const THEME_KEY = "theme";
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") || "system"
-  );
+function ThemeToggle() {
+  const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "light");
 
   useEffect(() => {
-    const apply = (t) => {
-      if (t === "system") {
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
-      } else {
-        document.documentElement.setAttribute("data-theme", t);
-      }
-    };
-    apply(theme);
-    localStorage.setItem("theme", theme);
+    const root = document.documentElement;
+    root.setAttribute("data-theme", theme);
+    localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
   return (
-    <div className="join">
-      <button
-        className={`btn join-item ${theme === "light" ? "btn-active" : ""}`}
-        onClick={() => setTheme("light")}
-      >
-        Light
-      </button>
-      <button
-        className={`btn join-item ${theme === "dark" ? "btn-active" : ""}`}
-        onClick={() => setTheme("dark")}
-      >
-        Dark
-      </button>
-      <button
-        className={`btn join-item ${theme === "system" ? "btn-active" : ""}`}
-        onClick={() => setTheme("system")}
-      >
-        System
-      </button>
-    </div>
+    <button
+      onClick={toggleTheme}
+      className="btn btn-ghost btn-circle"
+      title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+    >
+      {theme === "light" ? <Sun size={20} /> : <Moon size={20} />}
+    </button>
   );
 }
+
+export default ThemeToggle;
