@@ -14,7 +14,6 @@ function DashboardLayout() {
       label: "Transactions",
       icon: "💳",
       path: "/transactions",
-    },
     { id: "accounts", label: "Accounts", icon: "🏦", path: "/accounts" },
     {
       id: "investments",
