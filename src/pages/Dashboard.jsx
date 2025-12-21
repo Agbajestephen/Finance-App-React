@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+
 function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
