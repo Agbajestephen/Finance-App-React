@@ -19,12 +19,11 @@ import Signup from "./pages/SignUp.jsx";
 function App() {
   return (
     <Router>
-      <MainLayout>
-        <Routes>
-          {/* Public */}
-          <Route path="/" element={<Welcome />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<Welcome />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
 
          
 
