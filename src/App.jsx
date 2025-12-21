@@ -25,22 +25,19 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
-         
-
-          {/* DashboardLayout */}
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="investment" element={<Investment />} />
-            <Route path="accounts" element={<Accounts />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="credit-cards" element={<CreditCards />} />
-            <Route path="loans" element={<Loans />} />
-            <Route path="services" element={<Services />} />
-            <Route path="privileges" element={<MyPrivileges />} />
-            <Route path="setting" element={<Setting />} />
-          </Route>
-        </Routes>
-      </MainLayout>
+        {/* DashboardLayout */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="investment" element={<Investment />} />
+          <Route path="accounts" element={<Accounts />} />
+          <Route path="transactions" element={<Transactions />} />
+          <Route path="credit-cards" element={<CreditCards />} />
+          <Route path="loans" element={<Loans />} />
+          <Route path="services" element={<Services />} />
+          <Route path="privileges" element={<MyPrivileges />} />
+          <Route path="setting" element={<Setting />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }
