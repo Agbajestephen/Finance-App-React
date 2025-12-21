@@ -6,6 +6,7 @@ import { getDatabase } from "firebase/database"; // ✅ use Realtime Database
 const firebaseConfig = {
   apiKey: "AIzaSyDCruI-clmlSfEbO8DbL3k_2-9SqHOaZPg",
   authDomain: "soft-bank-d5c1a.firebaseapp.com",
+  databaseURL: "https://soft-bank-d5c1a-default-rtdb.firebaseio.com", // ✅ add this line
   projectId: "soft-bank-d5c1a",
   storageBucket: "soft-bank-d5c1a.firebasestorage.app",
   messagingSenderId: "47046753820",
