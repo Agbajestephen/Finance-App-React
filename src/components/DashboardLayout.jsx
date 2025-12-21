@@ -61,12 +61,6 @@ function DashboardLayout() {
         </div>
 
         <div className="navbar-end gap-2">
-          {/* Mobile Search Button */}
-          <button className="btn btn-ghost btn-circle md:hidden">
-            <Search size={20} />
-          </button>
-
-          {/* Theme Toggle */}
           <ThemeToggle />
 
           {/* Notifications */}
