@@ -29,7 +29,7 @@ function Dashboard() {
             {t.description} — ${t.amount}
           </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
