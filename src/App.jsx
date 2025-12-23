@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 
 import { AuthProvider } from "./contexts/AuthContext"
-import { BankingProvider } from "./contexts/BankingContext" // Moved from components to contexts
+import { BankingProvider } from "./contexts/BankingContext"
 import DashboardLayout from "./components/DashboardLayout.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 
