@@ -289,9 +289,8 @@ const Dashboard = () => {
                 
                 <div className="flex justify-between items-center p-3 bg-base-200 rounded-lg">
                   <div>
-                    <h2 className="card-title text-2xl font-bold mb-2">$5,756</h2>
-                    <p className="text-white/80">CASH USCLIER</p>
-                    <p className="text-white/80">Entry Columns</p>
+                    <p className="font-semibold">Total Accounts</p>
+                    <p className="text-sm text-gray-500">Combined Balance</p>
                   </div>
                   <div className="text-right">
                     <p className="font-semibold">SALE 1THU</p>
