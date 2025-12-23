@@ -40,6 +40,6 @@ export const updateUserProfile = (user, displayName, photoURL) => {
   return updateProfile(user, { displayName, photoURL });
 };
 
-// Export everything
+// Export everythi;ng
 export { auth };
 export default app;
