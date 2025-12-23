@@ -158,28 +158,7 @@ const Dashboard = () => {
     ]
   };
 
-  const weeklyActivityOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 250,
-        ticks: {
-          callback: function(value) {
-            return '$' + value;
-          }
-        }
-      }
-    }
-  };
-
-  // Expense Statistics Data
+  // Expense Distribution
   const expenseData = {
     labels: ['Entertainment', 'Investment', 'Others'],
     datasets: [
