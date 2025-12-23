@@ -24,6 +24,12 @@ function DashboardLayout() {
     console.log("Searching for:", searchQuery);
   };
 
+  const userProfile = {
+    name: "John Doe",
+    email: "john.doe@softbank.com",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+  };
+
   return (
     <div className="min-h-screen bg-base-100 text-base-content">
       {/* TOP NAVIGATION BAR */}
