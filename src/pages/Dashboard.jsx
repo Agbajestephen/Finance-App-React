@@ -212,8 +212,8 @@ const Dashboard = () => {
                   <p className="text-sm text-gray-500 dark:text-gray-400">{stat.title}</p>
                   <h3 className="text-2xl font-bold mt-2">{stat.value}</h3>
                 </div>
-                    </div>
-                  </div>
+                <div className={`p-3 rounded-full bg-gradient-to-r ${stat.color} bg-opacity-20`}>
+                  {stat.icon}
                 </div>
               </div>
             </div>
