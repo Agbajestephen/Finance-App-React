@@ -202,14 +202,6 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Left Column - Main Card and Activity */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Card Display */}
-            <div className="card bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
-              <div className="card-body">
-                <div className="flex justify-between items-start">
-                  <div>
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
