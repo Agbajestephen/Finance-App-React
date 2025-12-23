@@ -45,15 +45,25 @@ export default function Login() {
               <p className="text-gray-600 mt-2">Sign in to your account</p>
             </div>
 
-//   // Auto-login attempt
-//   const handleAutoLogin = async () => {
-//     if (rememberMe && formData.email && formData.password) {
-//       const result = await autoLogin();
-//       if (result.success) {
-//         navigate('/dashboard');
-//       }
-//     }
-//   };
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold">Email</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaEnvelope className="text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    className="input input-bordered w-full pl-10"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
 
               <div className="form-control">
                 <label className="label">
