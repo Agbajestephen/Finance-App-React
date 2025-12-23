@@ -6,6 +6,7 @@ import ThemeToggle from "./ThemeToggle.jsx";
 function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: "📊", path: "/dashboard" },
