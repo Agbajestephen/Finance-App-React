@@ -275,12 +275,22 @@ function DashboardLayout() {
             {/* Divider */}
             <div className="my-6 border-t"></div>
 
-            <div className="mt-8 p-4 bg-base-100 rounded-lg">
-              <div className="stats shadow">
-                <div className="stat">
-                  <div className="stat-title">Active Items</div>
-                  <div className="stat-value text-primary">{menuItems.length}</div>
-                  <div className="stat-desc">Total menu items</div>
+            {/* Recent Activity */}
+            <div>
+              <div className="px-3 py-2 text-xs font-semibold text-base-content/50 uppercase tracking-wider">
+                Recent Activity
+              </div>
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg bg-base-100">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium">Barrio</span>
+                    <span className="text-sm font-bold text-primary">$5,756</span>
+                  </div>
+                  <div className="text-xs text-base-content/60">VISA CTRM 12/22</div>
+                </div>
+                <div className="p-3 rounded-lg bg-base-100">
+                  <div className="text-sm font-medium">Recent Transactions</div>
+                  <div className="text-xs text-base-content/60 mt-1">Deposit from Card • Jan 28</div>
                 </div>
               </div>
             </div>
