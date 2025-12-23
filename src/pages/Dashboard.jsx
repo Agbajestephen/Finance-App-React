@@ -398,6 +398,26 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Quick Actions */}
+      <div className="card bg-base-100 shadow-lg">
+        <div className="card-body">
+          <h3 className="card-title mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Deposit Money', icon: '💰', color: 'btn-primary' },
+              { label: 'Transfer Funds', icon: '🔄', color: 'btn-secondary' },
+              { label: 'Pay Bills', icon: '💳', color: 'btn-accent' },
+              { label: 'Apply for Loan', icon: '🏦', color: 'btn-warning' }
+            ].map((action, index) => (
+              <button key={index} className={`btn ${action.color} flex-col h-24 gap-2`}>
+                <span className="text-2xl">{action.icon}</span>
+                <span className="text-sm font-medium">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
