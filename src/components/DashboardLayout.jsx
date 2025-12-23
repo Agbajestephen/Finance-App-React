@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Search, Bell, User, Menu, X, ChevronDown, Settings, LogOut, CreditCard, Wallet, PieChart } from "lucide-react";
 import { Outlet, NavLink } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle.jsx";
+import { FaExchangeAlt } from "react-icons/fa";
 
 function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -17,6 +18,16 @@ function DashboardLayout() {
     { id: "loans", label: "Loans", icon: "💰", path: "/loans" },
     { id: "services", label: "Services", icon: "⚙️", path: "/services" },
     { id: "privileges", label: "My Privileges", icon: "👑", path: "/privileges" },
+    // In your DashboardLayout.jsx navigation menu, add:
+<li>
+  <NavLink to="/transfers" className={({ isActive }) => 
+    `flex items-center gap-3 p-3 rounded-lg transition-colors ${
+      isActive ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'
+    }`}>
+    <FaExchangeAlt />
+    Transfers
+  </NavLink>
+</li>
   ];
 
   const handleSearch = (e) => {
