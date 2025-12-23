@@ -171,8 +171,7 @@ const Dashboard = () => {
           'rgb(245, 158, 11)',  // yellow
           'rgb(107, 114, 128)'  // gray
         ],
-        borderWidth: 0,
-        hoverOffset: 10
+        borderWidth: 0
       }
     ]
   };
