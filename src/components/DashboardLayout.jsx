@@ -224,7 +224,7 @@ function DashboardLayout() {
             bg-base-200 
             transition-transform duration-300 ease-in-out 
             z-40
-            h-[calc(100vh-64px)]
+            h-[calc(100vh-80px)]
             overflow-y-auto
           `}
         >
