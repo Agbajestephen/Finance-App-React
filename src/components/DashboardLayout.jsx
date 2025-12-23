@@ -93,8 +93,8 @@ function DashboardLayout() {
           </form>
         </div>
 
-        <div className="navbar-end gap-2">
-          <ThemeToggle />
+              {/* Theme Toggle */}
+              <ThemeToggle />
 
               {/* Notifications */}
               <div className="dropdown dropdown-end">
