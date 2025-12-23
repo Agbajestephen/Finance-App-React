@@ -160,7 +160,7 @@ const Dashboard = () => {
 
   // Expense Distribution
   const expenseData = {
-    labels: ['Entertainment', 'Investment', 'Others'],
+    labels: ['Entertainment', 'Food', 'Shopping', 'Bills', 'Others'],
     datasets: [
       {
         data: [15, 25, 20, 30, 10],
