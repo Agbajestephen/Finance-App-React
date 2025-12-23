@@ -270,7 +270,10 @@ function DashboardLayout() {
                   )}
                 </NavLink>
               ))}
-            </div>
+            </nav>
+
+            {/* Divider */}
+            <div className="my-6 border-t"></div>
 
             <div className="mt-8 p-4 bg-base-100 rounded-lg">
               <div className="stats shadow">
