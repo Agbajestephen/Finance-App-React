@@ -252,8 +252,10 @@ function DashboardLayout() {
                   key={item.id}
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 p-3 rounded-lg transition-all ${
-                      isActive ? "bg-primary text-white" : "hover:bg-base-300"
+                    `flex items-center gap-3 p-3 rounded-xl transition-all group ${
+                      isActive 
+                        ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg" 
+                        : "hover:bg-base-300 hover:shadow"
                     }`
                   }
                 >
