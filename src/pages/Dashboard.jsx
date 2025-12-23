@@ -29,8 +29,122 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  // Weekly Activity Data
-  const weeklyActivityData = {
+  const [timeFilter, setTimeFilter] = useState('month');
+
+  // Stats Cards Data
+  const stats = [
+    {
+      title: 'Total Balance',
+      value: '$12,750',
+      change: '+25%',
+      trend: 'up',
+      icon: <FaEye className="text-primary" />,
+      color: 'from-primary to-primary/70',
+      detail: 'From last month'
+    },
+    {
+      title: 'Total Income',
+      value: '$5,600',
+      change: '+12.5%',
+      trend: 'up',
+      icon: <FaArrowUp className="text-success" />,
+      color: 'from-success to-success/70',
+      detail: 'From last month'
+    },
+    {
+      title: 'Total Expense',
+      value: '$3,460',
+      change: '+3.3%',
+      trend: 'up',
+      icon: <FaArrowDown className="text-error" />,
+      color: 'from-error to-error/70',
+      detail: 'From last month'
+    },
+    {
+      title: 'Total Savings',
+      value: '$7,920',
+      change: '+4.2%',
+      trend: 'up',
+      icon: <FaPlus className="text-warning" />,
+      color: 'from-warning to-warning/70',
+      detail: 'From last month'
+    }
+  ];
+
+  // Account Types Data
+  const accountTypes = [
+    {
+      type: 'Checking',
+      amount: '$8,450.00',
+      count: 3,
+      color: 'bg-primary',
+      icon: '🏦'
+    },
+    {
+      type: 'Saving',
+      amount: '$15,280.50',
+      count: 2,
+      color: 'bg-secondary',
+      icon: '💰'
+    },
+    {
+      type: 'Investment',
+      amount: '$32,450.00',
+      count: 1,
+      color: 'bg-accent',
+      icon: '📈'
+    },
+    {
+      type: 'Credit',
+      amount: '$4,250.00',
+      count: 2,
+      color: 'bg-warning',
+      icon: '💳'
+    }
+  ];
+
+  // Recent Transactions
+  const transactions = [
+    {
+      id: 1,
+      name: 'Spotify Subscription',
+      type: 'Entertainment',
+      date: '23 Jan 2021',
+      amount: '-$150',
+      account: 'Primary Checking',
+      status: 'completed'
+    },
+    {
+      id: 2,
+      name: 'Salary Deposit',
+      type: 'Income',
+      date: '20 Jan 2021',
+      amount: '+$2,500',
+      account: 'Main Savings',
+      status: 'completed'
+    },
+    {
+      id: 3,
+      name: 'Grocery Shopping',
+      type: 'Food',
+      date: '18 Jan 2021',
+      amount: '-$85.50',
+      account: 'Everyday Checking',
+      status: 'completed'
+    },
+    {
+      id: 4,
+      name: 'Amazon Purchase',
+      type: 'Shopping',
+      date: '15 Jan 2021',
+      amount: '-$245.99',
+      account: 'Credit Card',
+      status: 'pending'
+    }
+  ];
+
+  // Chart Data - Weekly Activity
+  const weeklyData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
       {
