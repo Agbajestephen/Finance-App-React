@@ -255,6 +255,8 @@ const Dashboard = () => {
                 />
               </div>
             </div>
+          </div>
+        </div>
 
             {/* Quick Transfer Section */}
             <div className="card bg-base-100 shadow-xl">
