@@ -374,7 +374,23 @@ const Dashboard = () => {
           <div className="card-body">
             <h2 className="card-title text-xl font-bold mb-4">Balance History</h2>
             <div className="h-64">
-              <Bar data={balanceHistoryData} options={balanceHistoryOptions} />
+              <Doughnut 
+                data={expenseData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'right',
+                      labels: {
+                        boxWidth: 12,
+                        padding: 15
+                      }
+                    }
+                  },
+                  cutout: '65%'
+                }}
+              />
             </div>
             <div className="flex justify-between mt-4 text-sm">
               <span>Jul</span>
