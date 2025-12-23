@@ -369,8 +369,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Balance History Chart */}
-        <div className="card bg-base-100 shadow-xl mb-6">
+        {/* Expense Distribution */}
+        <div className="card bg-base-100 shadow-lg">
           <div className="card-body">
             <h2 className="card-title text-xl font-bold mb-4">Balance History</h2>
             <div className="h-64">
