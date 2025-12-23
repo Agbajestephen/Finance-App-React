@@ -1,6 +1,6 @@
 import React from "react";
 
-function CreditCards() {
+function Profile() {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4">Credit Cards</h1>
@@ -34,4 +34,4 @@ function CreditCards() {
   );
 }
 
-export default CreditCards;
+export default Profile;

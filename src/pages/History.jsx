@@ -1,6 +1,6 @@
 import React from "react";
 
-function Investment() {
+function History() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Investment</h1>
@@ -35,4 +35,4 @@ function Investment() {
   );
 }
 
-export default Investment;
+export default History;
