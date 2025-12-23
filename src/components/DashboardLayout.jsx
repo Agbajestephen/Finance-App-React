@@ -226,6 +226,8 @@ function DashboardLayout() {
             z-40
             h-[calc(100vh-80px)]
             overflow-y-auto
+            border-r
+            flex flex-col
           `}
         >
           <div className="p-4">
