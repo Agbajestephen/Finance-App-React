@@ -11,19 +11,13 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-// import { useState, useEffect } from 'react';
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
-// import { useAuth } from '../contexts/AuthContext';
-// import { 
-//   LogIn, 
-//   Eye, 
-//   EyeOff, 
-//   AlertCircle, 
-//   CheckCircle,
-//   Mail,
-//   Lock,
-//   Smartphone
-// } from 'lucide-react';
+  async function handleSubmit(e) {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      toast.error('Please fill in all fields');
+      return;
+    }
 
 // function Login() {
 //   const [showPassword, setShowPassword] = useState(false);
