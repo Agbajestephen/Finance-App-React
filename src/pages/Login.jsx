@@ -4,6 +4,12 @@ import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import { FaGoogle, FaGithub, FaEnvelope, FaLock } from 'react-icons/fa';
 
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
 // import { useState, useEffect } from 'react';
 // import { Link, useLocation, useNavigate } from 'react-router-dom';
