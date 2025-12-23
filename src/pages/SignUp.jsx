@@ -13,6 +13,7 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { signup } = useAuth();
     e.preventDefault();
     
     if (!name || !email || !password || !confirmPassword) {
