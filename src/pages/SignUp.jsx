@@ -14,6 +14,7 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
+  const navigate = useNavigate();
     e.preventDefault();
     
     if (!name || !email || !password || !confirmPassword) {
