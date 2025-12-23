@@ -310,35 +310,26 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Recent Transactions */}
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-xl font-bold mb-4">Recent Transactions</h2>
-                <div className="space-y-4">
-                  {/* Transaction 1 */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                        <i className="fas fa-credit-card text-blue-500"></i>
-                      </div>
-                      <div>
-                        <p className="font-medium">Deposit from my Card</p>
-                        <p className="text-gray-500 text-sm">28 January 2021</p>
-                      </div>
-                    </div>
-                    <span className="font-bold text-green-600">$850</span>
-                  </div>
-                  
-                  {/* Transaction 2 */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                        <i className="fab fa-paypal text-purple-500"></i>
-                      </div>
-                      <div>
-                        <p className="font-medium">Deposit Paypal</p>
-                        <p className="text-gray-500 text-sm">25 January 2021</p>
-                      </div>
+      {/* Recent Transactions & Expense Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Transactions */}
+        <div className="card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="card-title">Recent Transactions</h3>
+              <button className="btn btn-ghost btn-sm">See All →</button>
+            </div>
+            
+            <div className="space-y-4">
+              {transactions.map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-base-200 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      transaction.amount.startsWith('+') 
+                        ? 'bg-success/20 text-success' 
+                        : 'bg-error/20 text-error'
+                    }`}>
+                      {transaction.amount.startsWith('+') ? '+' : '-'}
                     </div>
                     <span className="font-bold text-green-600">$2,500</span>
                   </div>
