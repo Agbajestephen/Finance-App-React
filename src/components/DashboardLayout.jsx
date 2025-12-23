@@ -322,7 +322,7 @@ function DashboardLayout() {
       {/* MOBILE OVERLAY */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 lg:hidden z-30"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-30"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
