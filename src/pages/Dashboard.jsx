@@ -282,8 +282,6 @@ const Dashboard = () => {
                     <div className="text-right">
                       <p className="font-bold">{account.amount}</p>
                     </div>
-                    <p className="mt-2 font-medium">Workman</p>
-                    <p className="text-gray-500 text-sm">Designer</p>
                   </div>
                 ))}
                 
