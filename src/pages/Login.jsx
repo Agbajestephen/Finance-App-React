@@ -19,21 +19,18 @@ export default function Login() {
       return;
     }
 
-// function Login() {
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [usePhone, setUsePhone] = useState(false);
-//   const [rememberMe, setRememberMe] = useState(false);
-//   const [formData, setFormData] = useState({ 
-//     email: '', 
-//     phone: '', 
-//     password: '' 
-//   });
-//   const [validationErrors, setValidationErrors] = useState({});
-//   const [logoutMessage, setLogoutMessage] = useState('');
-  
-//   const { login, loginLoading, error, autoLogin } = useAuth();
-//   const navigate = useNavigate();
-//   const location = useLocation();
+    try {
+      setLoading(true);
+      await login(email, password);
+      toast.success('Successfully logged in!');
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to log in: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
