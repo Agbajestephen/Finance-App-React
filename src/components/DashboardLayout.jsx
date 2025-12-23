@@ -109,8 +109,6 @@ function DashboardLayout() {
                   </div>
                 </div>
               </div>
-            </button>
-          </div>
 
               {/* Profile */}
               <div className="dropdown dropdown-end">
