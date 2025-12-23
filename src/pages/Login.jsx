@@ -87,15 +87,20 @@ export default function Login() {
                 </div>
               </div>
 
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData(prev => ({ ...prev, [name]: value }));
-    
-//     // Clear validation error for this field
-//     if (validationErrors[name]) {
-//       setValidationErrors(prev => ({ ...prev, [name]: '' }));
-//     }
-//   };
+              <div className="form-control mt-8">
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-full"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="loading loading-spinner"></span>
+                  ) : (
+                    'Sign In'
+                  )}
+                </button>
+              </div>
+            </form>
 
 //   const handleForgotPassword = () => {
 //     navigate('/forgot-password', { 
