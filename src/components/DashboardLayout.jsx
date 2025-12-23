@@ -33,20 +33,48 @@ function DashboardLayout() {
   return (
     <div className="min-h-screen bg-base-100 text-base-content">
       {/* TOP NAVIGATION BAR */}
-      <div className="navbar bg-base-100 shadow-sm border-b sticky top-0 z-50">
-        <div className="navbar-start">
-          <button
-            className="btn btn-ghost btn-circle lg:hidden"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          >
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+      <header className="sticky top-0 z-50 bg-base-100 border-b shadow-sm">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Left Section */}
+            <div className="flex items-center gap-4">
+              <button
+                className="btn btn-ghost btn-square lg:hidden"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              >
+                {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
 
-          <div className="flex items-center gap-2 ml-2">
-            <div className="text-2xl font-bold text-primary">Softbank</div>
-            <div className="hidden md:block text-lg font-semibold">Overview</div>
-          </div>
-        </div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                    <span className="text-white font-bold">SB</span>
+                  </div>
+                  <div className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    Softbank
+                  </div>
+                </div>
+                <div className="hidden md:block text-sm font-medium text-base-content/70">| Overview</div>
+              </div>
+            </div>
+
+            {/* Center Section - Search */}
+            <div className="hidden lg:flex flex-1 max-w-xl mx-4">
+              <form onSubmit={handleSearch} className="w-full">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search size={18} className="text-base-content/50" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search transactions, accounts, cards..."
+                    className="input input-bordered w-full pl-10 pr-4 py-2 rounded-xl"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+              </form>
+            </div>
 
         <div className="navbar-center hidden md:flex">
           <form onSubmit={handleSearch} className="form-control">
