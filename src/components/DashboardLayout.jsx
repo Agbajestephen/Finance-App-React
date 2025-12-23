@@ -214,7 +214,7 @@ function DashboardLayout() {
 
       <div className="flex">
         {/* SIDEBAR */}
-        <div
+        <aside
           className={`
             ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
             lg:translate-x-0
