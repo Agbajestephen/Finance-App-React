@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import toast from 'react-hot-toast';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
 import React from 'react';
