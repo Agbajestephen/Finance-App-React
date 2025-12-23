@@ -348,7 +348,6 @@ const Dashboard = () => {
                     }`}>
                       {transaction.status}
                     </span>
-                    <span className="font-medium">50%</span>
                   </div>
                 </div>
               ))}
