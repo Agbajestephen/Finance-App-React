@@ -285,7 +285,7 @@ const Dashboard = () => {
                     <p className="mt-2 font-medium">Workman</p>
                     <p className="text-gray-500 text-sm">Designer</p>
                   </div>
-                </div>
+                ))}
                 
                 <div className="divider my-2"></div>
                 
