@@ -359,7 +359,7 @@ const Dashboard = () => {
         {/* Expense Distribution */}
         <div className="card bg-base-100 shadow-lg">
           <div className="card-body">
-            <h2 className="card-title text-xl font-bold mb-4">Balance History</h2>
+            <h3 className="card-title mb-4">Expense Distribution</h3>
             <div className="h-64">
               <Doughnut 
                 data={expenseData}
