@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 
 import { AuthProvider } from "./contexts/AuthContext"
-import { BankingProvider } from "./contexts/BankingContext" // Moved from components to contexts
+import { BankingProvider } from "./contexts/BankingContext"
 import DashboardLayout from "./components/DashboardLayout.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 
@@ -19,6 +19,8 @@ import Services from "./pages/Services.jsx"
 import MyPrivileges from "./pages/MyPrivileges.jsx"
 import Setting from "./pages/Setting.jsx"
 import Signup from "./pages/SignUp.jsx"
+import AdminLogin from "./pages/AdminLogin.jsx"
+import AdminDashboard from "./pages/AdminDashboard.jsx"
 
 function App() {
   return (
@@ -33,6 +35,16 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Protected Routes */}
             <Route
