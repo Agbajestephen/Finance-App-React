@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Bell, User, Menu, X } from "lucide-react";
+import { Search, Bell, User, Menu, X, ChevronDown, Settings, LogOut, CreditCard, Wallet, PieChart } from "lucide-react";
 import { Outlet, NavLink } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle.jsx";
 
