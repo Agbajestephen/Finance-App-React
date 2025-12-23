@@ -17,7 +17,6 @@ function DashboardLayout() {
     { id: "loans", label: "Loans", icon: "💰", path: "/loans" },
     { id: "services", label: "Services", icon: "⚙️", path: "/services" },
     { id: "privileges", label: "My Privileges", icon: "👑", path: "/privileges" },
-    { id: "setting", label: "Setting", icon: "⚙️", path: "/setting" },
   ];
 
   const handleSearch = (e) => {
