@@ -295,7 +295,23 @@ function DashboardLayout() {
               </div>
             </div>
           </div>
-        </div>
+
+          {/* Footer */}
+          <div className="p-4 border-t">
+            <NavLink 
+              to="/settings" 
+              className="flex items-center gap-3 p-3 rounded-xl hover:bg-base-300 transition-colors"
+            >
+              <div className="w-8 h-8 rounded-lg bg-base-300 flex items-center justify-center">
+                <Settings size={16} />
+              </div>
+              <div>
+                <span className="font-medium">Settings</span>
+                <p className="text-xs text-base-content/60">App preferences</p>
+              </div>
+            </NavLink>
+          </div>
+        </aside>
 
         {/* MAIN CONTENT */}
         <main className="flex-1 p-6 bg-base-100 text-base-content">
