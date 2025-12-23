@@ -55,48 +55,27 @@ export default function Login() {
 //     }
 //   };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setValidationErrors({});
-    
-//     // Validate form
-//     const errors = {};
-//     if (usePhone) {
-//       if (!formData.phone) errors.phone = 'Phone number is required';
-//       else if (!/^[\d\s\-\+\(\)]{10,}$/.test(formData.phone)) {
-//         errors.phone = 'Invalid phone number format';
-//       }
-//     } else {
-//       if (!formData.email) errors.email = 'Email is required';
-//       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-//         errors.email = 'Invalid email format';
-//       }
-//     }
-    
-//     if (!formData.password) errors.password = 'Password is required';
-//     else if (formData.password.length < 6) {
-//       errors.password = 'Password must be at least 6 characters';
-//     }
-    
-//     if (Object.keys(errors).length > 0) {
-//       setValidationErrors(errors);
-//       return;
-//     }
-    
-//     // Use email or phone for login
-//     const identifier = usePhone ? formData.phone : formData.email;
-    
-//     // Call login function
-//     const result = await login(
-//       usePhone ? undefined : identifier,
-//       formData.password,
-//       rememberMe
-//     );
-    
-//     if (result.success) {
-//       // Success handled in AuthContext
-//     }
-//   };
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold">Password</span>
+                  <Link to="/forgot-password" className="label-text-alt link link-primary">
+                    Forgot password?
+                  </Link>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaLock className="text-gray-400" />
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="••••••••"
+                    className="input input-bordered w-full pl-10"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
 
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
