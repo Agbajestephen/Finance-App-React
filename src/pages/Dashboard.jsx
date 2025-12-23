@@ -364,7 +364,7 @@ const Dashboard = () => {
                     <span className="font-medium">50%</span>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
