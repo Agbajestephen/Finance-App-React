@@ -148,11 +148,10 @@ const Dashboard = () => {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
       {
-        label: 'Activity',
-        data: [0, 100, 90, 200, 110, 50, 0],
-        borderColor: 'rgb(102, 126, 234)',
-        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-        borderWidth: 3,
+        label: 'Spending',
+        data: [350, 300, 450, 500, 150, 100, 200],
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
         tension: 0.4,
         fill: true,
         pointBackgroundColor: 'rgb(102, 126, 234)',
