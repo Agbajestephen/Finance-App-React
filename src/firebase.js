@@ -1,24 +1,45 @@
-// Import the functions you need
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database"; // ✅ use Realtime Database
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup,
+  sendEmailVerification,
+  updateProfile
+} from "firebase/auth";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDCruI-clmlSfEbO8DbL3k_2-9SqHOaZPg",
-  authDomain: "soft-bank-d5c1a.firebaseapp.com",
-  databaseURL: "https://soft-bank-d5c1a-default-rtdb.firebaseio.com", // ✅ add this line
-  projectId: "soft-bank-d5c1a",
-  storageBucket: "soft-bank-d5c1a.appspot.com", // ✅ fix domain (should end with .appspot.com)
-  messagingSenderId: "47046753820",
-  appId: "1:47046753820:web:c7c9d3be9370ac5f80e9d9",
-  measurementId: "G-ZDNTBLQZXK"
+  apiKey: "AIzaSyCr4SybxmMLqNoGtdA2iEJyFArK5wldAdI",
+  authDomain: "soft-bank-aafa7.firebaseapp.com",
+  projectId: "soft-bank-aafa7",
+  storageBucket: "soft-bank-aafa7.firebasestorage.app",
+  messagingSenderId: "822418727458",
+  appId: "1:822418727458:web:734e7b82a41fe2083a607b",
+  measurementId: "G-QKCKP4GYKZ"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-// ✅ Initialize Realtime Database
-const db = getDatabase(app);
+// Google Sign-In Provider
+const googleProvider = new GoogleAuthProvider();
 
-// Export db so you can use it in Dashboard.jsx
-export { db };
+// Google Sign-In function
+export const signInWithGoogle = () => {
+  return signInWithPopup(auth, googleProvider);
+};
+
+// Send verification email function
+export const sendVerificationEmail = (user) => {
+  return sendEmailVerification(user);
+};
+
+// Update profile function
+export const updateUserProfile = (user, displayName, photoURL) => {
+  return updateProfile(user, { displayName, photoURL });
+};
+
+// Export everything
+export { auth };
+export default app;
