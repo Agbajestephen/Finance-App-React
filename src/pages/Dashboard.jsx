@@ -153,9 +153,7 @@ const Dashboard = () => {
         borderColor: 'rgb(59, 130, 246)',
         backgroundColor: 'rgba(59, 130, 246, 0.1)',
         tension: 0.4,
-        fill: true,
-        pointBackgroundColor: 'rgb(102, 126, 234)',
-        pointRadius: 5
+        fill: true
       }
     ]
   };
