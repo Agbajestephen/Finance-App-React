@@ -346,17 +346,20 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="flex items-center">
-                      <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div> 
-                      Investment
-                    </span>
-                    <span className="font-medium">35%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="flex items-center">
-                      <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div> 
-                      Others
+                  <div className="text-right">
+                    <p className={`font-bold ${
+                      transaction.amount.startsWith('+') 
+                        ? 'text-success' 
+                        : 'text-error'
+                    }`}>
+                      {transaction.amount}
+                    </p>
+                    <span className={`badge badge-sm ${
+                      transaction.status === 'completed' 
+                        ? 'badge-success' 
+                        : 'badge-warning'
+                    }`}>
+                      {transaction.status}
                     </span>
                     <span className="font-medium">50%</span>
                   </div>
