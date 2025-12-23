@@ -270,16 +270,9 @@ const Dashboard = () => {
                       <div className={`w-10 h-10 rounded-lg ${account.color} flex items-center justify-center`}>
                         <span className="text-lg">{account.icon}</span>
                       </div>
-                    </div>
-                    <p className="mt-2 font-medium">Livia Bear</p>
-                    <p className="text-gray-500 text-sm">CEO</p>
-                  </div>
-                  
-                  {/* Contact 2 */}
-                  <div className="flex flex-col items-center">
-                    <div className="avatar">
-                      <div className="w-16 rounded-full bg-secondary text-white flex items-center justify-center">
-                        <span className="text-xl font-semibold">RP</span>
+                      <div>
+                        <p className="font-semibold">{account.type}</p>
+                        <p className="text-sm text-gray-500">{account.count} Accounts</p>
                       </div>
                     </div>
                     <p className="mt-2 font-medium">Randy Press</p>
