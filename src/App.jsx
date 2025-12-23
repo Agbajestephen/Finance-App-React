@@ -19,6 +19,8 @@ import Services from "./pages/Services.jsx"
 import MyPrivileges from "./pages/MyPrivileges.jsx"
 import Setting from "./pages/Setting.jsx"
 import Signup from "./pages/SignUp.jsx"
+import AdminLogin from "./pages/AdminLogin.jsx"
+import AdminDashboard from "./pages/AdminDashboard.jsx"
 
 function App() {
   return (
