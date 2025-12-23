@@ -35,26 +35,15 @@ export default function Login() {
 //   const navigate = useNavigate();
 //   const location = useLocation();
 
-//   // Check for saved credentials
-//   useEffect(() => {
-//     const savedCredentials = localStorage.getItem('softbank_credentials');
-//     if (savedCredentials) {
-//       try {
-//         const { email } = JSON.parse(savedCredentials);
-//         setFormData(prev => ({ ...prev, email: atob(email) }));
-//         setRememberMe(true);
-//       } catch (err) {
-//         console.error('Failed to parse saved credentials:', err);
-//       }
-//     }
-    
-//     // Check for logout message
-//     const message = location.state?.logoutMessage || sessionStorage.getItem('logoutMessage');
-//     if (message) {
-//       setLogoutMessage(message);
-//       sessionStorage.removeItem('logoutMessage');
-//     }
-//   }, [location]);
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="card bg-white shadow-2xl">
+          <div className="card-body">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
+              <p className="text-gray-600 mt-2">Sign in to your account</p>
+            </div>
 
 //   // Auto-login attempt
 //   const handleAutoLogin = async () => {
