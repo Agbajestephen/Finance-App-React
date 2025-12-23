@@ -1,202 +1,270 @@
-// src/pages/Dashboard.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useBanking } from '../components/BankingContext';
-import { 
-  FaMoneyBillWave, FaExchangeAlt, FaHistory, 
-  FaUserCircle, FaCreditCard, FaChartLine
-} from 'react-icons/fa';
+"use client"
 
+import { useBanking } from "../contexts/BankingContext"
+import { useAuth } from "../contexts/AuthContext"
+import { Link } from "react-router-dom"
+import {
+  FaWallet,
+  FaPiggyBank,
+  FaCreditCard,
+  FaArrowUp,
+  FaArrowDown,
+  FaExchangeAlt,
+  FaPlus,
+  FaChartLine,
+} from "react-icons/fa"
 
 const Dashboard = () => {
-  const { currentUser } = useAuth();
-  const { accounts, transactions, loading } = useBanking();
+  const { accounts, getAllUserTransactions, loading } = useBanking()
+  const { currentUser } = useAuth()
+  const transactions = getAllUserTransactions()
+
+  // Calculate total balance across all accounts
+  const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0)
+
+  // Get recent transactions (last 5)
+  const recentTransactions = transactions.slice(0, 5)
+
+  // Calculate statistics
+  const totalIncome = transactions.filter((t) => t.type === "deposit").reduce((sum, t) => sum + t.amount, 0)
+
+  const totalExpenses = transactions.filter((t) => t.type === "withdrawal").reduce((sum, t) => sum + t.amount, 0)
+
+  const getAccountIcon = (type) => {
+    switch (type) {
+      case "savings":
+        return <FaPiggyBank className="text-green-500" />
+      case "checking":
+        return <FaCreditCard className="text-blue-500" />
+      case "wallet":
+        return <FaWallet className="text-purple-500" />
+      default:
+        return <FaWallet className="text-gray-500" />
+    }
+  }
+
+  const getTransactionIcon = (type) => {
+    switch (type) {
+      case "deposit":
+        return <FaArrowDown className="text-green-500" />
+      case "withdrawal":
+        return <FaArrowUp className="text-red-500" />
+      case "transfer":
+        return <FaExchangeAlt className="text-blue-500" />
+      default:
+        return <FaExchangeAlt className="text-gray-500" />
+    }
+  }
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
-    );
+    )
   }
 
-  const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
-  const recentTransactions = transactions.slice(0, 5);
-
   return (
-    <div className="p-6">
+    <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Welcome back, {currentUser?.displayName || currentUser?.email?.split('@')[0]}!
-        </h1>
-        <p className="text-gray-600">Here's your financial overview</p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Welcome back, {currentUser?.displayName || currentUser?.email?.split("@")[0] || "User"}!
+          </h1>
+          <p className="text-gray-600 mt-1">Here's your financial overview</p>
+        </div>
+        <div className="flex gap-3">
+          <Link to="/transactions" className="btn btn-primary">
+            <FaExchangeAlt /> New Transfer
+          </Link>
+          <Link to="/accounts" className="btn btn-outline">
+            <FaPlus /> Add Account
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-md border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500">Total Balance</p>
-              <p className="text-3xl font-bold text-gray-800">₦{totalBalance.toLocaleString()}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Total Balance */}
+        <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm">Total Balance</p>
+                <h2 className="text-3xl font-bold mt-2">₦{totalBalance.toLocaleString()}</h2>
+              </div>
+              <div className="bg-white/20 p-3 rounded-xl">
+                <FaWallet className="text-2xl" />
+              </div>
             </div>
-            <FaMoneyBillWave className="text-4xl text-green-500" />
           </div>
-          <p className="text-sm text-gray-500 mt-2">Across {accounts.length} accounts</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500">Total Accounts</p>
-              <p className="text-3xl font-bold text-gray-800">{accounts.length}</p>
+        {/* Accounts */}
+        <div className="card bg-white shadow-md border">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Total Accounts</p>
+                <h2 className="text-3xl font-bold mt-2 text-gray-800">{accounts.length}</h2>
+              </div>
+              <div className="bg-green-100 p-3 rounded-xl">
+                <FaPiggyBank className="text-2xl text-green-600" />
+              </div>
             </div>
-            <FaCreditCard className="text-4xl text-blue-500" />
           </div>
-          <Link to="/accounts" className="text-blue-600 text-sm mt-2 inline-block">
-            View all accounts →
-          </Link>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500">Recent Transactions</p>
-              <p className="text-3xl font-bold text-gray-800">{transactions.length}</p>
+        {/* Income */}
+        <div className="card bg-white shadow-md border">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Total Income</p>
+                <h2 className="text-3xl font-bold mt-2 text-green-600">₦{totalIncome.toLocaleString()}</h2>
+              </div>
+              <div className="bg-green-100 p-3 rounded-xl">
+                <FaArrowDown className="text-2xl text-green-600" />
+              </div>
             </div>
-            <FaHistory className="text-4xl text-purple-500" />
           </div>
-          <Link to="/transactions" className="text-blue-600 text-sm mt-2 inline-block">
-            View all transactions →
-          </Link>
+        </div>
+
+        {/* Expenses */}
+        <div className="card bg-white shadow-md border">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Total Expenses</p>
+                <h2 className="text-3xl font-bold mt-2 text-red-600">₦{totalExpenses.toLocaleString()}</h2>
+              </div>
+              <div className="bg-red-100 p-3 rounded-xl">
+                <FaArrowUp className="text-2xl text-red-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Accounts Overview */}
+        <div className="lg:col-span-2">
+          <div className="card bg-white shadow-md border">
+            <div className="card-body">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="card-title text-2xl">Your Accounts</h2>
+                <Link to="/accounts" className="btn btn-sm btn-ghost">
+                  View All
+                </Link>
+              </div>
+
+              <div className="space-y-4">
+                {accounts.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 mb-4">No accounts yet</p>
+                    <Link to="/accounts" className="btn btn-primary">
+                      <FaPlus /> Create Your First Account
+                    </Link>
+                  </div>
+                ) : (
+                  accounts.map((account) => (
+                    <div
+                      key={account.id}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                          {getAccountIcon(account.type)}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-800">{account.name}</h3>
+                          <p className="text-sm text-gray-500">{account.accountNumber}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-gray-800">₦{account.balance.toLocaleString()}</p>
+                        <span className="text-xs text-gray-500 capitalize">{account.type}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Transactions */}
+        <div className="lg:col-span-1">
+          <div className="card bg-white shadow-md border">
+            <div className="card-body">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="card-title">Recent Activity</h2>
+                <Link to="/transactions" className="btn btn-sm btn-ghost">
+                  View All
+                </Link>
+              </div>
+
+              <div className="space-y-3">
+                {recentTransactions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 text-sm">No transactions yet</p>
+                  </div>
+                ) : (
+                  recentTransactions.map((transaction) => (
+                    <div
+                      key={transaction.id}
+                      className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                          {getTransactionIcon(transaction.type)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800">{transaction.description}</p>
+                          <p className="text-xs text-gray-500">{new Date(transaction.date).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p
+                          className={`text-sm font-semibold ${
+                            transaction.type === "deposit" ? "text-green-600" : "text-red-600"
+                          }`}
+                        >
+                          {transaction.type === "deposit" ? "+" : "-"}₦{transaction.amount.toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link
-            to="/transfers"
-            className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl flex flex-col items-center justify-center transition-colors"
-          >
-            <FaExchangeAlt className="text-2xl mb-2" />
-            <span>Transfer Money</span>
-          </Link>
-
-          <button
-            onClick={() => {/* Add deposit functionality */}}
-            className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl flex flex-col items-center justify-center transition-colors"
-          >
-            <FaMoneyBillWave className="text-2xl mb-2" />
-            <span>Deposit</span>
-          </button>
-
-          <Link
-            to="/accounts"
-            className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl flex flex-col items-center justify-center transition-colors"
-          >
-            <FaCreditCard className="text-2xl mb-2" />
-            <span>Open Account</span>
-          </Link>
-
-          <Link
-            to="/profile"
-            className="bg-gray-700 hover:bg-gray-800 text-white p-4 rounded-xl flex flex-col items-center justify-center transition-colors"
-          >
-            <FaUserCircle className="text-2xl mb-2" />
-            <span>My Profile</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Recent Accounts */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Your Accounts</h2>
-          <Link to="/accounts" className="text-blue-600 hover:text-blue-800">
-            View All →
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {accounts.slice(0, 3).map(account => (
-            <div key={account.id} className="bg-white p-4 rounded-xl shadow-sm border">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="font-semibold">{account.name}</h3>
-                  <p className="text-sm text-gray-500">{account.accountNumber}</p>
-                </div>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                  {account.type}
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-gray-800">
-                ₦{account.balance.toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Transactions */}
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Recent Transactions</h2>
-          <Link to="/transactions" className="text-blue-600 hover:text-blue-800">
-            View All →
-          </Link>
-        </div>
-        <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-          {recentTransactions.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <FaHistory className="text-4xl mx-auto mb-4 text-gray-300" />
-              <p>No transactions yet</p>
-            </div>
-          ) : (
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="p-4 text-left">Description</th>
-                  <th className="p-4 text-left">Amount</th>
-                  <th className="p-4 text-left">Date</th>
-                  <th className="p-4 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentTransactions.map(tx => (
-                  <tr key={tx.id} className="border-t">
-                    <td className="p-4">
-                      <div>
-                        <p className="font-medium">{tx.description}</p>
-                        <p className="text-sm text-gray-500">
-                          {tx.fromAccount} → {tx.toAccount}
-                        </p>
-                      </div>
-                    </td>
-                    <td className={`p-4 font-semibold ${
-                      tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {tx.type === 'deposit' ? '+' : '-'}₦{tx.amount.toLocaleString()}
-                    </td>
-                    <td className="p-4 text-gray-600">
-                      {new Date(tx.date).toLocaleDateString()}
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                        {tx.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+      <div className="card bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl">
+        <div className="card-body">
+          <h2 className="card-title text-2xl mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Link to="/transactions" className="btn bg-white/20 hover:bg-white/30 border-none text-white">
+              <FaExchangeAlt /> Transfer
+            </Link>
+            <Link to="/accounts" className="btn bg-white/20 hover:bg-white/30 border-none text-white">
+              <FaPlus /> New Account
+            </Link>
+            <Link to="/transactions" className="btn bg-white/20 hover:bg-white/30 border-none text-white">
+              <FaChartLine /> Analytics
+            </Link>
+            <Link to="/setting" className="btn bg-white/20 hover:bg-white/30 border-none text-white">
+              Settings
+            </Link>
+          </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
