@@ -216,6 +216,12 @@ const Dashboard = () => {
                   {stat.icon}
                 </div>
               </div>
+              <div className="flex items-center gap-2 mt-4">
+                <span className={`badge ${stat.trend === 'up' ? 'badge-success' : 'badge-error'}`}>
+                  {stat.change}
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{stat.detail}</span>
+              </div>
             </div>
 
             {/* Weekly Activity Chart */}
