@@ -7,6 +7,7 @@ import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import React from 'react';
 function SignUp() {
   const handleSubmit = (e) => {
+export default function Signup() {
     e.preventDefault();
     
     if (!name || !email || !password || !confirmPassword) {
