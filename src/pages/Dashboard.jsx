@@ -177,24 +177,25 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6 font-sans">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">My Cards</h1>
-          <div className="flex items-center space-x-4">
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full bg-primary text-white flex items-center justify-center">
-                  <span className="font-semibold">JD</span>
-                </div>
-              </label>
-              <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a>Profile</a></li>
-                <li><a>Settings</a></li>
-                <li><a>Logout</a></li>
-              </ul>
-            </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Account Overview</h1>
+          <p className="text-gray-500 dark:text-gray-400">Manage all your financial accounts in one place</p>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-outline gap-2">
+              <FaFilter /> Filter
+            </label>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li><button onClick={() => setTimeFilter('week')}>This Week</button></li>
+              <li><button onClick={() => setTimeFilter('month')}>This Month</button></li>
+              <li><button onClick={() => setTimeFilter('quarter')}>This Quarter</button></li>
+              <li><button onClick={() => setTimeFilter('year')}>This Year</button></li>
+            </ul>
           </div>
         </div>
 
