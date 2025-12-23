@@ -112,10 +112,102 @@ function DashboardLayout() {
             </button>
           </div>
 
-          <div className="dropdown dropdown-end">
-            <button className="btn btn-ghost btn-circle avatar">
-              <div className="w-8 rounded-full">
-                <User size={20} />
+              {/* Profile */}
+              <div className="dropdown dropdown-end">
+                <button 
+                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-base-200 transition-colors"
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                >
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-secondary p-0.5">
+                    <div className="w-full h-full rounded-full bg-base-100 flex items-center justify-center">
+                      <User size={16} className="text-primary" />
+                    </div>
+                  </div>
+                  <div className="hidden md:block text-left">
+                    <p className="text-sm font-semibold">{userProfile.name}</p>
+                    <p className="text-xs text-base-content/60">Premium Account</p>
+                  </div>
+                  <ChevronDown size={16} className="hidden md:block" />
+                </button>
+
+                <ul className={`dropdown-content menu p-3 shadow-2xl bg-base-100 rounded-box w-64 mt-2 ${isProfileOpen ? 'block' : 'hidden'}`}>
+                  {/* Profile Header */}
+                  <div className="p-3 mb-2 rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary p-0.5">
+                        <div className="w-full h-full rounded-full bg-base-100 flex items-center justify-center">
+                          <User size={20} className="text-primary" />
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">{userProfile.name}</h4>
+                        <p className="text-sm text-base-content/60">{userProfile.email}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Profile Menu Items */}
+                  <li>
+                    <NavLink to="/profile" className="flex items-center gap-3 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <User size={16} className="text-primary" />
+                      </div>
+                      <div>
+                        <span className="font-medium">My Profile</span>
+                        <p className="text-xs text-base-content/60">Personal information</p>
+                      </div>
+                    </NavLink>
+                  </li>
+                  
+                  <li>
+                    <NavLink to="/cards" className="flex items-center gap-3 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                        <CreditCard size={16} className="text-blue-500" />
+                      </div>
+                      <div>
+                        <span className="font-medium">My Cards</span>
+                        <p className="text-xs text-base-content/60">View all your cards</p>
+                      </div>
+                    </NavLink>
+                  </li>
+                  
+                  <li>
+                    <NavLink to="/wallet" className="flex items-center gap-3 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                        <Wallet size={16} className="text-green-500" />
+                      </div>
+                      <div>
+                        <span className="font-medium">Wallet</span>
+                        <p className="text-xs text-base-content/60">Manage your wallet</p>
+                      </div>
+                    </NavLink>
+                  </li>
+
+                  <div className="divider my-2"></div>
+
+                  {/* Settings */}
+                  <li>
+                    <NavLink to="/settings" className="flex items-center gap-3 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-base-300 flex items-center justify-center">
+                        <Settings size={16} />
+                      </div>
+                      <div>
+                        <span className="font-medium">Settings</span>
+                        <p className="text-xs text-base-content/60">Preferences & privacy</p>
+                      </div>
+                    </NavLink>
+                  </li>
+
+                  {/* Logout */}
+                  <li>
+                    <a href="/login" className="flex items-center gap-3 py-3 text-error">
+                      <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center">
+                        <LogOut size={16} />
+                      </div>
+                      <span className="font-medium">Logout</span>
+                    </a>
+                  </li>
+                </ul>
               </div>
             </button>
             <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
