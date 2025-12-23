@@ -89,9 +89,6 @@ function DashboardLayout() {
               <button type="submit" className="btn btn-square">
                 <Search size={20} />
               </button>
-            </div>
-          </form>
-        </div>
 
               {/* Theme Toggle */}
               <ThemeToggle />
