@@ -1,301 +1,286 @@
-import React from 'react';
-import { FaSpotify, FaUserFriends, FaShieldAlt, FaEye, FaPlus, FaEllipsisV } from 'react-icons/fa';
+"use client"
 
-const Dashboard = () => {
-  // Transactions data
-  const transactions = [
-    {
-      id: 1,
-      description: 'Spotify',
-      details: 'Auto renew',
-      transactionId: '#12548796',
-      type: 'Shopping',
-      card: '1234 ****',
-      date: '25 Jan, 12:20 AM',
-      amount: '-$2,500',
-      status: 'previous',
-      icon: <FaSpotify className="text-green-500" />
-    },
-    {
-      id: 2,
-      description: 'People',
-      details: 'Sales',
-      transactionId: '#13546795',
-      type: 'Transfer',
-      card: '1234 ****',
-      date: '25 Jan, 10:40 PM',
-      amount: '+$970',
-      status: 'previous',
-      icon: <FaUserFriends className="text-blue-500" />
-    },
-    {
-      id: 3,
-      description: 'Service',
-      details: 'Service',
-      transactionId: '#13546795',
-      type: 'Service',
-      card: '1234 ****',
-      date: '20 Jan, 10:40 PM',
-      amount: '+$580',
-      status: 'previous',
-      icon: <FaShieldAlt className="text-purple-500" />
-    },
-    {
-      id: 4,
-      description: 'Vision',
-      details: '',
-      transactionId: '#15546196',
-      type: 'Transfer',
-      card: '1234 ****',
-      date: '15 Jan, 03:28 PM',
-      amount: '+$808',
-      status: 'previous',
-      icon: <FaEye className="text-yellow-500" />
-    },
-    {
-      id: 5,
-      description: 'Entity',
-      details: '',
-      transactionId: '#125456795',
-      type: 'Transfer',
-      card: '1234 ****',
-      date: '14 Jan, 10:40 PM',
-      amount: '+$584',
-      status: 'previous',
-      icon: <FaEllipsisV className="text-gray-500" />
+import { useState } from "react"
+import { useBanking } from "../contexts/BankingContext"
+import { FaExchangeAlt, FaCheckCircle, FaUsers, FaUniversity, FaMobileAlt } from "react-icons/fa"
+
+const Transactions = () => {
+  const { accounts, transfer, getAccountById } = useBanking()
+
+  const [formData, setFormData] = useState({
+    fromAccount: "",
+    toAccount: "",
+    amount: "",
+    description: "",
+  })
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleTransfer = (e) => {
+    e.preventDefault()
+    setError("")
+
+    if (!formData.fromAccount || !formData.toAccount || !formData.amount) {
+      setError("Please fill all required fields")
+      return
     }
-  ];
+
+    if (formData.fromAccount === formData.toAccount) {
+      setError("Cannot transfer to the same account")
+      return
+    }
+
+    const amount = Number.parseFloat(formData.amount)
+    if (amount <= 0) {
+      setError("Amount must be greater than 0")
+      return
+    }
+
+    const sourceAccount = getAccountById(formData.fromAccount)
+    if (sourceAccount && sourceAccount.balance < amount) {
+      setError(`Insufficient balance in ${sourceAccount.name}. Available: ₦${sourceAccount.balance.toLocaleString()}`)
+      return
+    }
+
+    const result = transfer(formData.fromAccount, formData.toAccount, amount, formData.description || "Transfer")
+
+    if (result) {
+      setSuccess(true)
+      setFormData({
+        fromAccount: "",
+        toAccount: "",
+        amount: "",
+        description: "",
+      })
+
+      setTimeout(() => {
+        setSuccess(false)
+      }, 3000)
+    } else {
+      setError("Transfer failed. Check account balance.")
+    }
+  }
+
+  const handleQuickTransfer = (amount) => {
+    if (accounts.length >= 2) {
+      setFormData({
+        fromAccount: accounts[0].id,
+        toAccount: accounts[1].id,
+        amount: amount.toString(),
+        description: "Quick transfer",
+      })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">My Cards</h1>
-            <div className="flex space-x-4 mt-2">
-              <button className="text-blue-600 font-medium flex items-center">
-                <FaPlus className="mr-2" /> Add Card
-              </button>
-              <button className="text-gray-600 font-medium">My Expense</button>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full bg-primary text-white flex items-center justify-center">
-                  <span className="font-semibold">JD</span>
-                </div>
-              </label>
-            </div>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Transfer Money</h1>
+          <p className="text-gray-600 mt-2">Send money between your accounts instantly</p>
         </div>
 
-        {/* Cards Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Card 1 */}
-          <div className="card bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
-            <div className="card-body">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="flex items-center mb-2">
-                    <div className="badge badge-sm bg-white/30 text-white border-0 mr-2">DATA</div>
-                    <span className="text-sm">9/2020</span>
-                  </div>
-                  <h2 className="card-title text-3xl font-bold mb-1">$5,796</h2>
-                  <p className="text-white/80 text-sm">DATA Location</p>
-                  <p className="text-white/80 text-sm">MADE BY 01 12/23</p>
+        {/* Success Message */}
+        {success && (
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 animate-fade-in">
+            <FaCheckCircle className="text-green-600 text-xl flex-shrink-0" />
+            <div>
+              <p className="font-medium text-green-800">Transfer successful!</p>
+              <p className="text-sm text-green-700">The amount has been transferred between accounts.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-red-800 font-medium">{error}</p>
+          </div>
+        )}
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Transfer Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-md border p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <FaExchangeAlt className="text-blue-600 text-xl" />
                 </div>
-                <div className="text-right">
-                  <div className="badge badge-sm bg-white/30 text-white border-0 mb-2">$5.7%</div>
-                  <div className="flex space-x-2">
-                    <div className="w-10 h-7 bg-white/30 rounded"></div>
-                    <div className="w-10 h-7 bg-white/30 rounded"></div>
-                  </div>
+                <div>
+                  <h2 className="text-xl font-semibold">Make a Transfer</h2>
+                  <p className="text-gray-500 text-sm">Fill in the transfer details</p>
                 </div>
               </div>
-              <div className="mt-8">
-                <p className="text-xl font-semibold">3778 **** **** 1234</p>
-                <div className="flex justify-between items-center mt-4">
-                  <p className="text-white/80 text-sm">VALID THRU 08/25</p>
-                  <div className="flex items-center">
-                    <div className="w-8 h-5 bg-white/30 rounded mr-2"></div>
-                    <span className="text-sm">VISA</span>
-                  </div>
+
+              <form onSubmit={handleTransfer} className="space-y-6">
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">From Account *</span>
+                  </label>
+                  <select
+                    value={formData.fromAccount}
+                    onChange={(e) => setFormData({ ...formData, fromAccount: e.target.value })}
+                    className="select select-bordered w-full"
+                    required
+                  >
+                    <option value="">Select source account</option>
+                    {accounts.map((acc) => (
+                      <option key={acc.id} value={acc.id}>
+                        {acc.name} - ₦{acc.balance.toLocaleString()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">To Account *</span>
+                  </label>
+                  <select
+                    value={formData.toAccount}
+                    onChange={(e) => setFormData({ ...formData, toAccount: e.target.value })}
+                    className="select select-bordered w-full"
+                    required
+                  >
+                    <option value="">Select destination account</option>
+                    {accounts.map((acc) => (
+                      <option key={acc.id} value={acc.id}>
+                        {acc.name} - ₦{acc.balance.toLocaleString()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Amount (₦) *</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.amount}
+                    onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                    placeholder="0.00"
+                    min="1"
+                    step="0.01"
+                    className="input input-bordered w-full"
+                    required
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Description (Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="e.g., Rent payment, Gift to friend"
+                    className="input input-bordered w-full"
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-primary w-full">
+                  <FaExchangeAlt className="mr-2" />
+                  Transfer Money
+                </button>
+              </form>
+            </div>
+
+            {/* Transfer Types Info */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+              <div className="bg-white rounded-xl shadow-md border p-4 flex items-start gap-3">
+                <div className="p-3 bg-purple-100 rounded-lg">
+                  <FaUsers className="text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm">Between Accounts</h3>
+                  <p className="text-xs text-gray-500 mt-1">Transfer between your accounts</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md border p-4 flex items-start gap-3">
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <FaUniversity className="text-green-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm">To Other Banks</h3>
+                  <p className="text-xs text-gray-500 mt-1">Coming soon</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md border p-4 flex items-start gap-3">
+                <div className="p-3 bg-orange-100 rounded-lg">
+                  <FaMobileAlt className="text-orange-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm">Mobile Money</h3>
+                  <p className="text-xs text-gray-500 mt-1">Coming soon</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Card 2 */}
-          <div className="card bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
-            <div className="card-body">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="flex items-center mb-2">
-                    <div className="badge badge-sm bg-white/30 text-white border-0 mr-2">SOCIALIZATION</div>
-                    <span className="text-sm">BANK</span>
-                  </div>
-                  <h2 className="card-title text-3xl font-bold mb-1">$5,756</h2>
-                  <p className="text-white/80 text-sm">CIGARETTES</p>
-                  <p className="text-white/80 text-sm">VALUE IN 4G 17/22</p>
-                </div>
-                <div className="text-right">
-                  <div className="badge badge-sm bg-white/30 text-white border-0 mb-2">17.92%</div>
-                  <div className="flex space-x-2">
-                    <div className="w-10 h-7 bg-white/30 rounded"></div>
-                    <div className="w-10 h-7 bg-white/30 rounded"></div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8">
-                <p className="text-xl font-semibold">3779 **** **** 1234</p>
-                <div className="flex justify-between items-center mt-4">
-                  <p className="text-white/80 text-sm">VALID THRU 07/24</p>
-                  <div className="flex items-center">
-                    <div className="w-8 h-5 bg-white/30 rounded mr-2"></div>
-                    <span className="text-sm">MASTER</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Transactions Table */}
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-              <h2 className="card-title text-2xl font-bold">Recent Transactions</h2>
-              <div className="flex space-x-2">
-                <button className="btn btn-sm btn-active">All Transactions</button>
-                <div className="tabs tabs-boxed">
-                  <a className="tab tab-active">Income</a>
-                  <a className="tab">Expense</a>
-                </div>
-              </div>
-            </div>
-
-            {/* Desktop Table */}
-            <div className="overflow-x-auto">
-              <table className="table table-zebra w-full hidden md:table">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="font-semibold text-gray-700">Description</th>
-                    <th className="font-semibold text-gray-700">Transaction ID</th>
-                    <th className="font-semibold text-gray-700">Type</th>
-                    <th className="font-semibold text-gray-700">Card</th>
-                    <th className="font-semibold text-gray-700">Date</th>
-                    <th className="font-semibold text-gray-700">Amount</th>
-                    <th className="font-semibold text-gray-700">Receipt</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((transaction) => (
-                    <tr key={transaction.id} className="hover">
-                      <td>
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
-                            {transaction.icon}
-                          </div>
-                          <div>
-                            <p className="font-medium">{transaction.description}</p>
-                            {transaction.details && (
-                              <p className="text-gray-500 text-sm">{transaction.details}</p>
-                            )}
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <span className="text-gray-600">{transaction.transactionId}</span>
-                      </td>
-                      <td>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          transaction.type === 'Shopping' ? 'bg-red-100 text-red-800' :
-                          transaction.type === 'Transfer' ? 'bg-blue-100 text-blue-800' :
-                          'bg-purple-100 text-purple-800'
-                        }`}>
-                          {transaction.type}
-                        </span>
-                      </td>
-                      <td className="text-gray-600">{transaction.card}</td>
-                      <td className="text-gray-600">{transaction.date}</td>
-                      <td className={`font-semibold ${
-                        transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {transaction.amount}
-                      </td>
-                      <td>
-                        <button className="btn btn-xs btn-outline">{transaction.status}</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Mobile Cards View */}
-              <div className="space-y-4 md:hidden">
-                {transactions.map((transaction) => (
-                  <div key={transaction.id} className="card card-compact bg-base-100 shadow">
-                    <div className="card-body">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center">
-                          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mr-3">
-                            {transaction.icon}
-                          </div>
-                          <div>
-                            <h3 className="font-bold">{transaction.description}</h3>
-                            {transaction.details && (
-                              <p className="text-gray-500 text-sm">{transaction.details}</p>
-                            )}
-                            <p className="text-gray-600 text-sm">{transaction.transactionId}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className={`font-bold ${
-                            transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {transaction.amount}
-                          </p>
-                          <p className="text-gray-500 text-sm">{transaction.date}</p>
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center mt-3">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          transaction.type === 'Shopping' ? 'bg-red-100 text-red-800' :
-                          transaction.type === 'Transfer' ? 'bg-blue-100 text-blue-800' :
-                          'bg-purple-100 text-purple-800'
-                        }`}>
-                          {transaction.type}
-                        </span>
-                        <span className="text-gray-600 text-sm">{transaction.card}</span>
-                        <button className="btn btn-xs btn-outline">{transaction.status}</button>
-                      </div>
-                    </div>
-                  </div>
+          {/* Quick Actions & Info */}
+          <div className="space-y-6">
+            {/* Quick Transfers */}
+            <div className="bg-white rounded-xl shadow-md border p-6">
+              <h3 className="font-semibold mb-4">Quick Transfers</h3>
+              <p className="text-sm text-gray-500 mb-4">One-click transfers between your first two accounts</p>
+              <div className="space-y-3">
+                {[1000, 5000, 10000, 50000].map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => handleQuickTransfer(amount)}
+                    className="btn btn-outline w-full"
+                    disabled={accounts.length < 2}
+                  >
+                    ₦{amount.toLocaleString()}
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Pagination */}
-            <div className="flex justify-between items-center mt-6">
-              <div className="text-sm text-gray-500">
-                Showing 5 of 25 transactions
+            {/* Transfer Info */}
+            <div className="alert alert-info">
+              <div>
+                <h4 className="font-semibold mb-2">Transfer Information</h4>
+                <ul className="text-sm space-y-1">
+                  <li>• Instant transfers</li>
+                  <li>• No fees between accounts</li>
+                  <li>• Secure & encrypted</li>
+                  <li>• Daily limit: ₦5,000,000</li>
+                </ul>
               </div>
-              <div className="join">
-                <button className="join-item btn btn-sm">Previous</button>
-                <button className="join-item btn btn-sm btn-active">1</button>
-                <button className="join-item btn btn-sm">2</button>
-                <button className="join-item btn btn-sm">3</button>
-                <button className="join-item btn btn-sm">4</button>
-                <button className="join-item btn btn-sm">Next</button>
+            </div>
+
+            {/* Your Accounts Summary */}
+            <div className="bg-white rounded-xl shadow-md border p-6">
+              <h3 className="font-semibold mb-4">Your Accounts</h3>
+              <div className="space-y-3">
+                {accounts.length === 0 ? (
+                  <p className="text-sm text-gray-500 text-center py-4">No accounts available</p>
+                ) : (
+                  accounts.map((acc) => (
+                    <div key={acc.id} className="p-3 bg-gray-50 rounded-lg">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-medium text-sm">{acc.name}</p>
+                          <p className="text-xs text-gray-500">{acc.accountNumber}</p>
+                        </div>
+                        <p className="font-bold text-sm">₦{acc.balance.toLocaleString()}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Transactions
