@@ -224,21 +224,35 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Weekly Activity Chart */}
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-xl font-bold mb-4">Weekly Activity</h2>
-                <div className="h-64">
-                  <Line data={weeklyActivityData} options={weeklyActivityOptions} />
-                </div>
-                <div className="flex justify-between mt-4 text-sm">
-                  <span>$0</span>
-                  <span>$100</span>
-                  <span>$90</span>
-                  <span>$200</span>
-                  <span>$110</span>
-                  <span>$0</span>
-                </div>
+      {/* Charts and Account Types */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Weekly Activity Chart */}
+        <div className="lg:col-span-2">
+          <div className="card bg-base-100 shadow-lg">
+            <div className="card-body">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="card-title">Weekly Activity</h3>
+                <span className="text-sm text-primary font-semibold">View Details →</span>
+              </div>
+              <div className="h-64">
+                <Line 
+                  data={weeklyData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        ticks: {
+                          callback: value => '$' + value
+                        }
+                      }
+                    }
+                  }}
+                />
               </div>
             </div>
 
