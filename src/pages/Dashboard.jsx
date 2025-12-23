@@ -331,18 +331,12 @@ const Dashboard = () => {
                     }`}>
                       {transaction.amount.startsWith('+') ? '+' : '-'}
                     </div>
-                    <span className="font-bold text-green-600">$2,500</span>
-                  </div>
-                  
-                  {/* Transaction 3 */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
-                        <i className="fas fa-user-friends text-red-500"></i>
-                      </div>
-                      <div>
-                        <p className="font-medium">Jenni Wilson</p>
-                        <p className="text-gray-500 text-sm">21 January 2021</p>
+                    <div>
+                      <p className="font-semibold">{transaction.name}</p>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">{transaction.date}</span>
+                        <span className="badge badge-outline badge-sm">{transaction.type}</span>
+                        <span className="text-gray-500">• {transaction.account}</span>
                       </div>
                     </div>
                   </div>
