@@ -165,9 +165,11 @@ const Dashboard = () => {
       {
         data: [15, 35, 50],
         backgroundColor: [
-          'rgb(59, 130, 246)', // blue
-          'rgb(34, 197, 94)', // green
-          'rgb(168, 85, 247)' // purple
+          'rgb(59, 130, 246)',  // blue
+          'rgb(34, 197, 94)',   // green
+          'rgb(168, 85, 247)',  // purple
+          'rgb(245, 158, 11)',  // yellow
+          'rgb(107, 114, 128)'  // gray
         ],
         borderWidth: 0,
         hoverOffset: 10
