@@ -163,7 +163,7 @@ const Dashboard = () => {
     labels: ['Entertainment', 'Investment', 'Others'],
     datasets: [
       {
-        data: [15, 35, 50],
+        data: [15, 25, 20, 30, 10],
         backgroundColor: [
           'rgb(59, 130, 246)',  // blue
           'rgb(34, 197, 94)',   // green
