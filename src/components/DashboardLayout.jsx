@@ -257,7 +257,11 @@ function DashboardLayout() {
                     }`
                   }
                 >
-                  <div className="text-lg">{item.icon}</div>
+                  <div className={`text-lg transition-transform group-hover:scale-110 ${
+                    item.id === "dashboard" ? "animate-pulse" : ""
+                  }`}>
+                    {item.icon}
+                  </div>
                   <span className="font-medium">{item.label}</span>
                 </NavLink>
               ))}
