@@ -210,7 +210,7 @@ function DashboardLayout() {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="flex">
         {/* SIDEBAR */}
