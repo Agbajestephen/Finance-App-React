@@ -196,6 +196,10 @@ const Dashboard = () => {
               <li><button onClick={() => setTimeFilter('year')}>This Year</button></li>
             </ul>
           </div>
+          
+          <button className="btn btn-primary gap-2">
+            <FaPlus /> Add Account
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
