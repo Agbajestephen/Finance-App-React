@@ -345,26 +345,6 @@ const Dashboard = () => {
                         <p className="text-gray-500 text-sm">21 January 2021</p>
                       </div>
                     </div>
-                    <span className="font-bold text-red-600">-$5,400</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Expense Statistics */}
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-xl font-bold mb-4">Expense Statistics</h2>
-                <div className="h-48">
-                  <Doughnut data={expenseData} options={expenseOptions} />
-                </div>
-                <div className="mt-4 space-y-2">
-                  <div className="flex justify-between">
-                    <span className="flex items-center">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div> 
-                      Entertainment
-                    </span>
-                    <span className="font-medium">15%</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="flex items-center">
