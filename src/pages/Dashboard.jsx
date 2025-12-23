@@ -379,14 +379,21 @@ const Dashboard = () => {
                 }}
               />
             </div>
-            <div className="flex justify-between mt-4 text-sm">
-              <span>Jul</span>
-              <span>Aug</span>
-              <span>Sep</span>
-              <span>Oct</span>
-              <span>Nov</span>
-              <span>Dec</span>
-              <span>Jan</span>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              {[
+                { label: 'Entertainment', value: '15%', color: 'bg-blue-500' },
+                { label: 'Food', value: '25%', color: 'bg-green-500' },
+                { label: 'Shopping', value: '20%', color: 'bg-purple-500' },
+                { label: 'Bills', value: '30%', color: 'bg-yellow-500' }
+              ].map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                    <span className="text-sm">{item.label}</span>
+                  </div>
+                  <span className="font-semibold">{item.value}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
