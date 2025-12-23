@@ -293,18 +293,8 @@ const Dashboard = () => {
                     <p className="text-sm text-gray-500">Combined Balance</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold">SALE 1THU</p>
-                    <p className="text-xl font-bold">17.92</p>
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <p className="text-lg font-semibold">3779 **** **** 1234</p>
-                  <div className="flex justify-between items-center mt-2">
-                    <p className="text-white/80">VALID THRU 07/24</p>
-                    <div className="flex space-x-2">
-                      <div className="w-8 h-5 bg-white/30 rounded"></div>
-                      <div className="w-8 h-5 bg-white/30 rounded"></div>
-                    </div>
+                    <p className="font-bold text-lg">6 Accounts</p>
+                    <p className="text-lg font-bold text-primary">$98,540.17</p>
                   </div>
                 </div>
               </div>
