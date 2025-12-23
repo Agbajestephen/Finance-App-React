@@ -258,16 +258,17 @@ const Dashboard = () => {
           </div>
         </div>
 
-            {/* Quick Transfer Section */}
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-xl font-bold mb-4">Quick Transfer</h2>
-                <div className="flex flex-wrap gap-6 mb-6">
-                  {/* Contact 1 */}
-                  <div className="flex flex-col items-center">
-                    <div className="avatar">
-                      <div className="w-16 rounded-full bg-primary text-white flex items-center justify-center">
-                        <span className="text-xl font-semibold">LB</span>
+        {/* Account Types Overview */}
+        <div>
+          <div className="card bg-base-100 shadow-lg">
+            <div className="card-body">
+              <h3 className="card-title mb-4">Account Types Overview</h3>
+              <div className="space-y-4">
+                {accountTypes.map((account, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-base-200 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg ${account.color} flex items-center justify-center`}>
+                        <span className="text-lg">{account.icon}</span>
                       </div>
                     </div>
                     <p className="mt-2 font-medium">Livia Bear</p>
