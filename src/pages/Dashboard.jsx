@@ -1,12 +1,12 @@
-import React from 'react';
-import { Doughnut, Bar, Line } from 'react-chartjs-2';
+import React, { useState } from 'react';
+import { FaArrowUp, FaArrowDown, FaPlus, FaEye, FaFilter } from 'react-icons/fa';
+import { Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   ArcElement,
   Title,
   Tooltip,
