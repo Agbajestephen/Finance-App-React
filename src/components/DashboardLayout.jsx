@@ -314,7 +314,7 @@ function DashboardLayout() {
         </aside>
 
         {/* MAIN CONTENT */}
-        <main className="flex-1 p-6 bg-base-100 text-base-content">
+        <main className="flex-1 p-4 lg:p-6 bg-base-100 text-base-content overflow-auto">
           <Outlet />
         </main>
       </div>
