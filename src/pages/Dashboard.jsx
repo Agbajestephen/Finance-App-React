@@ -287,25 +287,9 @@ const Dashboard = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center">
-                  <input 
-                    type="text" 
-                    placeholder="Write Amount" 
-                    className="input input-bordered w-full max-w-xs mr-4" 
-                    defaultValue="$23.50" 
-                  />
-                  <button className="btn btn-primary">Send</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Secondary Card and Stats */}
-          <div className="space-y-6">
-            {/* Secondary Card */}
-            <div className="card bg-gradient-to-br from-pink-400 to-red-500 text-white shadow-xl">
-              <div className="card-body">
-                <div className="flex justify-between items-start">
+                <div className="divider my-2"></div>
+                
+                <div className="flex justify-between items-center p-3 bg-base-200 rounded-lg">
                   <div>
                     <h2 className="card-title text-2xl font-bold mb-2">$5,756</h2>
                     <p className="text-white/80">CASH USCLIER</p>
