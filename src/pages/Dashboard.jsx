@@ -279,16 +279,8 @@ const Dashboard = () => {
                         <p className="text-sm text-gray-500">{account.count} Accounts</p>
                       </div>
                     </div>
-                    <p className="mt-2 font-medium">Randy Press</p>
-                    <p className="text-gray-500 text-sm">Director</p>
-                  </div>
-                  
-                  {/* Contact 3 */}
-                  <div className="flex flex-col items-center">
-                    <div className="avatar">
-                      <div className="w-16 rounded-full bg-accent text-white flex items-center justify-center">
-                        <span className="text-xl font-semibold">WD</span>
-                      </div>
+                    <div className="text-right">
+                      <p className="font-bold">{account.amount}</p>
                     </div>
                     <p className="mt-2 font-medium">Workman</p>
                     <p className="text-gray-500 text-sm">Designer</p>
