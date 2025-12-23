@@ -206,22 +206,16 @@ const Dashboard = () => {
               <div className="card-body">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h2 className="card-title text-3xl font-bold mb-2">$5,796</h2>
-                    <p className="text-white/80">CASH USCLIER</p>
-                    <p className="text-white/80">Entry Columns</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold">SALE 1THU</p>
-                    <p className="text-2xl font-bold">57.22</p>
-                  </div>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <div key={index} className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="card-body">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{stat.title}</p>
+                  <h3 className="text-2xl font-bold mt-2">{stat.value}</h3>
                 </div>
-                <div className="mt-8">
-                  <p className="text-xl font-semibold">3778 **** **** 1234</p>
-                  <div className="flex justify-between items-center mt-4">
-                    <p className="text-white/80">VALID THRU 08/25</p>
-                    <div className="flex space-x-2">
-                      <div className="w-10 h-7 bg-white/30 rounded"></div>
-                      <div className="w-10 h-7 bg-white/30 rounded"></div>
                     </div>
                   </div>
                 </div>
