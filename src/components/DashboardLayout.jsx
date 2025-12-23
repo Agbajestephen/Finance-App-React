@@ -265,6 +265,9 @@ function DashboardLayout() {
                     {item.icon}
                   </div>
                   <span className="font-medium">{item.label}</span>
+                  {item.id === "transactions" && (
+                    <span className="ml-auto badge badge-primary badge-sm">3</span>
+                  )}
                 </NavLink>
               ))}
             </div>
