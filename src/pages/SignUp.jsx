@@ -9,6 +9,7 @@ function SignUp() {
   const handleSubmit = (e) => {
 export default function Signup() {
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
     e.preventDefault();
     
     if (!name || !email || !password || !confirmPassword) {
