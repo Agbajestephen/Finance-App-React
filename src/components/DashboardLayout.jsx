@@ -76,17 +76,10 @@ function DashboardLayout() {
               </form>
             </div>
 
-        <div className="navbar-center hidden md:flex">
-          <form onSubmit={handleSearch} className="form-control">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Search for something..."
-                className="input input-bordered w-96"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button type="submit" className="btn btn-square">
+            {/* Right Section - Actions */}
+            <div className="flex items-center gap-3">
+              {/* Mobile Search */}
+              <button className="btn btn-ghost btn-circle lg:hidden">
                 <Search size={20} />
               </button>
 
