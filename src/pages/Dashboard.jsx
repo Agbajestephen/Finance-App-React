@@ -177,52 +177,6 @@ const Dashboard = () => {
     ]
   };
 
-  const expenseOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-    cutout: '70%'
-  };
-
-  // Balance History Data
-  const balanceHistoryData = {
-    labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
-    datasets: [
-      {
-        label: 'Balance',
-        data: [65000, 59000, 72000, 81000, 86000, 92500, 100000],
-        backgroundColor: 'rgba(102, 126, 234, 0.7)',
-        borderColor: 'rgb(102, 126, 234)',
-        borderWidth: 1,
-        borderRadius: 6
-      }
-    ]
-  };
-
-  const balanceHistoryOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: false,
-        ticks: {
-          callback: function(value) {
-            return '$' + (value/1000).toFixed(0) + 'k';
-          }
-        }
-      }
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 font-sans">
       <div className="max-w-7xl mx-auto">
