@@ -230,8 +230,23 @@ function DashboardLayout() {
             flex flex-col
           `}
         >
-          <div className="p-4">
-            <div className="space-y-2">
+          {/* Sidebar Content */}
+          <div className="p-4 flex-1">
+            {/* Quick Stats */}
+            <div className="mb-6 p-4 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Total Balance</span>
+                <PieChart size={16} className="text-primary" />
+              </div>
+              <div className="text-2xl font-bold">$45,892.50</div>
+              <div className="text-xs text-base-content/60 mt-1">+12.5% from last month</div>
+            </div>
+
+            {/* Navigation */}
+            <nav className="space-y-1">
+              <div className="px-3 py-2 text-xs font-semibold text-base-content/50 uppercase tracking-wider">
+                Main Menu
+              </div>
               {menuItems.map((item) => (
                 <NavLink
                   key={item.id}
