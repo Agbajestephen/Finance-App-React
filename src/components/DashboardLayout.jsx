@@ -209,12 +209,7 @@ function DashboardLayout() {
                   </li>
                 </ul>
               </div>
-            </button>
-            <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><NavLink to="/setting">Profile</NavLink></li>
-              <li><NavLink to="/setting">Settings</NavLink></li>
-              <li><a href="/login">Logout</a></li>
-            </ul>
+            </div>
           </div>
         </div>
       </div>
