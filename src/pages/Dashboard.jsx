@@ -223,6 +223,9 @@ const Dashboard = () => {
                 <span className="text-sm text-gray-500 dark:text-gray-400">{stat.detail}</span>
               </div>
             </div>
+          </div>
+        ))}
+      </div>
 
       {/* Charts and Account Types */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
