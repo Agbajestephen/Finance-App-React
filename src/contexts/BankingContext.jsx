@@ -256,15 +256,6 @@ export const BankingProvider = ({ children }) => {
       totalPages: Math.ceil(userTransactions.length / limit),
       currentPage: page,
     }
-  }
-
-  // GET ALL USER TRANSACTIONS (for history page)
-  const getAllUserTransactions = () => {
-    if (!currentUser) return []
-    return transactions
-      .filter((tx) => tx.userId === currentUser.uid)
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
-  }
 
   // GET ACCOUNT BY ID
   const getAccountById = (accountId) => {
