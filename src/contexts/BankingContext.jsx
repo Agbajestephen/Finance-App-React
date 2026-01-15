@@ -26,11 +26,11 @@ export const BankingProvider = ({ children }) => {
       return
     }
 
-    // Simulate loading delay
-    setTimeout(() => {
-      // Load accounts
-      const savedAccounts = localStorage.getItem(`banking_accounts_${currentUser.uid}`)
-      const savedTransactions = localStorage.getItem(`banking_transactions_${currentUser.uid}`)
+    async function loadData() {
+      setLoading(true)
+
+      const accs = await loadAccounts(currentUser.uid)
+      const txns = await loadTransactions(currentUser.uid)
 
       if (!savedAccounts) {
         // Create default accounts for new user
