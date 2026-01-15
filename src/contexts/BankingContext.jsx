@@ -10,7 +10,6 @@ import {
 } from "../services/bankingService"
 
 const BankingContext = createContext()
-
 export const useBanking = () => useContext(BankingContext)
 
 export const BankingProvider = ({ children }) => {
