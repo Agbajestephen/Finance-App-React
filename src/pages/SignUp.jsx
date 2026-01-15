@@ -1,19 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import toast from 'react-hot-toast';
-import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
-export default function Signup() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleSubmit(e) {
+import React from 'react';
+function SignUp() {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (!name || !email || !password || !confirmPassword) {
@@ -172,3 +160,4 @@ export default function Signup() {
     </div>
   );
 }
+export default SignUp;
