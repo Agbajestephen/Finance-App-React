@@ -22,6 +22,8 @@ export const BankingProvider = ({ children }) => {
   // Load user's data from localStorage
   useEffect(() => {
     if (!currentUser) {
+      setAccounts([])
+      setTransactions([])
       setLoading(false)
       return
     }
