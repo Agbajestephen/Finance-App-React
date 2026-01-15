@@ -1,7 +1,13 @@
 "use client"
 
-import { createContext, useState, useContext, useEffect } from "react"
-import { useAuth } from "./AuthContext" // Updated import path from ../Contexts to same folder
+import { createContext, useContext, useEffect, useState } from "react"
+import { useAuth } from "./AuthContext"
+import {
+  loadAccounts,
+  saveAccounts,
+  loadTransactions,
+  saveTransactions,
+} from "../services/bankingService"
 
 const BankingContext = createContext()
 
