@@ -19,7 +19,7 @@ export const BankingProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Load user's data from localStorage
+  // Load from Firestore
   useEffect(() => {
     if (!currentUser) {
       setAccounts([])
