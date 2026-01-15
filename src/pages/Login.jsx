@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { signInWithGoogle } from '../firebase';
 import toast from 'react-hot-toast';
-import { FaGoogle, FaGithub, FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaGoogle, FaEnvelope, FaLock } from 'react-icons/fa';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
@@ -21,107 +23,104 @@ export default function Login() {
 
     try {
       setLoading(true);
-      await login(email, password);
-      toast.success('Successfully logged in!');
+      await login(email.trim(), password);
+      toast.success('Welcome back');
       navigate('/dashboard');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to log in: ' + error.message);
+      toast.error('Invalid email or password');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      setLoading(true);
+      await signInWithGoogle();
+      toast.success('Signed in with Google');
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+      toast.error('Google sign-in failed');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="card bg-white shadow-2xl">
-          <div className="card-body">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
-              <p className="text-gray-600 mt-2">Sign in to your account</p>
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold">Email</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaEnvelope className="text-gray-400" />
-                  </div>
-                  <input
-                    type="email"
-                    placeholder="you@example.com"
-                    className="input input-bordered w-full pl-10"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+          <p className="text-gray-500 mt-2">Sign in to continue</p>
+        </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold">Password</span>
-                  <Link to="/forgot-password" className="label-text-alt link link-primary">
-                    Forgot password?
-                  </Link>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-gray-400" />
-                  </div>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    className="input input-bordered w-full pl-10"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-control mt-8">
-                <button 
-                  type="submit" 
-                  className="btn btn-primary w-full"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <span className="loading loading-spinner"></span>
-                  ) : (
-                    'Sign In'
-                  )}
-                </button>
-              </div>
-            </form>
-
-            <div className="divider">OR</div>
-
-            <div className="space-y-4">
-              <button className="btn btn-outline w-full gap-2">
-                <FaGoogle className="text-red-500" />
-                Continue with Google
-              </button>
-              <button className="btn btn-outline w-full gap-2">
-                <FaGithub className="text-gray-800" />
-                Continue with GitHub
-              </button>
-            </div>
-
-            <div className="text-center mt-8">
-              <p className="text-gray-600">
-                Don't have an account?{' '}
-                <Link to="/signup" className="link link-primary font-semibold">
-                  Sign up
-                </Link>
-              </p>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="text-sm font-medium text-gray-700">Email</label>
+            <div className="relative mt-1">
+              <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="email"
+                className="w-full border rounded-lg pl-10 py-2 focus:ring-2 focus:ring-indigo-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+              />
             </div>
           </div>
+
+          <div>
+            <div className="flex justify-between text-sm">
+              <label className="font-medium text-gray-700">Password</label>
+              <Link to="/forgot-password" className="text-indigo-600 hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="relative mt-1">
+              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="password"
+                className="w-full border rounded-lg pl-10 py-2 focus:ring-2 focus:ring-indigo-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-60"
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+
+        <div className="my-6 flex items-center">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="px-3 text-sm text-gray-500">OR</span>
+          <div className="flex-1 h-px bg-gray-200" />
         </div>
+
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full flex items-center justify-center gap-2 border rounded-lg py-2 hover:bg-gray-50"
+        >
+          <FaGoogle className="text-red-500" />
+          Continue with Google
+        </button>
+
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Don’t have an account?{' '}
+          <Link to="/signup" className="text-indigo-600 font-medium hover:underline">
+            Sign up
+          </Link>
+        </p>
+
       </div>
     </div>
   );
