@@ -83,8 +83,8 @@ export const BankingProvider = ({ children }) => {
   ========================= */
   const getAccountById = (id) => accounts.find((a) => a.id === id);
 
-  const getAllUserTransactions = () =>
-    [...transactions].sort(
+  const getAllUserTransactions = () => {
+    return [...transactions].sort(
       (a, b) => new Date(b.date) - new Date(a.date)
     );
 
