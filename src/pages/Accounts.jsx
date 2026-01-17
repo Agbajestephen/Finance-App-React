@@ -139,7 +139,7 @@ const Accounts = () => {
           ))}
         </div>
       )}
-
+      
       {/* Create Account Modal */}
       {showModal && (
         <div className="modal modal-open">
