@@ -101,7 +101,7 @@ export const BankingProvider = ({ children }) => {
   };
 
   /* =========================
-     TRANSFER LOGIC (FINAL)
+     CORE TRANSFER
   ========================= */
   const transfer = ({ fromId, toId, amount, description }) => {
     if (!fromId || !toId) {
