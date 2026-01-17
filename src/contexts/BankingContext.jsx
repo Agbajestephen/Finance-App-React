@@ -130,7 +130,7 @@ export const BankingProvider = ({ children }) => {
     );
 
     logTransaction({
-      type: "transfer",
+      type: "internal_transfer",
       amount,
       description,
       fromAccount: from.accountNumber,
