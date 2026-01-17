@@ -119,12 +119,6 @@ export const BankingProvider = ({ children }) => {
       throw new Error("Insufficient balance");
     }
 
-    // 🚫 Savings cannot be edited directly
-    if (from.type === "savings" || to.type === "savings") {
-      // Allowed ONLY through transfer
-      // This function IS the transfer → so allowed
-    }
-
     setAccounts((prev) =>
       prev.map((acc) => {
         if (acc.id === fromId)
