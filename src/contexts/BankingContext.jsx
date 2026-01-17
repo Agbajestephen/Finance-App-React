@@ -157,6 +157,7 @@ export const BankingProvider = ({ children }) => {
         getAccountById,
         getAllUserTransactions,
         transfer,
+        transferBetweenBalances, // ✅ now defined
       }}
     >
       {children}
