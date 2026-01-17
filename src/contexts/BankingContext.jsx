@@ -120,12 +120,12 @@ export const BankingProvider = ({ children }) => {
     }
 
     setAccounts((prev) =>
-      prev.map((acc) => {
-        if (acc.id === fromId)
-          return { ...acc, balance: acc.balance - amount };
-        if (acc.id === toId)
-          return { ...acc, balance: acc.balance + amount };
-        return acc;
+      prev.map((a) => {
+        if (a.id === fromId)
+          return { ...a, balance: a.balance - amount };
+        if (a.id === toId)
+          return { ...a, balance: a.balance + amount };
+        return a;
       })
     );
 
