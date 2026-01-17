@@ -108,7 +108,7 @@ export const BankingProvider = ({ children }) => {
     const to = getAccountById(toId);
 
     if (!from || !to) {
-      throw new Error("Account not found");
+      throw new Error("Invalid account");
     }
 
     if (amount <= 0) {
