@@ -146,6 +146,46 @@ export const BankingProvider = ({ children }) => {
     return transfer(from, to, amount, "Internal transfer");
   };
 
+  const deposit = (accountId, amount, description) => {
+  setAccounts(prev =>
+    prev.map(acc =>
+      acc.id === accountId
+        ? { ...acc, balance: acc.balance + amount }
+        : acc
+    )
+  );
+
+  logTransaction({
+    type: "deposit",
+    amount,
+    description,
+    accountId,
+  });
+};
+
+const withdraw = (accountId, amount, description) => {
+  const account = accounts.find(a => a.id === accountId);
+  if (!account || account.balance < amount) return false;
+
+  setAccounts(prev =>
+    prev.map(acc =>
+      acc.id === accountId
+        ? { ...acc, balance: acc.balance - amount }
+        : acc
+    )
+  );
+
+  logTransaction({
+    type: "withdraw",
+    amount,
+    description,
+    accountId,
+  });
+
+  return true;
+};
+
+
   /* =========================
      PROVIDER
   ========================= */
@@ -155,6 +195,8 @@ export const BankingProvider = ({ children }) => {
         accounts,
         transactions,
         loading,
+        deposit,
+        withdraw,
         getAccountById,
         getAllUserTransactions,
         transfer,
