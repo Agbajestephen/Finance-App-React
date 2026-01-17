@@ -1,26 +1,27 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { Toaster } from "react-hot-toast"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
-import { AuthProvider } from "./contexts/AuthContext"
-import { BankingProvider } from "./contexts/BankingContext"
-import DashboardLayout from "./components/DashboardLayout.jsx"
-import ProtectedRoute from "./components/ProtectedRoute.jsx"
+import { AuthProvider } from "./contexts/AuthContext";
+import { BankingProvider } from "./contexts/BankingContext";
+import DashboardLayout from "./components/DashboardLayout.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
-import Welcome from "./pages/Welcome.jsx"
-import Login from "./pages/Login.jsx"
-import ForgotPassword from "./pages/ForgetPassword.jsx"
-import Dashboard from "./pages/Dashboard.jsx"
-import History from "./pages/History.jsx"
-import Accounts from "./pages/Accounts.jsx"
-import Transactions from "./pages/Transactions.jsx"
-import Profile from "./pages/Profile.jsx"
-import Loans from "./pages/Loans.jsx"
-import Services from "./pages/Services.jsx"
-import MyPrivileges from "./pages/MyPrivileges.jsx"
-import Setting from "./pages/Setting.jsx"
-import Signup from "./pages/SignUp.jsx"
-import AdminLogin from "./pages/AdminLogin.jsx"
-import AdminDashboard from "./pages/AdminDashboard.jsx"
+import Welcome from "./pages/Welcome.jsx";
+import Login from "./pages/Login.jsx";
+import ForgotPassword from "./pages/ForgetPassword.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import History from "./pages/History.jsx";
+import Accounts from "./pages/Accounts.jsx";
+import Transactions from "./pages/Transactions.jsx";
+import Profile from "./pages/Profile.jsx";
+import Loans from "./pages/Loans.jsx";
+import Services from "./pages/Services.jsx";
+import MyPrivileges from "./pages/MyPrivileges.jsx";
+import Setting from "./pages/Setting.jsx";
+import Signup from "./pages/SignUp.jsx";
+import AdminLogin from "./pages/AdminLogin.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import VerifyEmail from "./pages/VerifyEmail.jsx";
 
 function App() {
   return (
@@ -63,12 +64,13 @@ function App() {
               <Route path="services" element={<Services />} />
               <Route path="privileges" element={<MyPrivileges />} />
               <Route path="setting" element={<Setting />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
             </Route>
           </Routes>
         </BankingProvider>
       </AuthProvider>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
