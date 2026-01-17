@@ -1,12 +1,17 @@
-// Import the functions you need from the SDKs you need
+// Firebase core
 import { initializeApp } from "firebase/app";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
+
+// Firebase Auth
+import {
+  getAuth,
+  GoogleAuthProvider,
   signInWithPopup,
   sendEmailVerification,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
+
+// Firebase Firestore
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCr4SybxmMLqNoGtdA2iEJyFArK5wldAdI",
@@ -15,31 +20,28 @@ const firebaseConfig = {
   storageBucket: "soft-bank-aafa7.firebasestorage.app",
   messagingSenderId: "822418727458",
   appId: "1:822418727458:web:734e7b82a41fe2083a607b",
-  measurementId: "G-QKCKP4GYKZ"
+  measurementId: "G-QKCKP4GYKZ",
 };
 
-// Initialize Firebase
+// Initialize Firebase ONCE
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
-// Google Sign-In Provider
+// Initialize services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+// Providers
 const googleProvider = new GoogleAuthProvider();
 
-// Google Sign-In function
-export const signInWithGoogle = () => {
-  return signInWithPopup(auth, googleProvider);
-};
+// Auth helpers
+export const signInWithGoogle = () =>
+  signInWithPopup(auth, googleProvider);
 
-// Send verification email function
-export const sendVerificationEmail = (user) => {
-  return sendEmailVerification(user);
-};
+export const sendVerificationEmail = (user) =>
+  sendEmailVerification(user);
 
-// Update profile function
-export const updateUserProfile = (user, displayName, photoURL) => {
-  return updateProfile(user, { displayName, photoURL });
-};
+export const updateUserProfile = (user, displayName, photoURL) =>
+  updateProfile(user, { displayName, photoURL });
 
-// Export everythi;ng
-export { auth };
+// Default export
 export default app;
