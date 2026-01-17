@@ -103,11 +103,7 @@ export const BankingProvider = ({ children }) => {
   /* =========================
      CORE TRANSFER
   ========================= */
-  const transfer = ({ fromId, toId, amount, description }) => {
-    if (!fromId || !toId) {
-      throw new Error("Invalid account selection");
-    }
-
+  const transfer = (fromId, toId, amount, description) => {
     const from = getAccountById(fromId);
     const to = getAccountById(toId);
 
