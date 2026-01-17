@@ -138,6 +138,16 @@ export const BankingProvider = ({ children }) => {
     });
   };
 
+  /* =========================
+     ✅ THIS WAS MISSING
+  ========================= */
+  const transferBetweenBalances = ({ from, to, amount }) => {
+    return transfer(from, to, amount, "Internal transfer");
+  };
+
+  /* =========================
+     PROVIDER
+  ========================= */
   return (
     <BankingContext.Provider
       value={{
