@@ -14,4 +14,20 @@ service cloud.firestore {
       }
     }
   }
+      // ACCOUNTS COLLECTION
+    match /accounts/{accountNumber} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid;
+
+      // ❌ NO direct update/delete (balances via transactions only)
+      allow update, delete: if false;
+    }
+
+    // TRANSACTIONS LOG
+    match /transactions/{txId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+    }
+
 }
