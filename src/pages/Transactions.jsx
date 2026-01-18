@@ -20,6 +20,15 @@ const Transactions = () => {
     direction: "main_to_savings", // internal only
   })
 
+  const verifyRecipient = async () => {
+  const user = await findUserByAccountNumber(accountNumber);
+  if (!user) {
+    setError("Account not found");
+  } else {
+    setRecipient(user.name);
+  }
+};
+
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
