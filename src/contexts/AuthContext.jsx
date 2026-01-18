@@ -11,230 +11,140 @@ import {
   updateEmail,
 } from "firebase/auth";
 
-import {} from "firebase/auth";
-import {
-  doc,
-  setDoc,
-  getDocs,
-  query,
-  where,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
 import { auth } from "../firebase";
+import { createMainAccount } from "../services/createMainAccount";
 
-// Create the Auth Context
-const AuthContext = createContext();
+// =======================
+// CREATE CONTEXT
+// =======================
+const AuthContext = createContext(null);
 
-// Custom hook to use auth - put this BEFORE AuthProvider
 export const useAuth = () => {
   const context = useContext(AuthContext);
-
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-
   return context;
 };
 
-// Auth Provider Component
+// =======================
+// PROVIDER
+// =======================
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 1. SIGN UP FUNCTION
+  // =======================
+  // SIGN UP
+  // =======================
   const signup = async (email, password, displayName) => {
     try {
       setError("");
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
 
-      // Update user profile with display name
-      if (displayName && userCredential.user) {
-        await updateProfile(userCredential.user, {
-          displayName: displayName,
-        });
+      if (displayName) {
+        await updateProfile(userCredential.user, { displayName });
       }
 
-      // Send email verification
-      if (userCredential.user) {
-        await sendEmailVerification(userCredential.user);
-      }
+      await sendEmailVerification(userCredential.user);
+
+      // 🔥 CREATE MAIN BANK ACCOUNT ON SIGNUP
+      await createMainAccount(userCredential.user);
 
       return userCredential;
-    } catch (error) {
-      console.error("Signup error:", error);
-      setError(error.message);
-      throw error;
+    } catch (err) {
+      setError(err.message);
+      throw err;
     }
   };
+  
 
-  // 2. LOGIN FUNCTION
+  // =======================
+  // LOGIN
+  // =======================
   const login = async (email, password) => {
     try {
       setError("");
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      return userCredential;
-    } catch (error) {
-      console.error("Login error:", error);
-      setError(error.message);
-      throw error;
+      return await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      setError(err.message);
+      throw err;
     }
   };
 
-  // 3. LOGOUT FUNCTION
+  // =======================
+  // LOGOUT
+  // =======================
   const logout = async () => {
-    try {
-      setError("");
-      await signOut(auth);
-    } catch (error) {
-      console.error("Logout error:", error);
-      setError(error.message);
-      throw error;
-    }
+    await signOut(auth);
   };
 
-  // 4. RESET PASSWORD
-  const resetPassword = async (email) => {
-    try {
-      setError("");
-      await sendPasswordResetEmail(auth, email);
-    } catch (error) {
-      console.error("Reset password error:", error);
-      setError(error.message);
-      throw error;
-    }
-  };
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-  // 5. UPDATE USER PROFILE
   const updateUserProfile = async (updates) => {
-    try {
-      setError("");
-      if (!auth.currentUser) throw new Error("No user logged in");
-
-      if (updates.displayName) {
-        await updateProfile(auth.currentUser, {
-          displayName: updates.displayName,
-        });
-      }
-
-      if (updates.photoURL) {
-        await updateProfile(auth.currentUser, {
-          photoURL: updates.photoURL,
-        });
-      }
-
-      // Update local state
-      setCurrentUser({
-        ...currentUser,
-        ...updates,
-      });
-    } catch (error) {
-      console.error("Update profile error:", error);
-      setError(error.message);
-      throw error;
-    }
+    if (!auth.currentUser) return;
+    await updateProfile(auth.currentUser, updates);
+    setCurrentUser({ ...auth.currentUser });
   };
 
-  // 6. UPDATE EMAIL
-  const updateUserEmail = async (newEmail) => {
-    try {
-      setError("");
-      if (!auth.currentUser) throw new Error("No user logged in");
-      await updateEmail(auth.currentUser, newEmail);
-
-      // Update local state
-      setCurrentUser({
-        ...currentUser,
-        email: newEmail,
-      });
-    } catch (error) {
-      console.error("Update email error:", error);
-      setError(error.message);
-      throw error;
-    }
+  const updateUserEmail = async (email) => {
+    await updateEmail(auth.currentUser, email);
   };
 
-  // 7. UPDATE PASSWORD
-  const updateUserPassword = async (newPassword) => {
-    try {
-      setError("");
-      if (!auth.currentUser) throw new Error("No user logged in");
-      await updatePassword(auth.currentUser, newPassword);
-    } catch (error) {
-      console.error("Update password error:", error);
-      setError(error.message);
-      throw error;
-    }
+  const updateUserPassword = async (password) => {
+    await updatePassword(auth.currentUser, password);
   };
 
-  // 8. RE-SEND EMAIL VERIFICATION
   const resendEmailVerification = async () => {
-    try {
-      setError("");
-      if (!auth.currentUser) throw new Error("No user logged in");
-      await sendEmailVerification(auth.currentUser);
-    } catch (error) {
-      console.error("Resend verification error:", error);
-      setError(error.message);
-      throw error;
-    }
+    await sendEmailVerification(auth.currentUser);
   };
 
-  // 9. CLEAR ERROR
   const clearError = () => setError("");
 
-  // Listen for auth state changes
+  // =======================
+  // AUTH STATE LISTENER
+  // =======================
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       setLoading(false);
+
+      if (user) {
+        await createMainAccount(user);
+      }
     });
 
-    // Cleanup subscription
     return unsubscribe;
   }, []);
-
-  // Value object to be provided by context
+  // =======================
+  // CONTEXT VALUE
+  // =======================
   const value = {
-    currentUser, // Current logged in user object
-    signup, // Function to sign up new users
-    login, // Function to log in existing users
-    logout, // Function to log out
-    resetPassword, // Function to reset password
-    updateUserProfile, // Function to update user profile
-    updateUserEmail, // Function to update email
-    updateUserPassword, // Function to update password
-    resendEmailVerification, // Function to resend verification email
-    error, // Current error message
-    clearError, // Function to clear error
-    loading, // Loading state
+    currentUser,
+    signup,
+    login,
+    logout,
+    resetPassword,
+    updateUserProfile,
+    updateUserEmail,
+    updateUserPassword,
+    resendEmailVerification,
+    error,
+    clearError,
+    loading,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading ? (
-        children
-      ) : (
-        // Loading screen while checking auth state
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="loading loading-spinner loading-lg text-primary mb-4"></div>
-            <p className="text-gray-600">Loading authentication...</p>
-          </div>
-        </div>
-      )}
+      {!loading ? children : <div>Loading...</div>}
     </AuthContext.Provider>
   );
 };
 
-// Export the context itself (optional, for advanced use cases)
 export default AuthContext;

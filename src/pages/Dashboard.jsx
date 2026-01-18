@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { useBanking } from "../contexts/BankingContext";
-import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { useBanking } from "../contexts/BankingContext"
+import { useAuth } from "../contexts/AuthContext"
+import { Link } from "react-router-dom"
 import {
   FaWallet,
   FaPiggyBank,
@@ -12,12 +12,12 @@ import {
   FaExchangeAlt,
   FaPlus,
   FaChartLine,
-} from "react-icons/fa";
+} from "react-icons/fa"
 
 const Dashboard = () => {
-  const { accounts, getAllUserTransactions, loading } = useBanking();
-  const { currentUser } = useAuth();
-  const transactions = getAllUserTransactions();
+  const { accounts, getAllUserTransactions, loading } = useBanking()
+  const { currentUser } = useAuth()
+  const transactions = getAllUserTransactions()
 
   // Calculate total balance across all accounts
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
@@ -30,11 +30,7 @@ const Dashboard = () => {
     .filter((t) => t.type === "deposit")
     .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalExpenses = transactions
-    .filter((t) => t.type === "withdrawal")
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  const mainAccount = accounts.find((a) => a.type === "checking");
+  const totalExpenses = transactions.filter((t) => t.type === "withdrawal").reduce((sum, t) => sum + t.amount, 0)
 
   const getAccountIcon = (type) => {
     switch (type) {
@@ -88,9 +84,19 @@ const Dashboard = () => {
           <Link to="/transactions" className="btn btn-primary">
             <FaExchangeAlt /> New Transfer
           </Link>
-          <Link to="/accounts" className="btn btn-outline">
-            <FaPlus /> Add Account
-          </Link>
+        </div>
+      </div>
+
+      <div className="bg-white p-4 rounded-xl">
+        <p className="text-sm text-gray-500">Account Number</p>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-lg">{accountNumber}</span>
+          <button
+            onClick={() => navigator.clipboard.writeText(accountNumber)}
+            className="btn btn-xs btn-outline"
+          >
+            Copy
+          </button>
         </div>
       </div>
 

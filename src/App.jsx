@@ -22,6 +22,7 @@ import Signup from "./pages/SignUp.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
+import Terms from "./pages/Terms.jsx";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/terms" element={<Terms />} />
 
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
@@ -64,7 +67,6 @@ function App() {
               <Route path="services" element={<Services />} />
               <Route path="privileges" element={<MyPrivileges />} />
               <Route path="setting" element={<Setting />} />
-              <Route path="/verify-email" element={<VerifyEmail />} />
             </Route>
           </Routes>
         </BankingProvider>

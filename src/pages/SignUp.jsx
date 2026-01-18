@@ -93,12 +93,22 @@ export default function Signup() {
                 <div className="h-2 w-full bg-gray-200 rounded">
                   <div
                     className={`h-2 rounded transition-all ${
-                      ["w-1/4 bg-red-500", "w-2/4 bg-yellow-500", "w-3/4 bg-blue-500", "w-full bg-green-500"][strength.score]
+                      [
+                        "w-1/4 bg-red-500",
+                        "w-2/4 bg-yellow-500",
+                        "w-3/4 bg-blue-500",
+                        "w-full bg-green-500",
+                      ][strength.score]
                     }`}
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Strength: {["Very Weak", "Weak", "Fair", "Strong", "Very Strong"][strength.score]}
+                  Strength:{" "}
+                  {
+                    ["Very Weak", "Weak", "Fair", "Strong", "Very Strong"][
+                      strength.score
+                    ]
+                  }
                 </p>
               </div>
 
@@ -120,9 +130,12 @@ export default function Signup() {
                   onChange={() => setAgree(!agree)}
                 />
                 I agree to the{" "}
-                <span className="text-primary font-semibold cursor-pointer">
+                <Link
+                  to="/terms"
+                  className="text-primary font-semibold hover:underline"
+                >
                   Terms & Conditions
-                </span>
+                </Link>
               </label>
 
               <button
@@ -130,7 +143,11 @@ export default function Signup() {
                 className="btn btn-primary w-full mt-4"
                 disabled={loading}
               >
-                {loading ? <span className="loading loading-spinner"></span> : "Create Account"}
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Create Account"
+                )}
               </button>
             </form>
 
