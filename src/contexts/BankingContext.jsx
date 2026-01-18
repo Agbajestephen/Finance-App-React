@@ -8,6 +8,7 @@ import {
   loadTransactions,
   saveTransactions,
 } from "../services/bankingService";
+import { generateAccountNumber } from "../services/accountNumber";
 
 const BankingContext = createContext(null);
 export const useBanking = () => useContext(BankingContext);
@@ -185,6 +186,19 @@ const withdraw = (accountId, amount, description) => {
   return true;
 };
 
+
+const createAccount = ({ name, type }) => {
+  const newAccount = {
+    id: crypto.randomUUID(),
+    name,
+    type,
+    balance: 0,
+    accountNumber: generateAccountNumber(),
+    createdAt: new Date().toISOString(),
+  }
+
+  setAccounts(prev => [...prev, newAccount])
+}
 
   /* =========================
      PROVIDER
