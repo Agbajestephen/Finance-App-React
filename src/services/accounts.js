@@ -1,26 +1,19 @@
-import {
-  collection,
-  getDocs,
-  query,
-  where
-} from "firebase/firestore";
-import { db } from "./index";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-// Generates UNIQUE SoftBank account number
+// 10-digit Nigerian-style account number
 export async function generateAccountNumber() {
   let exists = true;
-  let accountNumber = "";
+  let accountNumber;
 
   while (exists) {
-    accountNumber = "SB" + Math.floor(10000000 + Math.random() * 90000000);
+    accountNumber = Math.floor(
+      1000000000 + Math.random() * 9000000000
+    ).toString();
 
-    const q = query(
-      collection(db, "users"),
-      where("mainAccount.accountNumber", "==", accountNumber)
-    );
-
-    const snapshot = await getDocs(q);
-    exists = !snapshot.empty;
+    const ref = doc(db, "accounts", accountNumber);
+    const snap = await getDoc(ref);
+    exists = snap.exists();
   }
 
   return accountNumber;
