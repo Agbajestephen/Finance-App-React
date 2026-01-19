@@ -8,6 +8,8 @@ import {
   loadTransactions,
   saveTransactions,
 } from "../services/bankingService";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import { generateAccountNumber } from "../services/accountNumber";
 
 const BankingContext = createContext(null);
@@ -57,6 +59,16 @@ export const BankingProvider = ({ children }) => {
 
         setAccounts(defaults);
         await saveAccounts(currentUser.uid, defaults);
+        const mainAccount = defaults.find((a) => a.type === "checking");
+
+        await setDoc(
+          doc(db, "users", currentUser.uid),
+          {
+            displayName: currentUser.displayName || "User",
+            primaryAccountNumber: mainAccount.accountNumber,
+          },
+          { merge: true },
+        );
       } else {
         setAccounts(accs);
       }
@@ -86,7 +98,7 @@ export const BankingProvider = ({ children }) => {
 
   const getAllUserTransactions = () => {
     return [...transactions].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
+      (a, b) => new Date(b.date) - new Date(a.date),
     );
   };
 
@@ -123,12 +135,10 @@ export const BankingProvider = ({ children }) => {
 
     setAccounts((prev) =>
       prev.map((a) => {
-        if (a.id === fromId)
-          return { ...a, balance: a.balance - amount };
-        if (a.id === toId)
-          return { ...a, balance: a.balance + amount };
+        if (a.id === fromId) return { ...a, balance: a.balance - amount };
+        if (a.id === toId) return { ...a, balance: a.balance + amount };
         return a;
-      })
+      }),
     );
 
     logTransaction({
@@ -148,57 +158,52 @@ export const BankingProvider = ({ children }) => {
   };
 
   const deposit = (accountId, amount, description) => {
-  setAccounts(prev =>
-    prev.map(acc =>
-      acc.id === accountId
-        ? { ...acc, balance: acc.balance + amount }
-        : acc
-    )
-  );
+    setAccounts((prev) =>
+      prev.map((acc) =>
+        acc.id === accountId ? { ...acc, balance: acc.balance + amount } : acc,
+      ),
+    );
 
-  logTransaction({
-    type: "deposit",
-    amount,
-    description,
-    accountId,
-  });
-};
+    logTransaction({
+      type: "deposit",
+      amount,
+      description,
+      accountId,
+    });
+  };
 
-const withdraw = (accountId, amount, description) => {
-  const account = accounts.find(a => a.id === accountId);
-  if (!account || account.balance < amount) return false;
+  const withdraw = (accountId, amount, description) => {
+    const account = accounts.find((a) => a.id === accountId);
+    if (!account || account.balance < amount) return false;
 
-  setAccounts(prev =>
-    prev.map(acc =>
-      acc.id === accountId
-        ? { ...acc, balance: acc.balance - amount }
-        : acc
-    )
-  );
+    setAccounts((prev) =>
+      prev.map((acc) =>
+        acc.id === accountId ? { ...acc, balance: acc.balance - amount } : acc,
+      ),
+    );
 
-  logTransaction({
-    type: "withdraw",
-    amount,
-    description,
-    accountId,
-  });
+    logTransaction({
+      type: "withdraw",
+      amount,
+      description,
+      accountId,
+    });
 
-  return true;
-};
+    return true;
+  };
 
+  const createAccount = ({ name, type }) => {
+    const newAccount = {
+      id: crypto.randomUUID(),
+      name,
+      type,
+      balance: 0,
+      accountNumber: generateAccountNumber(),
+      createdAt: new Date().toISOString(),
+    };
 
-const createAccount = ({ name, type }) => {
-  const newAccount = {
-    id: crypto.randomUUID(),
-    name,
-    type,
-    balance: 0,
-    accountNumber: generateAccountNumber(),
-    createdAt: new Date().toISOString(),
-  }
-
-  setAccounts(prev => [...prev, newAccount])
-}
+    setAccounts((prev) => [...prev, newAccount]);
+  };
 
   /* =========================
      PROVIDER
