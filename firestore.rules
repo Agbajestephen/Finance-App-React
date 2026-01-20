@@ -1,28 +1,26 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
+    
     function signedIn() {
       return request.auth != null;
     }
-
-    // USERS
+    
     match /users/{userId} {
-
-      // Profile
-      allow read, write: if signedIn();
-
-      // Accounts
+      allow read: if signedIn();
+      allow write: if request.auth.uid == userId;
+      
+      // 🔥 FIX: Allow any signed-in user to READ and WRITE accounts (needed for transfers)
       match /accounts/data {
         allow read, write: if signedIn();
       }
-
-      // Transactions
+      
+      // Allow any signed-in user to READ and WRITE transactions (needed for transfers)
       match /transactions/data {
         allow read, write: if signedIn();
       }
     }
-
+    
     match /{document=**} {
       allow read, write: if false;
     }
