@@ -20,7 +20,7 @@ import MyPrivileges from "./pages/MyPrivileges.jsx";
 import Setting from "./pages/Setting.jsx";
 import Signup from "./pages/SignUp.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
+
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Terms from "./pages/Terms.jsx";
 
@@ -39,16 +39,6 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/terms" element={<Terms />} />
-
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
 
             {/* Protected Routes */}
             <Route
