@@ -30,6 +30,8 @@ function App() {
         <BankingProvider>
           <Toaster position="top-right" />
 
+          
+
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Welcome />} />
