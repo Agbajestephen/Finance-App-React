@@ -41,6 +41,14 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password, displayName) => {
     try {
       setError("");
+
+      // 🚫 STOP weak passwords before Firebase
+      if (!isStrongPassword(password)) {
+        throw new Error(
+          "Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.",
+        );
+      }
+
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -53,7 +61,6 @@ export const AuthProvider = ({ children }) => {
 
       await sendEmailVerification(userCredential.user);
 
-      // 🔥 CREATE MAIN BANK ACCOUNT ON SIGNUP
       await createMainAccount(userCredential.user);
 
       return userCredential;
@@ -62,7 +69,6 @@ export const AuthProvider = ({ children }) => {
       throw err;
     }
   };
-  
 
   // =======================
   // LOGIN
