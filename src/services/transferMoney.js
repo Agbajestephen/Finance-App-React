@@ -1,66 +1,57 @@
-import {
-  doc,
-  runTransaction,
-  serverTimestamp,
-  collection,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import { findUserByAccountNumber } from "./findUserByAccount";
 
-export const transferMoney = async ({
-  senderUid,
-  recipientAccountNumber,
-  amount,
-}) => {
-  if (amount <= 0) throw new Error("Invalid amount");
+export const findUserByAccountNumber = async (accountNumber) => {
+  if (!accountNumber) return null;
 
-  const recipient = await findUserByAccountNumber(recipientAccountNumber);
-  if (!recipient) throw new Error("Account not found");
-
-  if (recipient.uid === senderUid)
-    throw new Error("Cannot transfer to yourself");
-
-  const senderRef = doc(db, "accounts", senderUid);
-  const receiverRef = doc(db, "accounts", recipient.uid);
-
-  await runTransaction(db, async (transaction) => {
-    const senderSnap = await transaction.get(senderRef);
-    const receiverSnap = await transaction.get(receiverRef);
-
-    if (!senderSnap.exists() || !receiverSnap.exists())
-      throw new Error("Account missing");
-
-    const senderBalance = senderSnap.data().balance;
-
-    if (senderBalance < amount)
-      throw new Error("Insufficient balance");
-
-    transaction.update(senderRef, {
-      balance: senderBalance - amount,
-      updatedAt: serverTimestamp(),
+  try {
+    const searchNumber = accountNumber.trim().toUpperCase();
+    
+    console.log("🔍 Searching for:", searchNumber);
+    
+    const usersRef = collection(db, "users");
+    const snapshot = await getDocs(usersRef);
+    
+    if (snapshot.empty) {
+      console.log("❌ No users in database");
+      return null;
+    }
+    
+    console.log("📋 All users in database:");
+    snapshot.docs.forEach(doc => {
+      const data = doc.data();
+      console.log(`  - "${data.accountNumber}" (${data.email})`);
     });
-
-    transaction.update(receiverRef, {
-      balance: receiverSnap.data().balance + amount,
-      updatedAt: serverTimestamp(),
-    });
-
-    const txRef = doc(collection(db, "transactions"));
-
-    transaction.set(txRef, {
-      fromUid: senderUid,
-      toUid: recipient.uid,
-      fromAccount: senderSnap.data().accountNumber,
-      toAccount: recipient.accountNumber,
-      amount,
-      type: "transfer",
-      status: "success",
-      createdAt: serverTimestamp(),
-    });
-  });
-
-  return {
-    success: true,
-    recipientName: recipient.name,
-  };
+    
+    let foundUser = null;
+    
+    for (const doc of snapshot.docs) {
+      const userData = doc.data();
+      const dbAccountNumber = userData.accountNumber?.trim().toUpperCase();
+      
+      console.log(`Comparing: "${searchNumber}" === "${dbAccountNumber}"`);
+      
+      if (dbAccountNumber === searchNumber) {
+        foundUser = {
+          uid: doc.id,
+          name: userData.fullName || userData.displayName || userData.name || "User",
+          email: userData.email,
+          accountNumber: userData.accountNumber,
+          displayName: userData.displayName || userData.fullName
+        };
+        console.log("✅ Found match!", foundUser);
+        break;
+      }
+    }
+    
+    if (!foundUser) {
+      console.log("❌ No matching account number found");
+    }
+    
+    return foundUser;
+    
+  } catch (error) {
+    console.error("❌ Error finding user:", error);
+    return null;
+  }
 };

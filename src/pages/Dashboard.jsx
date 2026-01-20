@@ -23,32 +23,40 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      const ref = doc(db, "users", currentUser.uid);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        setAccountNumber(snap.data().accountNumber);
+      if (!currentUser?.uid) return;
+      
+      try {
+        const ref = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          setAccountNumber(snap.data().accountNumber || "");
+        }
+      } catch (error) {
+        console.error("Error fetching account number:", error);
       }
     };
     fetchAccount();
   }, [currentUser]);
 
   // Calculate total balance across all accounts
-  const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+  const totalBalance = accounts.reduce((sum, acc) => sum + (acc.balance || 0), 0);
 
-  // Get recent transactions (last 5)
-  const recentTransactions = transactions.slice(0, 5);
+  // Get recent transactions (last 5) - sorted by date descending
+  const recentTransactions = [...transactions]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 5);
 
   // Calculate statistics
   const totalIncome = transactions
     .filter((t) => t.type === "deposit")
-    .reduce((sum, t) => sum + t.amount, 0);
+    .reduce((sum, t) => sum + (t.amount || 0), 0);
 
   const totalExpenses = transactions
-    .filter((t) => t.type === "withdrawal")
-    .reduce((sum, t) => sum + t.amount, 0);
+    .filter((t) => t.type === "withdrawal" || t.type === "transfer")
+    .reduce((sum, t) => sum + (t.amount || 0), 0);
 
   const getAccountIcon = (type) => {
-    switch (type) {
+    switch (type?.toLowerCase()) {
       case "savings":
         return <FaPiggyBank className="text-green-500" />;
       case "checking":
@@ -61,7 +69,7 @@ const Dashboard = () => {
   };
 
   const getTransactionIcon = (type) => {
-    switch (type) {
+    switch (type?.toLowerCase()) {
       case "deposit":
         return <FaArrowDown className="text-green-500" />;
       case "withdrawal":
@@ -70,6 +78,15 @@ const Dashboard = () => {
         return <FaExchangeAlt className="text-blue-500" />;
       default:
         return <FaExchangeAlt className="text-gray-500" />;
+    }
+  };
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // You could add a toast notification here
+    } catch (err) {
+      console.error("Failed to copy:", err);
     }
   };
 
@@ -102,18 +119,21 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-xl">
-        <p className="text-sm text-gray-500">Account Number</p>
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-lg">{accountNumber}</span>
-          <button
-            onClick={() => navigator.clipboard.writeText(accountNumber)}
-            className="btn btn-xs btn-outline"
-          >
-            Copy
-          </button>
+      {/* Account Number Card */}
+      {accountNumber && (
+        <div className="bg-white p-4 rounded-xl shadow-sm border">
+          <p className="text-sm text-gray-500">Account Number</p>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="font-mono text-lg font-semibold">{accountNumber}</span>
+            <button
+              onClick={() => copyToClipboard(accountNumber)}
+              className="btn btn-xs btn-outline"
+            >
+              Copy
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -218,19 +238,19 @@ const Dashboard = () => {
                         </div>
                         <div>
                           <h3 className="font-semibold text-gray-800">
-                            {account.name}
+                            {account.name || "Unnamed Account"}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {account.accountNumber}
+                            {account.accountNumber || "N/A"}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="text-xl font-bold text-gray-800">
-                          ₦{account.balance.toLocaleString()}
+                          ₦{(account.balance || 0).toLocaleString()}
                         </p>
                         <span className="text-xs text-gray-500 capitalize">
-                          {account.type}
+                          {account.type || "account"}
                         </span>
                       </div>
                     </div>
@@ -269,10 +289,12 @@ const Dashboard = () => {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-800">
-                            {transaction.description}
+                            {transaction.description || transaction.type}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {new Date(transaction.date).toLocaleDateString()}
+                            {transaction.date 
+                              ? new Date(transaction.date).toLocaleDateString()
+                              : "N/A"}
                           </p>
                         </div>
                       </div>
@@ -285,7 +307,7 @@ const Dashboard = () => {
                           }`}
                         >
                           {transaction.type === "deposit" ? "+" : "-"}₦
-                          {transaction.amount.toLocaleString()}
+                          {(transaction.amount || 0).toLocaleString()}
                         </p>
                       </div>
                     </div>
@@ -321,7 +343,7 @@ const Dashboard = () => {
               <FaChartLine /> Analytics
             </Link>
             <Link
-              to="/setting"
+              to="/profile"
               className="btn bg-white/20 hover:bg-white/30 border-none text-white"
             >
               Settings
