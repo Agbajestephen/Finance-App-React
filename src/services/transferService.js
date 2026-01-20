@@ -1,70 +1,70 @@
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  runTransaction,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
+import { findUserByAccountNumber } from "./findUserByAccount";
 
 export const transferByAccountNumber = async ({
   senderUid,
   receiverAccountNumber,
   amount,
-  note = "",
+  note,
 }) => {
   if (amount <= 0) throw new Error("Invalid amount");
 
-  // 🔍 Find receiver
-  const q = query(
-    collection(db, "users"),
-    where("accountNumber", "==", receiverAccountNumber)
+  // 1️⃣ Sender
+  const senderRef = doc(db, "accounts", senderUid);
+  const senderSnap = await getDoc(senderRef);
+  if (!senderSnap.exists()) throw new Error("Sender not found");
+
+  const senderAccounts = senderSnap.data().accounts;
+  const senderMain = senderAccounts.find(a => a.type === "checking");
+
+  if (!senderMain || senderMain.balance < amount)
+    throw new Error("Insufficient balance");
+
+  // 2️⃣ Receiver
+  const receiverUser = await findUserByAccountNumber(receiverAccountNumber);
+  if (!receiverUser) throw new Error("Receiver not found");
+
+  const receiverRef = doc(db, "accounts", receiverUser.uid);
+  const receiverSnap = await getDoc(receiverRef);
+  if (!receiverSnap.exists()) throw new Error("Receiver account missing");
+
+  const receiverAccounts = receiverSnap.data().accounts;
+
+  // 3️⃣ Update balances (IMMUTABLE)
+  const updatedSenderAccounts = senderAccounts.map(acc =>
+    acc.type === "checking"
+      ? { ...acc, balance: acc.balance - amount }
+      : acc
   );
 
-  const snap = await getDocs(q);
-  if (snap.empty) throw new Error("Receiver account not found");
-
-  const receiverUid = snap.docs[0].id;
-
-  const senderAccountsRef = doc(db, "users", senderUid, "accounts", "data");
-  const receiverAccountsRef = doc(
-    db,
-    "users",
-    receiverUid,
-    "accounts",
-    "data"
+  const updatedReceiverAccounts = receiverAccounts.map(acc =>
+    acc.type === "checking"
+      ? { ...acc, balance: acc.balance + amount }
+      : acc
   );
 
-  await runTransaction(db, async (tx) => {
-    const senderSnap = await tx.get(senderAccountsRef);
-    const receiverSnap = await tx.get(receiverAccountsRef);
+  // 4️⃣ Save
+  await updateDoc(senderRef, { accounts: updatedSenderAccounts });
+  await updateDoc(receiverRef, { accounts: updatedReceiverAccounts });
 
-    if (!senderSnap.exists() || !receiverSnap.exists()) {
-      throw new Error("Account data missing");
-    }
+  // 5️⃣ Transactions
+  const tx = {
+    type: "external_transfer",
+    amount,
+    note,
+    date: new Date().toISOString(),
+  };
 
-    const senderAccounts = senderSnap.data().accounts;
-    const receiverAccounts = receiverSnap.data().accounts;
-
-    const senderMain = senderAccounts.find(a => a.id === "main");
-    const receiverMain = receiverAccounts.find(a => a.id === "main");
-
-    if (!senderMain || !receiverMain) {
-      throw new Error("Main account not found");
-    }
-
-    if (senderMain.balance < amount) {
-      throw new Error("Insufficient balance");
-    }
-
-    // ✅ Update balances
-    senderMain.balance -= amount;
-    receiverMain.balance += amount;
-
-    tx.update(senderAccountsRef, { accounts: senderAccounts });
-    tx.update(receiverAccountsRef, { accounts: receiverAccounts });
+  await addDoc(collection(db, "transactions", senderUid, "items"), {
+    ...tx,
+    direction: "debit",
+    to: receiverAccountNumber,
   });
 
-  return true;
+  await addDoc(collection(db, "transactions", receiverUser.uid, "items"), {
+    ...tx,
+    direction: "credit",
+    from: senderUid,
+  });
 };
