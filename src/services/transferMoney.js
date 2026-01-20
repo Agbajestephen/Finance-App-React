@@ -1,34 +1,57 @@
-import { loadTransactions, saveTransactions } from "./bankingService";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
-// ────────────────────────────────────────────────────────────────
-// After successful runTransaction block, add this:
-const newTransaction = {
-  id: crypto.randomUUID?.() || Date.now().toString() + Math.random(),
-  type: "transfer",
-  amount,
-  direction: "sent",                  // or "received" for receiver side
-  fromUid: senderUid,
-  toUid: recipient.uid,
-  fromAccount: senderSnap.data().accountNumber,
-  toAccount: recipient.accountNumber,
-  note: "", // you can add later
-  status: "success",
-  createdAt: new Date().toISOString(), // or serverTimestamp() if preferred
+export const findUserByAccountNumber = async (accountNumber) => {
+  if (!accountNumber) return null;
+
+  try {
+    const searchNumber = accountNumber.trim().toUpperCase();
+    
+    console.log("🔍 Searching for:", searchNumber);
+    
+    const usersRef = collection(db, "users");
+    const snapshot = await getDocs(usersRef);
+    
+    if (snapshot.empty) {
+      console.log("❌ No users in database");
+      return null;
+    }
+    
+    console.log("📋 All users in database:");
+    snapshot.docs.forEach(doc => {
+      const data = doc.data();
+      console.log(`  - "${data.accountNumber}" (${data.email})`);
+    });
+    
+    let foundUser = null;
+    
+    for (const doc of snapshot.docs) {
+      const userData = doc.data();
+      const dbAccountNumber = userData.accountNumber?.trim().toUpperCase();
+      
+      console.log(`Comparing: "${searchNumber}" === "${dbAccountNumber}"`);
+      
+      if (dbAccountNumber === searchNumber) {
+        foundUser = {
+          uid: doc.id,
+          name: userData.fullName || userData.displayName || userData.name || "User",
+          email: userData.email,
+          accountNumber: userData.accountNumber,
+          displayName: userData.displayName || userData.fullName
+        };
+        console.log("✅ Found match!", foundUser);
+        break;
+      }
+    }
+    
+    if (!foundUser) {
+      console.log("❌ No matching account number found");
+    }
+    
+    return foundUser;
+    
+  } catch (error) {
+    console.error("❌ Error finding user:", error);
+    return null;
+  }
 };
-
-try {
-  // Sender's history
-  const senderTxs = await loadTransactions(senderUid);
-  await saveTransactions(senderUid, [...senderTxs, { ...newTransaction, direction: "sent" }]);
-
-  // Optional: Receiver's history (recommended for full UX)
-  const receiverTxs = await loadTransactions(recipient.uid);
-  await saveTransactions(recipient.uid, [...receiverTxs, { ...newTransaction, direction: "received" }]);
-
-  console.log("Transaction history saved for both users");
-} catch (err) {
-  console.error("Failed to record transaction:", err);
-  // You might want to rollback balance here in production
-}
-
-
