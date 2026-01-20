@@ -1,70 +1,136 @@
-import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
+import { doc, getDoc, runTransaction } from "firebase/firestore";
 import { db } from "../firebase";
 import { findUserByAccountNumber } from "./findUserByAccount";
 
-export const transferByAccountNumber = async ({
-  senderUid,
-  receiverAccountNumber,
-  amount,
-  note,
-}) => {
-  if (amount <= 0) throw new Error("Invalid amount");
+export const transferByAccountNumber = async ({ senderUid, receiverAccountNumber, amount, note }) => {
+  const transferAmount = parseFloat(amount);
+  if (isNaN(transferAmount) || transferAmount <= 0) {
+    throw new Error("Invalid amount");
+  }
 
-  // 1️⃣ Sender
-  const senderRef = doc(db, "accounts", senderUid);
-  const senderSnap = await getDoc(senderRef);
-  if (!senderSnap.exists()) throw new Error("Sender not found");
+  try {
+    console.log("Searching for account:", receiverAccountNumber);
+    const receiverUser = await findUserByAccountNumber(receiverAccountNumber);
+    console.log("Found receiver:", receiverUser);
+    
+    if (!receiverUser || !receiverUser.uid) {
+      throw new Error("Account not found");
+    }
 
-  const senderAccounts = senderSnap.data().accounts;
-  const senderMain = senderAccounts.find(a => a.type === "checking");
+    if (receiverUser.uid === senderUid) {
+      throw new Error("Cannot transfer to yourself");
+    }
 
-  if (!senderMain || senderMain.balance < amount)
-    throw new Error("Insufficient balance");
+    await runTransaction(db, async (transaction) => {
+      console.log("🔄 Transaction started");
+      
+      // ✅ PHASE 1: ALL READS FIRST
+      const senderAccountsRef = doc(db, "users", senderUid, "accounts", "data");
+      const senderAccountsSnap = await transaction.get(senderAccountsRef);
+      console.log("📖 Read sender accounts");
+      
+      const receiverAccountsRef = doc(db, "users", receiverUser.uid, "accounts", "data");
+      const receiverAccountsSnap = await transaction.get(receiverAccountsRef);
+      console.log("📖 Read receiver accounts");
 
-  // 2️⃣ Receiver
-  const receiverUser = await findUserByAccountNumber(receiverAccountNumber);
-  if (!receiverUser) throw new Error("Receiver not found");
+      const senderTxRef = doc(db, "users", senderUid, "transactions", "data");
+      const senderTxSnap = await transaction.get(senderTxRef);
+      console.log("📖 Read sender transactions");
 
-  const receiverRef = doc(db, "accounts", receiverUser.uid);
-  const receiverSnap = await getDoc(receiverRef);
-  if (!receiverSnap.exists()) throw new Error("Receiver account missing");
+      const receiverTxRef = doc(db, "users", receiverUser.uid, "transactions", "data");
+      const receiverTxSnap = await transaction.get(receiverTxRef);
+      console.log("📖 Read receiver transactions");
 
-  const receiverAccounts = receiverSnap.data().accounts;
+      // ✅ PHASE 2: VALIDATE
+      if (!senderAccountsSnap.exists()) {
+        throw new Error("Sender account not found");
+      }
 
-  // 3️⃣ Update balances (IMMUTABLE)
-  const updatedSenderAccounts = senderAccounts.map(acc =>
-    acc.type === "checking"
-      ? { ...acc, balance: acc.balance - amount }
-      : acc
-  );
+      const senderAccounts = senderAccountsSnap.data().accounts || [];
+      const senderMain = senderAccounts.find(a => a.type === "checking");
 
-  const updatedReceiverAccounts = receiverAccounts.map(acc =>
-    acc.type === "checking"
-      ? { ...acc, balance: acc.balance + amount }
-      : acc
-  );
+      console.log("💰 Sender balance before:", senderMain?.balance);
 
-  // 4️⃣ Save
-  await updateDoc(senderRef, { accounts: updatedSenderAccounts });
-  await updateDoc(receiverRef, { accounts: updatedReceiverAccounts });
+      if (!senderMain) {
+        throw new Error("No checking account found");
+      }
 
-  // 5️⃣ Transactions
-  const tx = {
-    type: "external_transfer",
-    amount,
-    note,
-    date: new Date().toISOString(),
-  };
+      if (senderMain.balance < transferAmount) {
+        throw new Error("Insufficient balance");
+      }
 
-  await addDoc(collection(db, "transactions", senderUid, "items"), {
-    ...tx,
-    direction: "debit",
-    to: receiverAccountNumber,
-  });
+      if (!receiverAccountsSnap.exists()) {
+        throw new Error("Receiver account not found");
+      }
 
-  await addDoc(collection(db, "transactions", receiverUser.uid, "items"), {
-    ...tx,
-    direction: "credit",
-    from: senderUid,
-  });
+      const receiverAccounts = receiverAccountsSnap.data().accounts || [];
+      const receiverMain = receiverAccounts.find(a => a.type === "checking");
+
+      console.log("💰 Receiver balance before:", receiverMain?.balance);
+
+      if (!receiverMain) {
+        throw new Error("Receiver has no checking account");
+      }
+
+      const senderTransactions = senderTxSnap.exists() ? senderTxSnap.data().transactions || [] : [];
+      const receiverTransactions = receiverTxSnap.exists() ? receiverTxSnap.data().transactions || [] : [];
+
+      // ✅ PHASE 3: PREPARE UPDATES
+      const updatedSenderAccounts = senderAccounts.map(acc =>
+        acc.type === "checking" ? { ...acc, balance: acc.balance - transferAmount } : acc
+      );
+
+      const updatedReceiverAccounts = receiverAccounts.map(acc =>
+        acc.type === "checking" ? { ...acc, balance: acc.balance + transferAmount } : acc
+      );
+
+      console.log("💰 Sender balance after:", updatedSenderAccounts.find(a => a.type === "checking")?.balance);
+      console.log("💰 Receiver balance after:", updatedReceiverAccounts.find(a => a.type === "checking")?.balance);
+
+      const timestamp = new Date().toISOString();
+
+      const senderTransaction = {
+        id: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        type: "withdrawal",
+        amount: transferAmount,
+        description: note || "Transfer sent",
+        to: receiverAccountNumber,
+        toName: receiverUser.displayName || receiverUser.email || "Unknown",
+        date: timestamp,
+        status: "completed"
+      };
+
+      const receiverTransaction = {
+        id: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        type: "deposit",
+        amount: transferAmount,
+        description: note || "Transfer received",
+        from: senderMain.accountNumber || senderUid,
+        fromName: "External Transfer",
+        date: timestamp,
+        status: "completed"
+      };
+
+      // ✅ PHASE 4: ALL WRITES AT THE END
+      console.log("✍️ Writing sender accounts update");
+      transaction.update(senderAccountsRef, { accounts: updatedSenderAccounts });
+      
+      console.log("✍️ Writing receiver accounts update");
+      transaction.update(receiverAccountsRef, { accounts: updatedReceiverAccounts });
+      
+      console.log("✍️ Writing sender transactions");
+      transaction.set(senderTxRef, { transactions: [...senderTransactions, senderTransaction] });
+      
+      console.log("✍️ Writing receiver transactions");
+      transaction.set(receiverTxRef, { transactions: [...receiverTransactions, receiverTransaction] });
+      
+      console.log("✅ All writes queued");
+    });
+
+    console.log("🎉 Transaction committed successfully");
+    return { success: true, message: "Transfer successful" };
+  } catch (error) {
+    console.error("Transfer error:", error);
+    throw new Error(error.message || "Transfer failed. Please try again.");
+  }
 };
