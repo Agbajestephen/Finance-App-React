@@ -2,32 +2,29 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // USERS
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
 
-      match /accounts/{docId} {
-        allow read, write: if request.auth.uid == userId;
+      // Profile
+      allow read, write: if signedIn();
+
+      // Accounts
+      match /accounts/data {
+        allow read, write: if signedIn();
       }
 
-      match /transactions/{docId} {
-        allow read, write: if request.auth.uid == userId;
+      // Transactions
+      match /transactions/data {
+        allow read, write: if signedIn();
       }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
-      // ACCOUNTS COLLECTION
-    match /accounts/{accountNumber} {
-      allow read: if signedIn();
-      allow create: if signedIn()
-        && request.resource.data.uid == request.auth.uid;
-
-      // ❌ NO direct update/delete (balances via transactions only)
-      allow update, delete: if false;
-    }
-
-    // TRANSACTIONS LOG
-    match /transactions/{txId} {
-      allow read: if signedIn();
-      allow create: if signedIn();
-    }
-
 }
