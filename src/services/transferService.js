@@ -5,13 +5,9 @@ import {
   getDocs,
   doc,
   runTransaction,
-  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-/**
- * Transfer money using account number
- */
 export const transferByAccountNumber = async ({
   senderUid,
   receiverAccountNumber,
@@ -20,53 +16,54 @@ export const transferByAccountNumber = async ({
 }) => {
   if (amount <= 0) throw new Error("Invalid amount");
 
-  // Find receiver by account number
-  const usersRef = collection(db, "users");
+  // 🔍 Find receiver
   const q = query(
-    usersRef,
-    where("mainAccount.accountNumber", "==", receiverAccountNumber)
+    collection(db, "users"),
+    where("accountNumber", "==", receiverAccountNumber)
   );
 
   const snap = await getDocs(q);
+  if (snap.empty) throw new Error("Receiver account not found");
 
-  if (snap.empty) {
-    throw new Error("Receiver account not found");
-  }
+  const receiverUid = snap.docs[0].id;
 
-  const receiverDoc = snap.docs[0];
-  const receiverRef = receiverDoc.ref;
-  const senderRef = doc(db, "users", senderUid);
+  const senderAccountsRef = doc(db, "users", senderUid, "accounts", "data");
+  const receiverAccountsRef = doc(
+    db,
+    "users",
+    receiverUid,
+    "accounts",
+    "data"
+  );
 
   await runTransaction(db, async (tx) => {
-    const senderSnap = await tx.get(senderRef);
-    const receiverSnap = await tx.get(receiverRef);
+    const senderSnap = await tx.get(senderAccountsRef);
+    const receiverSnap = await tx.get(receiverAccountsRef);
 
-    if (!senderSnap.exists()) throw new Error("Sender not found");
+    if (!senderSnap.exists() || !receiverSnap.exists()) {
+      throw new Error("Account data missing");
+    }
 
-    const senderBalance = senderSnap.data().mainAccount.balance;
-    if (senderBalance < amount) throw new Error("Insufficient balance");
+    const senderAccounts = senderSnap.data().accounts;
+    const receiverAccounts = receiverSnap.data().accounts;
 
-    // Update balances
-    tx.update(senderRef, {
-      "mainAccount.balance": senderBalance - amount,
-    });
+    const senderMain = senderAccounts.find(a => a.id === "main");
+    const receiverMain = receiverAccounts.find(a => a.id === "main");
 
-    tx.update(receiverRef, {
-      "mainAccount.balance":
-        receiverSnap.data().mainAccount.balance + amount,
-    });
+    if (!senderMain || !receiverMain) {
+      throw new Error("Main account not found");
+    }
 
-    // Log transaction
-    const txnRef = doc(collection(db, "transactions"));
-    tx.set(txnRef, {
-      from: senderSnap.data().mainAccount.accountNumber,
-      to: receiverAccountNumber,
-      amount,
-      note,
-      type: "transfer",
-      status: "completed",
-      createdAt: serverTimestamp(),
-    });
+    if (senderMain.balance < amount) {
+      throw new Error("Insufficient balance");
+    }
+
+    // ✅ Update balances
+    senderMain.balance -= amount;
+    receiverMain.balance += amount;
+
+    tx.update(senderAccountsRef, { accounts: senderAccounts });
+    tx.update(receiverAccountsRef, { accounts: receiverAccounts });
   });
 
   return true;

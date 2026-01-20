@@ -1,19 +1,19 @@
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { collection, query, where, getDocs } from "firebase/firestore"
+import { db } from "../firebase"
 
-export const findUserByAccountNumber = async (accountNumber) => {
+export async function findUserByAccountNumber(accountNumber) {
   const q = query(
     collection(db, "users"),
-    where("accountNumber", "==", accountNumber)
-  );
+    where("primaryAccountNumber", "==", accountNumber)
+  )
 
-  const snapshot = await getDocs(q);
+  const snap = await getDocs(q)
 
-  if (snapshot.empty) return null;
+  if (snap.empty) return null
 
-  const docSnap = snapshot.docs[0];
+  const docSnap = snap.docs[0]
   return {
     uid: docSnap.id,
-    ...docSnap.data(),
-  };
-};
+    name: docSnap.data().displayName
+  }
+}
