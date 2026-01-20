@@ -1,9 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import { FaExchangeAlt, FaCheckCircle } from "react-icons/fa";
 import { transferByAccountNumber } from "../services/transferService";
-import { findUserByAccountNumber } from "../services/findUser";
+import { findUserByAccountNumber } from "../services/findUserByAccount";
 import { useAuth } from "../contexts/AuthContext";
 import { useBanking } from "../contexts/BankingContext";
 
@@ -25,8 +23,8 @@ const Transactions = () => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const main = accounts.find(a => a.type === "checking");
-  const savings = accounts.find(a => a.type === "savings");
+  const main = accounts.find((a) => a.type === "checking");
+  const savings = accounts.find((a) => a.type === "savings");
 
   const lookupReceiver = async (value) => {
     setFormData({ ...formData, receiverAccountNumber: value });
@@ -36,14 +34,19 @@ const Transactions = () => {
 
     if (value.length < 6) return;
 
-    const user = await findUserByAccountNumber(value);
-    if (!user) {
-      setError("Receiver account not found");
-      return;
-    }
+    try {
+      const user = await findUserByAccountNumber(value);
+      if (!user) {
+        setError("Account not found");
+        return;
+      }
 
-    setReceiverName(user.displayName || "Account Holder");
-    setReceiverUid(user.uid);
+      setReceiverName(user.displayName || user.name || "Account Holder");
+      setReceiverUid(user.uid);
+    } catch (err) {
+      console.error("Lookup error:", err);
+      setError("Error looking up account");
+    }
   };
 
   const submit = async (e) => {
@@ -66,7 +69,11 @@ const Transactions = () => {
       }
 
       if (transferType === "external") {
-        if (!receiverUid) throw new Error("Verify receiver first");
+        if (!receiverUid) {
+          setError("Please verify receiver account first");
+          setLoading(false);
+          return;
+        }
 
         await transferByAccountNumber({
           senderUid: currentUser.uid,
@@ -85,9 +92,9 @@ const Transactions = () => {
       });
       setReceiverName("");
       setReceiverUid(null);
-
     } catch (err) {
-      setError(err.message);
+      console.error("Transfer error:", err);
+      setError(err.message || "Transfer failed");
     } finally {
       setLoading(false);
     }
@@ -96,15 +103,16 @@ const Transactions = () => {
   return (
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow">
-
         <h1 className="text-2xl font-bold mb-4">Transactions</h1>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="p-4 bg-blue-50 rounded">
-            Main Balance ₦{main?.balance || 0}
+            <p className="text-sm text-gray-600">Main Balance</p>
+            <p className="text-xl font-bold">₦{(main?.balance || 0).toLocaleString()}</p>
           </div>
           <div className="p-4 bg-green-50 rounded">
-            Savings Balance ₦{savings?.balance || 0}
+            <p className="text-sm text-gray-600">Savings Balance</p>
+            <p className="text-xl font-bold">₦{(savings?.balance || 0).toLocaleString()}</p>
           </div>
         </div>
 
@@ -122,14 +130,29 @@ const Transactions = () => {
             <>
               <input
                 className="input input-bordered w-full"
-                placeholder="Receiver Account Number"
+                placeholder="Receiver Account Number (e.g., SB-5369001880)"
                 value={formData.receiverAccountNumber}
                 onChange={(e) => lookupReceiver(e.target.value)}
               />
               {receiverName && (
-                <p className="text-green-600">Receiver: {receiverName}</p>
+                <p className="text-green-600 text-sm flex items-center gap-2">
+                  <FaCheckCircle /> Receiver: {receiverName}
+                </p>
               )}
             </>
+          )}
+
+          {transferType === "internal" && (
+            <select
+              className="select select-bordered w-full"
+              value={formData.direction}
+              onChange={(e) =>
+                setFormData({ ...formData, direction: e.target.value })
+              }
+            >
+              <option value="main_to_savings">Main → Savings</option>
+              <option value="savings_to_main">Savings → Main</option>
+            </select>
           )}
 
           <input
@@ -140,30 +163,39 @@ const Transactions = () => {
             onChange={(e) =>
               setFormData({ ...formData, amount: e.target.value })
             }
+            min="1"
+            step="0.01"
           />
 
           <input
             className="input input-bordered w-full"
-            placeholder="Description"
+            placeholder="Description (optional)"
             value={formData.description}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
           />
 
-          <button className="btn btn-primary w-full" disabled={loading}>
-            <FaExchangeAlt className="mr-2" />
+          <button 
+            className="btn btn-primary w-full" 
+            disabled={loading || (transferType === "external" && !receiverUid)}
+          >
+            <FaExchangeAlt />
             {loading ? "Processing..." : "Submit"}
           </button>
         </form>
 
         {success && (
           <div className="alert alert-success mt-4">
-            <FaCheckCircle /> Transfer successful
+            <FaCheckCircle /> Transfer successful!
           </div>
         )}
 
-        {error && <div className="alert alert-error mt-4">{error}</div>}
+        {error && (
+          <div className="alert alert-error mt-4">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );
