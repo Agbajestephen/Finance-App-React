@@ -19,7 +19,6 @@ import Services from "./pages/Services.jsx";
 import MyPrivileges from "./pages/MyPrivileges.jsx";
 import Setting from "./pages/Setting.jsx";
 import Signup from "./pages/SignUp.jsx";
-import AdminLogin from "./pages/AdminLogin.jsx";
 
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Terms from "./pages/Terms.jsx";
