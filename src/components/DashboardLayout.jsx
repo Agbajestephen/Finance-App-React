@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle.jsx";
 
-
 export default function DashboardLayout() {
   const { currentUser, logout } = useAuth();
   const { accounts, getAllUserTransactions } = useBanking();
@@ -48,6 +47,11 @@ export default function DashboardLayout() {
     { id: "history", label: "History", path: "/history" },
     { id: "loans", label: "Loans", path: "/loans" },
     { id: "services", label: "Services", path: "/services" },
+    {
+      id: "currency-converter",
+      label: "Currency Converter",
+      path: "/currency-converter",
+    },
     { id: "privileges", label: "My Privileges", path: "/privileges" },
   ];
 
@@ -73,16 +77,14 @@ export default function DashboardLayout() {
         t.fromAccount.toLowerCase().includes(query) ||
         t.toAccount.toLowerCase().includes(query) ||
         t.type.toLowerCase().includes(query) ||
-        t.amount.toString().includes(query)
+        t.amount.toString().includes(query),
     );
-
-    
 
     const matchingAccounts = accounts.filter(
       (a) =>
         a.name.toLowerCase().includes(query) ||
         a.accountNumber.toLowerCase().includes(query) ||
-        a.type.toLowerCase().includes(query)
+        a.type.toLowerCase().includes(query),
     );
 
     setSearchResults({

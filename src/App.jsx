@@ -21,6 +21,7 @@ import Setting from "./pages/Setting.jsx";
 import Signup from "./pages/SignUp.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import CurrencyConverter from "./pages/CurrencyConverter.jsx";
 
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Terms from "./pages/Terms.jsx";
@@ -61,6 +62,7 @@ function App() {
               <Route path="loans" element={<Loans />} />
               <Route path="services" element={<Services />} />
               <Route path="privileges" element={<MyPrivileges />} />
+              <Route path="currency-converter" element={<CurrencyConverter />} />
               <Route path="setting" element={<Setting />} />
             </Route>
           </Routes>
