@@ -76,6 +76,15 @@ export default function History() {
     return filtered;
   }, [allTransactions, searchTerm, filterType, filterDate, sortOrder]);
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedTransactions = filteredTransactions.slice(
+    startIndex,
+    endIndex,
+  );
+
   // Calculate statistics
   const stats = useMemo(() => {
     const deposits = allTransactions.filter((tx) => tx.type === "deposit");

@@ -7,11 +7,21 @@ import {
   getUserLoginLogs,
 } from "../services/adminService";
 import {
+  getAllLoanApplications,
+  approveLoanApplication,
+  rejectLoanApplication,
+  subscribeToLoanApplications,
+} from "../services/loanService";
+import { useBanking } from "../contexts/BankingContext";
+import {
   FaUsers,
   FaExchangeAlt,
   FaExclamationTriangle,
   FaClock,
   FaSignOutAlt,
+  FaMoneyBillWave,
+  FaCheckCircle,
+  FaTimesCircle,
 } from "react-icons/fa";
 
 export default function AdminDashboard() {

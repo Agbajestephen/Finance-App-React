@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useBanking } from "../contexts/BankingContext"
-import { useAuth } from "../contexts/AuthContext"
-import toast from "react-hot-toast"
+import { useState, useEffect } from "react";
+import { useBanking } from "../contexts/BankingContext";
+import { useAuth } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
 import {
   FaMoneyBillWave,
   FaHome,
@@ -14,16 +14,19 @@ import {
   FaClock,
   FaTimesCircle,
   FaInfoCircle,
-} from "react-icons/fa"
+} from "react-icons/fa";
+import {
+  submitLoanApplication,
+  getUserLoanApplications,
+  subscribeToUserLoans,
+} from "../services/loanService";
 
 const Loans = () => {
-  const { accounts, deposit } = useBanking()
-  const { currentUser } = useAuth()
-  const [activeTab, setActiveTab] = useState("apply")
-  const [loanApplications, setLoanApplications] = useState(() => {
-    const saved = localStorage.getItem(`loans_${currentUser?.uid}`)
-    return saved ? JSON.parse(saved) : []
-  })
+  const { accounts, deposit } = useBanking();
+  const { currentUser } = useAuth();
+  const [activeTab, setActiveTab] = useState("apply");
+  const [loanApplications, setLoanApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     loanType: "",
@@ -31,51 +34,95 @@ const Loans = () => {
     purpose: "",
     duration: "12",
     accountId: "",
-  })
+  });
 
   const loanTypes = [
-    { id: "personal", name: "Personal Loan", icon: FaMoneyBillWave, rate: 12, max: 500000 },
+    {
+      id: "personal",
+      name: "Personal Loan",
+      icon: FaMoneyBillWave,
+      rate: 12,
+      max: 500000,
+    },
     { id: "home", name: "Home Loan", icon: FaHome, rate: 8, max: 5000000 },
     { id: "car", name: "Car Loan", icon: FaCar, rate: 10, max: 2000000 },
-    { id: "education", name: "Education Loan", icon: FaGraduationCap, rate: 6, max: 1000000 },
-    { id: "business", name: "Business Loan", icon: FaBriefcase, rate: 15, max: 3000000 },
-  ]
+    {
+      id: "education",
+      name: "Education Loan",
+      icon: FaGraduationCap,
+      rate: 6,
+      max: 1000000,
+    },
+    {
+      id: "business",
+      name: "Business Loan",
+      icon: FaBriefcase,
+      rate: 15,
+      max: 3000000,
+    },
+  ];
+
+  // Load user's loan applications on component mount
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+
+    const unsubscribe = subscribeToUserLoans(currentUser.uid, (loans) => {
+      setLoanApplications(loans);
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  }, [currentUser?.uid]);
 
   const calculateEMI = (principal, rate, months) => {
-    const monthlyRate = rate / 12 / 100
-    const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1)
-    return emi
-  }
+    const monthlyRate = rate / 12 / 100;
+    const emi =
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+      (Math.pow(1 + monthlyRate, months) - 1);
+    return emi;
+  };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const handleLoanApplication = (e) => {
-    e.preventDefault()
+  const handleLoanApplication = async (e) => {
+    e.preventDefault();
 
-    if (!formData.loanType || !formData.amount || !formData.purpose || !formData.accountId) {
-      toast.error("Please fill all fields")
-      return
+    if (
+      !formData.loanType ||
+      !formData.amount ||
+      !formData.purpose ||
+      !formData.accountId
+    ) {
+      toast.error("Please fill all fields");
+      return;
     }
 
-    const selectedLoanType = loanTypes.find((lt) => lt.id === formData.loanType)
-    const amount = Number.parseFloat(formData.amount)
+    const selectedLoanType = loanTypes.find(
+      (lt) => lt.id === formData.loanType,
+    );
+    const amount = Number.parseFloat(formData.amount);
 
     if (amount > selectedLoanType.max) {
-      toast.error(`Maximum loan amount for ${selectedLoanType.name} is ₦${selectedLoanType.max.toLocaleString()}`)
-      return
+      toast.error(
+        `Maximum loan amount for ${selectedLoanType.name} is ₦${selectedLoanType.max.toLocaleString()}`,
+      );
+      return;
     }
 
     if (amount < 10000) {
-      toast.error("Minimum loan amount is ₦10,000")
-      return
+      toast.error("Minimum loan amount is ₦10,000");
+      return;
     }
 
-    const emi = calculateEMI(amount, selectedLoanType.rate, Number.parseInt(formData.duration))
+    const emi = calculateEMI(
+      amount,
+      selectedLoanType.rate,
+      Number.parseInt(formData.duration),
+    );
 
-    const newLoan = {
-      id: "loan_" + Date.now(),
+    const loanData = {
       userId: currentUser.uid,
       loanType: selectedLoanType.name,
       amount,
@@ -85,46 +132,23 @@ const Loans = () => {
       emi: Math.round(emi),
       totalPayable: Math.round(emi * Number.parseInt(formData.duration)),
       accountId: formData.accountId,
-      status: "pending",
-      appliedDate: new Date().toISOString(),
+    };
+
+    try {
+      await submitLoanApplication(loanData);
+      toast.success("Loan application submitted successfully!");
+      setFormData({
+        loanType: "",
+        amount: "",
+        purpose: "",
+        duration: "12",
+        accountId: "",
+      });
+    } catch (error) {
+      toast.error("Failed to submit loan application. Please try again.");
+      console.error("Error submitting loan:", error);
     }
-
-    const updatedLoans = [newLoan, ...loanApplications]
-    setLoanApplications(updatedLoans)
-    localStorage.setItem(`loans_${currentUser.uid}`, JSON.stringify(updatedLoans))
-
-    toast.success("Loan application submitted successfully!")
-    setFormData({ loanType: "", amount: "", purpose: "", duration: "12", accountId: "" })
-  }
-
-  const approveLoan = (loanId) => {
-    const loan = loanApplications.find((l) => l.id === loanId)
-    if (!loan) return
-
-    // Deposit loan amount to the selected account
-    deposit(loan.accountId, loan.amount, `Loan disbursement - ${loan.loanType}`)
-
-    // Update loan status
-    const updatedLoans = loanApplications.map((l) =>
-      l.id === loanId ? { ...l, status: "approved", approvedDate: new Date().toISOString() } : l,
-    )
-
-    setLoanApplications(updatedLoans)
-    localStorage.setItem(`loans_${currentUser.uid}`, JSON.stringify(updatedLoans))
-
-    toast.success("Loan approved and amount credited to your account!")
-  }
-
-  const rejectLoan = (loanId) => {
-    const updatedLoans = loanApplications.map((l) =>
-      l.id === loanId ? { ...l, status: "rejected", rejectedDate: new Date().toISOString() } : l,
-    )
-
-    setLoanApplications(updatedLoans)
-    localStorage.setItem(`loans_${currentUser.uid}`, JSON.stringify(updatedLoans))
-
-    toast.error("Loan application rejected")
-  }
+  };
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -133,35 +157,40 @@ const Loans = () => {
           <span className="badge badge-success gap-2">
             <FaCheckCircle /> Approved
           </span>
-        )
+        );
       case "pending":
         return (
           <span className="badge badge-warning gap-2">
             <FaClock /> Pending
           </span>
-        )
+        );
       case "rejected":
         return (
           <span className="badge badge-error gap-2">
             <FaTimesCircle /> Rejected
           </span>
-        )
+        );
       default:
-        return <span className="badge badge-ghost">{status}</span>
+        return <span className="badge badge-ghost">{status}</span>;
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-800">Loans & Credit</h1>
-        <p className="text-gray-600 mt-1">Apply for loans and manage your credit</p>
+        <p className="text-gray-600 mt-1">
+          Apply for loans and manage your credit
+        </p>
       </div>
 
       {/* Tabs */}
       <div className="tabs tabs-boxed bg-white shadow-md p-2">
-        <button className={`tab ${activeTab === "apply" ? "tab-active" : ""}`} onClick={() => setActiveTab("apply")}>
+        <button
+          className={`tab ${activeTab === "apply" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("apply")}
+        >
           Apply for Loan
         </button>
         <button
@@ -170,7 +199,10 @@ const Loans = () => {
         >
           My Applications ({loanApplications.length})
         </button>
-        <button className={`tab ${activeTab === "info" ? "tab-active" : ""}`} onClick={() => setActiveTab("info")}>
+        <button
+          className={`tab ${activeTab === "info" ? "tab-active" : ""}`}
+          onClick={() => setActiveTab("info")}
+        >
           Loan Info
         </button>
       </div>
@@ -184,11 +216,13 @@ const Loans = () => {
               <h2 className="card-title mb-4">Select Loan Type</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {loanTypes.map((loan) => {
-                  const Icon = loan.icon
+                  const Icon = loan.icon;
                   return (
                     <div
                       key={loan.id}
-                      onClick={() => setFormData({ ...formData, loanType: loan.id })}
+                      onClick={() =>
+                        setFormData({ ...formData, loanType: loan.id })
+                      }
                       className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                         formData.loanType === loan.id
                           ? "border-primary bg-primary/10"
@@ -196,11 +230,17 @@ const Loans = () => {
                       }`}
                     >
                       <Icon className="text-3xl text-primary mb-2" />
-                      <h3 className="font-semibold text-gray-800">{loan.name}</h3>
-                      <p className="text-sm text-gray-600 mt-1">Up to ₦{(loan.max / 1000).toFixed(0)}K</p>
-                      <p className="text-xs text-primary mt-1">{loan.rate}% interest</p>
+                      <h3 className="font-semibold text-gray-800">
+                        {loan.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Up to ₦{(loan.max / 1000).toFixed(0)}K
+                      </p>
+                      <p className="text-xs text-primary mt-1">
+                        {loan.rate}% interest
+                      </p>
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -214,7 +254,9 @@ const Loans = () => {
               <form onSubmit={handleLoanApplication} className="space-y-4">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">Loan Amount (₦)</span>
+                    <span className="label-text font-medium">
+                      Loan Amount (₦)
+                    </span>
                   </label>
                   <input
                     type="number"
@@ -244,7 +286,9 @@ const Loans = () => {
 
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">Loan Duration (Months)</span>
+                    <span className="label-text font-medium">
+                      Loan Duration (Months)
+                    </span>
                   </label>
                   <select
                     name="duration"
@@ -263,7 +307,9 @@ const Loans = () => {
 
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">Credit to Account</span>
+                    <span className="label-text font-medium">
+                      Credit to Account
+                    </span>
                   </label>
                   <select
                     name="accountId"
@@ -286,14 +332,19 @@ const Loans = () => {
                   <div className="alert alert-info">
                     <FaInfoCircle />
                     <div>
-                      <p className="font-semibold">Estimated Monthly Payment (EMI)</p>
+                      <p className="font-semibold">
+                        Estimated Monthly Payment (EMI)
+                      </p>
                       <p className="text-lg font-bold">
                         ₦
                         {calculateEMI(
                           Number.parseFloat(formData.amount || 0),
-                          loanTypes.find((lt) => lt.id === formData.loanType)?.rate || 0,
+                          loanTypes.find((lt) => lt.id === formData.loanType)
+                            ?.rate || 0,
                           Number.parseInt(formData.duration),
-                        ).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 0,
+                        })}
                       </p>
                     </div>
                   </div>
@@ -318,25 +369,35 @@ const Loans = () => {
               <div className="text-center py-12">
                 <FaMoneyBillWave className="text-6xl text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500 mb-4">No loan applications yet</p>
-                <button onClick={() => setActiveTab("apply")} className="btn btn-primary">
+                <button
+                  onClick={() => setActiveTab("apply")}
+                  className="btn btn-primary"
+                >
                   Apply for a Loan
                 </button>
               </div>
             ) : (
               <div className="space-y-4">
                 {loanApplications.map((loan) => (
-                  <div key={loan.id} className="p-6 border rounded-xl hover:shadow-md transition-shadow">
+                  <div
+                    key={loan.id}
+                    className="p-6 border rounded-xl hover:shadow-md transition-shadow"
+                  >
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-bold text-gray-800">{loan.loanType}</h3>
+                          <h3 className="text-xl font-bold text-gray-800">
+                            {loan.loanType}
+                          </h3>
                           {getStatusBadge(loan.status)}
                         </div>
                         <p className="text-gray-600 mb-2">{loan.purpose}</p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                           <div>
                             <p className="text-xs text-gray-500">Loan Amount</p>
-                            <p className="font-bold text-primary">₦{loan.amount.toLocaleString()}</p>
+                            <p className="font-bold text-primary">
+                              ₦{loan.amount.toLocaleString()}
+                            </p>
                           </div>
                           <div>
                             <p className="text-xs text-gray-500">Duration</p>
@@ -344,24 +405,35 @@ const Loans = () => {
                           </div>
                           <div>
                             <p className="text-xs text-gray-500">Monthly EMI</p>
-                            <p className="font-bold">₦{loan.emi.toLocaleString()}</p>
+                            <p className="font-bold">
+                              ₦{loan.emi.toLocaleString()}
+                            </p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">Interest Rate</p>
+                            <p className="text-xs text-gray-500">
+                              Interest Rate
+                            </p>
                             <p className="font-bold">{loan.interestRate}%</p>
                           </div>
                         </div>
                         <p className="text-xs text-gray-500 mt-3">
-                          Applied on {new Date(loan.appliedDate).toLocaleDateString()}
+                          Applied on{" "}
+                          {new Date(loan.appliedDate).toLocaleDateString()}
                         </p>
                       </div>
 
                       {loan.status === "pending" && (
                         <div className="flex gap-2">
-                          <button onClick={() => approveLoan(loan.id)} className="btn btn-success btn-sm">
+                          <button
+                            onClick={() => approveLoan(loan.id)}
+                            className="btn btn-success btn-sm"
+                          >
                             Approve (Demo)
                           </button>
-                          <button onClick={() => rejectLoan(loan.id)} className="btn btn-error btn-sm">
+                          <button
+                            onClick={() => rejectLoan(loan.id)}
+                            className="btn btn-error btn-sm"
+                          >
                             Reject
                           </button>
                         </div>
@@ -383,22 +455,29 @@ const Loans = () => {
               <h2 className="card-title mb-4">Interest Rates</h2>
               <div className="space-y-4">
                 {loanTypes.map((loan) => {
-                  const Icon = loan.icon
+                  const Icon = loan.icon;
                   return (
-                    <div key={loan.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div
+                      key={loan.id}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                    >
                       <div className="flex items-center gap-3">
                         <Icon className="text-2xl text-primary" />
                         <div>
                           <p className="font-semibold">{loan.name}</p>
-                          <p className="text-sm text-gray-500">Up to ₦{(loan.max / 1000).toFixed(0)}K</p>
+                          <p className="text-sm text-gray-500">
+                            Up to ₦{(loan.max / 1000).toFixed(0)}K
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-primary">{loan.rate}%</p>
+                        <p className="text-2xl font-bold text-primary">
+                          {loan.rate}%
+                        </p>
                         <p className="text-xs text-gray-500">per annum</p>
                       </div>
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -412,28 +491,36 @@ const Loans = () => {
                   <FaCheckCircle className="text-green-500 mt-1" />
                   <div>
                     <p className="font-semibold">Age Requirement</p>
-                    <p className="text-sm text-gray-600">Must be 21-65 years old</p>
+                    <p className="text-sm text-gray-600">
+                      Must be 21-65 years old
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FaCheckCircle className="text-green-500 mt-1" />
                   <div>
                     <p className="font-semibold">Active Account</p>
-                    <p className="text-sm text-gray-600">Must have an active Softbank account</p>
+                    <p className="text-sm text-gray-600">
+                      Must have an active Softbank account
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FaCheckCircle className="text-green-500 mt-1" />
                   <div>
                     <p className="font-semibold">Credit Score</p>
-                    <p className="text-sm text-gray-600">Good credit history preferred</p>
+                    <p className="text-sm text-gray-600">
+                      Good credit history preferred
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FaCheckCircle className="text-green-500 mt-1" />
                   <div>
                     <p className="font-semibold">Income Proof</p>
-                    <p className="text-sm text-gray-600">Regular source of income required</p>
+                    <p className="text-sm text-gray-600">
+                      Regular source of income required
+                    </p>
                   </div>
                 </div>
               </div>
@@ -452,7 +539,7 @@ const Loans = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Loans
+export default Loans;
