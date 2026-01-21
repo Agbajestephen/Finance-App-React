@@ -11,8 +11,29 @@ import {
   updateEmail,
 } from "firebase/auth";
 
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { createMainAccount } from "../services/createMainAccount";
+import { logUserActivity } from "../services/adminService";
+import { doc, getDoc } from "firebase/firestore";
+
+// =======================
+// PASSWORD VALIDATION
+// =======================
+const isStrongPassword = (password) => {
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSymbols = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  return (
+    password.length >= minLength &&
+    hasUpperCase &&
+    hasLowerCase &&
+    hasNumbers &&
+    hasSymbols
+  );
+};
 
 // =======================
 // CREATE CONTEXT
@@ -32,6 +53,7 @@ export const useAuth = () => {
 // =======================
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -76,8 +98,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError("");
-      return await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      // Logging is handled in auth state listener
+      return userCredential;
     } catch (err) {
+      // Log failed login attempt
+      await logUserActivity(null, "failed_login", email);
       setError(err.message);
       throw err;
     }
@@ -87,6 +117,9 @@ export const AuthProvider = ({ children }) => {
   // LOGOUT
   // =======================
   const logout = async () => {
+    if (currentUser) {
+      await logUserActivity(currentUser.uid, "logout");
+    }
     await signOut(auth);
   };
 
@@ -119,11 +152,31 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
-      setLoading(false);
 
       if (user) {
+        // Fetch user role from Firestore
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setUserRole(userData.role || "user");
+          } else {
+            setUserRole("user");
+          }
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+          setUserRole("user");
+        }
+
         await createMainAccount(user);
+        // Log successful login
+        await logUserActivity(user.uid, "login");
+      } else {
+        setUserRole(null);
       }
+
+      setLoading(false);
     });
 
     return unsubscribe;
@@ -133,6 +186,7 @@ export const AuthProvider = ({ children }) => {
   // =======================
   const value = {
     currentUser,
+    userRole,
     signup,
     login,
     logout,

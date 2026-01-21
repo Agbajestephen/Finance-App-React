@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "soft-bank-aafa7"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

@@ -19,6 +19,8 @@ import Services from "./pages/Services.jsx";
 import MyPrivileges from "./pages/MyPrivileges.jsx";
 import Setting from "./pages/Setting.jsx";
 import Signup from "./pages/SignUp.jsx";
+import AdminLogin from "./pages/AdminLogin.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Terms from "./pages/Terms.jsx";
@@ -30,16 +32,18 @@ function App() {
         <BankingProvider>
           <Toaster position="top-right" />
 
-          
-
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Welcome />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/terms" element={<Terms />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
             {/* Protected Routes */}
             <Route
