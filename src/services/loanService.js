@@ -5,6 +5,7 @@ import {
   getDocs,
   doc,
   updateDoc,
+  getDoc,
   query,
   where,
   orderBy,
@@ -64,11 +65,60 @@ export const getUserLoanApplications = async (userId) => {
 export const approveLoanApplication = async (loanId, adminId) => {
   try {
     const loanRef = doc(db, "loans", loanId);
+    const loanSnap = await getDoc(loanRef);
+
+    if (!loanSnap.exists()) {
+      throw new Error("Loan application not found");
+    }
+
+    const loanData = loanSnap.data();
+
+    // Update loan status
     await updateDoc(loanRef, {
       status: "approved",
       approvedDate: new Date(),
       approvedBy: adminId,
     });
+
+    // Credit the loan amount to user's account
+    const { loadAccounts, saveAccounts, loadTransactions, saveTransactions } =
+      await import("./bankingService");
+
+    const userAccounts = await loadAccounts(loanData.userId);
+    const userTransactions = await loadTransactions(loanData.userId);
+
+    // Find the account to credit
+    const accountToCredit = userAccounts.find(
+      (acc) => acc.id === loanData.accountId,
+    );
+    if (!accountToCredit) {
+      throw new Error("User account not found");
+    }
+
+    // Update account balance
+    const updatedAccounts = userAccounts.map((acc) =>
+      acc.id === loanData.accountId
+        ? { ...acc, balance: acc.balance + loanData.amount }
+        : acc,
+    );
+
+    // Log the transaction
+    const loanTransaction = {
+      id: crypto.randomUUID(),
+      type: "loan_credit",
+      amount: loanData.amount,
+      description: `Loan approved: ${loanData.loanType}`,
+      accountId: loanData.accountId,
+      date: new Date().toISOString(),
+      status: "completed",
+    };
+
+    const updatedTransactions = [loanTransaction, ...userTransactions];
+
+    // Save updated accounts and transactions
+    await saveAccounts(loanData.userId, updatedAccounts);
+    await saveTransactions(loanData.userId, updatedTransactions);
+
     return true;
   } catch (error) {
     console.error("Error approving loan:", error);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import zxcvbn from "zxcvbn";
 
@@ -11,6 +11,8 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -86,6 +88,8 @@ export default function Signup() {
                 placeholder="Password"
                 value={password}
                 onChange={setPassword}
+                showPassword={showPassword}
+                onTogglePassword={() => setShowPassword(!showPassword)}
               />
 
               {/* Strength Meter */}
@@ -112,13 +116,17 @@ export default function Signup() {
                 </p>
               </div>
 
-              {/* Confirm */}
+              {/* Confirm Password */}
               <Input
                 icon={<FaLock />}
                 type="password"
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={setConfirmPassword}
+                showPassword={showConfirmPassword}
+                onTogglePassword={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
               />
 
               {/* Terms */}
@@ -165,20 +173,43 @@ export default function Signup() {
 }
 
 /* Reusable Input Component */
-function Input({ icon, type = "text", placeholder, value, onChange }) {
+function Input({
+  icon,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  showPassword,
+  onTogglePassword,
+}) {
   return (
     <div className="relative">
       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
         {icon}
       </span>
       <input
-        type={type}
+        type={
+          showPassword !== undefined
+            ? showPassword
+              ? "text"
+              : "password"
+            : type
+        }
         placeholder={placeholder}
-        className="input input-bordered w-full pl-10"
+        className={`input input-bordered w-full pl-10 ${onTogglePassword ? "pr-10" : ""}`}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required
       />
+      {onTogglePassword && (
+        <button
+          type="button"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          onClick={onTogglePassword}
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+      )}
     </div>
   );
 }

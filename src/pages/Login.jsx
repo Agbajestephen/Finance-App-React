@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { signInWithGoogle } from '../firebase';
-import toast from 'react-hot-toast';
-import { FaGoogle, FaEnvelope, FaLock } from 'react-icons/fa';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { signInWithGoogle } from "../firebase";
+import toast from "react-hot-toast";
+import {
+  FaGoogle,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
@@ -17,18 +25,18 @@ export default function Login() {
     e.preventDefault();
 
     if (!email || !password) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
 
     try {
       setLoading(true);
       await login(email.trim(), password);
-      toast.success('Welcome back');
-      navigate('/dashboard');
+      toast.success("Welcome back");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
-      toast.error('Invalid email or password');
+      toast.error("Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -38,11 +46,11 @@ export default function Login() {
     try {
       setLoading(true);
       await signInWithGoogle();
-      toast.success('Signed in with Google');
-      navigate('/dashboard');
+      toast.success("Signed in with Google");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
-      toast.error('Google sign-in failed');
+      toast.error("Google sign-in failed");
     } finally {
       setLoading(false);
     }
@@ -50,78 +58,95 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
-          <p className="text-gray-500 mt-2">Sign in to continue</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="text-sm font-medium text-gray-700">Email</label>
-            <div className="relative mt-1">
-              <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="email"
-                className="w-full border rounded-lg pl-10 py-2 focus:ring-2 focus:ring-indigo-500"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-              />
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+            <p className="text-gray-500 mt-2">Sign in to continue</p>
           </div>
 
-          <div>
-            <div className="flex justify-between text-sm">
-              <label className="font-medium text-gray-700">Password</label>
-              <Link to="/forgot-password" className="text-indigo-600 hover:underline">
-                Forgot password?
-              </Link>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="text-sm font-medium text-gray-700">Email</label>
+              <div className="relative mt-1">
+                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="email"
+                  className="w-full border rounded-lg pl-10 py-2 focus:ring-2 focus:ring-indigo-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                />
+              </div>
             </div>
-            <div className="relative mt-1">
-              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="password"
-                className="w-full border rounded-lg pl-10 py-2 focus:ring-2 focus:ring-indigo-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-              />
+
+            <div>
+              <div className="flex justify-between text-sm">
+                <label className="font-medium text-gray-700">Password</label>
+                <Link
+                  to="/forgot-password"
+                  className="text-indigo-600 hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <div className="relative mt-1">
+                <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full border rounded-lg pl-10 pr-10 py-2 focus:ring-2 focus:ring-indigo-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
             </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-60"
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+
+          <div className="my-6 flex items-center">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="px-3 text-sm text-gray-500">OR</span>
+            <div className="flex-1 h-px bg-gray-200" />
           </div>
 
           <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-60"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-2 border rounded-lg py-2 hover:bg-gray-50"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            <FaGoogle className="text-red-500" />
+            Continue with Google
           </button>
-        </form>
 
-        <div className="my-6 flex items-center">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="px-3 text-sm text-gray-500">OR</span>
-          <div className="flex-1 h-px bg-gray-200" />
+          <p className="text-center text-sm text-gray-600 mt-6">
+            Don’t have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-indigo-600 font-medium hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
         </div>
-
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-2 border rounded-lg py-2 hover:bg-gray-50"
-        >
-          <FaGoogle className="text-red-500" />
-          Continue with Google
-        </button>
-
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Don’t have an account?{' '}
-          <Link to="/signup" className="text-indigo-600 font-medium hover:underline">
-            Sign up
-          </Link>
-        </p>
-
-      </div>
+      </motion.div>
     </div>
   );
 }

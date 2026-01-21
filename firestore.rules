@@ -21,6 +21,22 @@ service cloud.firestore {
       }
     }
     
+    match /loans/{loanId} {
+      allow create: if signedIn();
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin");
+      allow write: if signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    match /userLogs/{logId} {
+      allow read: if signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      allow write: if signedIn();
+    }
+
+    match /fraudLogs/{logId} {
+      allow read: if signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      allow write: if signedIn();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
