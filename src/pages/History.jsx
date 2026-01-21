@@ -1,48 +1,54 @@
-"use client"
-
-import { useState, useMemo } from "react"
-import { useBanking } from "../contexts/BankingContext"
-import { FaSearch, FaDownload, FaFilter, FaHistory, FaClock } from "react-icons/fa"
-import toast from "react-hot-toast"
+import { useState, useMemo } from "react";
+import { useBanking } from "../contexts/BankingContext";
+import {
+  FaSearch,
+  FaDownload,
+  FaFilter,
+  FaHistory,
+  FaClock,
+} from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function History() {
-  const { getAllUserTransactions } = useBanking()
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterType, setFilterType] = useState("all")
-  const [filterDate, setFilterDate] = useState("all")
-  const [sortOrder, setSortOrder] = useState("newest")
+  const { getAllUserTransactions } = useBanking();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("all");
+  const [filterDate, setFilterDate] = useState("all");
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
-  const allTransactions = getAllUserTransactions()
+  const allTransactions = getAllUserTransactions();
 
   // Filter and search transactions
   const filteredTransactions = useMemo(() => {
-    let filtered = allTransactions
+    let filtered = allTransactions;
 
     // Filter by type
     if (filterType !== "all") {
-      filtered = filtered.filter((tx) => tx.type === filterType)
+      filtered = filtered.filter((tx) => tx.type === filterType);
     }
 
     // Filter by date
-    const now = new Date()
+    const now = new Date();
     if (filterDate !== "all") {
       filtered = filtered.filter((tx) => {
-        const txDate = new Date(tx.date)
-        const diffDays = Math.floor((now - txDate) / (1000 * 60 * 60 * 24))
+        const txDate = new Date(tx.date);
+        const diffDays = Math.floor((now - txDate) / (1000 * 60 * 60 * 24));
 
         switch (filterDate) {
           case "today":
-            return diffDays === 0
+            return diffDays === 0;
           case "week":
-            return diffDays <= 7
+            return diffDays <= 7;
           case "month":
-            return diffDays <= 30
+            return diffDays <= 30;
           case "3months":
-            return diffDays <= 90
+            return diffDays <= 90;
           default:
-            return true
+            return true;
         }
-      })
+      });
     }
 
     // Search
@@ -53,28 +59,30 @@ export default function History() {
           tx.fromAccount.toLowerCase().includes(searchTerm.toLowerCase()) ||
           tx.toAccount.toLowerCase().includes(searchTerm.toLowerCase()) ||
           tx.id.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
+      );
     }
 
     // Sort
     if (sortOrder === "newest") {
-      filtered.sort((a, b) => new Date(b.date) - new Date(a.date))
+      filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
     } else if (sortOrder === "oldest") {
-      filtered.sort((a, b) => new Date(a.date) - new Date(b.date))
+      filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
     } else if (sortOrder === "highest") {
-      filtered.sort((a, b) => b.amount - a.amount)
+      filtered.sort((a, b) => b.amount - a.amount);
     } else if (sortOrder === "lowest") {
-      filtered.sort((a, b) => a.amount - b.amount)
+      filtered.sort((a, b) => a.amount - b.amount);
     }
 
-    return filtered
-  }, [allTransactions, searchTerm, filterType, filterDate, sortOrder])
+    return filtered;
+  }, [allTransactions, searchTerm, filterType, filterDate, sortOrder]);
 
   // Calculate statistics
   const stats = useMemo(() => {
-    const deposits = allTransactions.filter((tx) => tx.type === "deposit")
-    const withdrawals = allTransactions.filter((tx) => tx.type === "withdrawal")
-    const transfers = allTransactions.filter((tx) => tx.type === "transfer")
+    const deposits = allTransactions.filter((tx) => tx.type === "deposit");
+    const withdrawals = allTransactions.filter(
+      (tx) => tx.type === "withdrawal",
+    );
+    const transfers = allTransactions.filter((tx) => tx.type === "transfer");
 
     return {
       totalTransactions: allTransactions.length,
@@ -84,16 +92,25 @@ export default function History() {
       depositsCount: deposits.length,
       withdrawalsCount: withdrawals.length,
       transfersCount: transfers.length,
-    }
-  }, [allTransactions])
+    };
+  }, [allTransactions]);
 
   const exportToCSV = () => {
     if (filteredTransactions.length === 0) {
-      toast.error("No transactions to export")
-      return
+      toast.error("No transactions to export");
+      return;
     }
 
-    const headers = ["Date", "Type", "Description", "From", "To", "Amount", "Status", "Transaction ID"]
+    const headers = [
+      "Date",
+      "Type",
+      "Description",
+      "From",
+      "To",
+      "Amount",
+      "Status",
+      "Transaction ID",
+    ];
     const csvData = filteredTransactions.map((tx) => [
       new Date(tx.date).toLocaleString(),
       tx.type,
@@ -103,33 +120,36 @@ export default function History() {
       tx.amount,
       tx.status,
       tx.id,
-    ])
+    ]);
 
-    const csv = [headers.join(","), ...csvData.map((row) => row.join(","))].join("\n")
+    const csv = [
+      headers.join(","),
+      ...csvData.map((row) => row.join(",")),
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: "text/csv" })
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `transaction-history-${new Date().toISOString().split("T")[0]}.csv`
-    a.click()
-    window.URL.revokeObjectURL(url)
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `transaction-history-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
 
-    toast.success("Transaction history exported!")
-  }
+    toast.success("Transaction history exported!");
+  };
 
   const getTransactionIcon = (type) => {
     switch (type) {
       case "deposit":
-        return "💰"
+        return "💰";
       case "withdrawal":
-        return "💸"
+        return "💸";
       case "transfer":
-        return "🔄"
+        return "🔄";
       default:
-        return "📝"
+        return "📝";
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -140,7 +160,9 @@ export default function History() {
             <FaHistory className="text-primary" />
             Transaction History
           </h1>
-          <p className="text-sm text-gray-500 mt-1">View and manage all your transaction records</p>
+          <p className="text-sm text-gray-500 mt-1">
+            View and manage all your transaction records
+          </p>
         </div>
         <button onClick={exportToCSV} className="btn btn-primary gap-2">
           <FaDownload />
@@ -152,22 +174,30 @@ export default function History() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="stat bg-base-100 shadow rounded-lg">
           <div className="stat-title">Total Transactions</div>
-          <div className="stat-value text-primary">{stats.totalTransactions}</div>
+          <div className="stat-value text-primary">
+            {stats.totalTransactions}
+          </div>
           <div className="stat-desc">All time</div>
         </div>
         <div className="stat bg-base-100 shadow rounded-lg">
           <div className="stat-title">Total Deposits</div>
-          <div className="stat-value text-success text-2xl">₦{stats.totalDeposits.toLocaleString()}</div>
+          <div className="stat-value text-success text-2xl">
+            ₦{stats.totalDeposits.toLocaleString()}
+          </div>
           <div className="stat-desc">{stats.depositsCount} transactions</div>
         </div>
         <div className="stat bg-base-100 shadow rounded-lg">
           <div className="stat-title">Total Withdrawals</div>
-          <div className="stat-value text-error text-2xl">₦{stats.totalWithdrawals.toLocaleString()}</div>
+          <div className="stat-value text-error text-2xl">
+            ₦{stats.totalWithdrawals.toLocaleString()}
+          </div>
           <div className="stat-desc">{stats.withdrawalsCount} transactions</div>
         </div>
         <div className="stat bg-base-100 shadow rounded-lg">
           <div className="stat-title">Total Transfers</div>
-          <div className="stat-value text-warning text-2xl">₦{stats.totalTransfers.toLocaleString()}</div>
+          <div className="stat-value text-warning text-2xl">
+            ₦{stats.totalTransfers.toLocaleString()}
+          </div>
           <div className="stat-desc">{stats.transfersCount} transactions</div>
         </div>
       </div>
@@ -265,9 +295,9 @@ export default function History() {
               )}
               <button
                 onClick={() => {
-                  setSearchTerm("")
-                  setFilterType("all")
-                  setFilterDate("all")
+                  setSearchTerm("");
+                  setFilterType("all");
+                  setFilterDate("all");
                 }}
                 className="btn btn-ghost btn-xs"
               >
@@ -281,13 +311,17 @@ export default function History() {
       {/* Transaction List */}
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title mb-4">Transactions ({filteredTransactions.length})</h2>
+          <h2 className="card-title mb-4">
+            Transactions ({filteredTransactions.length})
+          </h2>
 
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-12">
               <FaClock className="mx-auto text-6xl text-gray-300 mb-4" />
               <p className="text-gray-500 text-lg">No transactions found</p>
-              <p className="text-gray-400 text-sm">Try adjusting your filters</p>
+              <p className="text-gray-400 text-sm">
+                Try adjusting your filters
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -304,16 +338,24 @@ export default function History() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTransactions.map((tx) => (
+                  {paginatedTransactions.map((tx) => (
                     <tr key={tx.id} className="hover">
                       <td>
-                        <div className="text-sm">{new Date(tx.date).toLocaleDateString()}</div>
-                        <div className="text-xs text-gray-500">{new Date(tx.date).toLocaleTimeString()}</div>
+                        <div className="text-sm">
+                          {new Date(tx.date).toLocaleDateString()}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {new Date(tx.date).toLocaleTimeString()}
+                        </div>
                       </td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <span className="text-xl">{getTransactionIcon(tx.type)}</span>
-                          <span className="capitalize font-medium">{tx.type}</span>
+                          <span className="text-xl">
+                            {getTransactionIcon(tx.type)}
+                          </span>
+                          <span className="capitalize font-medium">
+                            {tx.type}
+                          </span>
                         </div>
                       </td>
                       <td>
@@ -332,7 +374,8 @@ export default function History() {
                                 : "text-warning"
                           }`}
                         >
-                          {tx.type === "deposit" ? "+" : "-"}₦{tx.amount.toLocaleString()}
+                          {tx.type === "deposit" ? "+" : "-"}₦
+                          {tx.amount.toLocaleString()}
                         </div>
                       </td>
                       <td>
@@ -354,8 +397,60 @@ export default function History() {
               </table>
             </div>
           )}
+
+          {/* Pagination Controls */}
+          {filteredTransactions.length > itemsPerPage && (
+            <div className="flex justify-between items-center mt-6">
+              <div className="text-sm text-gray-600">
+                Showing {startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredTransactions.length)} of{" "}
+                {filteredTransactions.length} transactions
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="btn btn-sm btn-outline"
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`btn btn-sm ${currentPage === pageNum ? "btn-primary" : "btn-outline"}`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="btn btn-sm btn-outline"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }

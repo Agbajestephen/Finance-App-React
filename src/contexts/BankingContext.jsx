@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import {
@@ -82,7 +80,7 @@ export const BankingProvider = ({ children }) => {
             welcomeBonusGranted: true, // 🔒 permanent lock
             createdAt: new Date().toISOString(),
           },
-          { merge: true }
+          { merge: true },
         );
 
         setLoading(false);
@@ -117,9 +115,7 @@ export const BankingProvider = ({ children }) => {
   const getAccountById = (id) => accounts.find((a) => a.id === id);
 
   const getAllUserTransactions = () =>
-    [...transactions].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
+    [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const logTransaction = (data) => {
     setTransactions((prev) => [
@@ -141,10 +137,8 @@ export const BankingProvider = ({ children }) => {
 
     setAccounts((prev) =>
       prev.map((acc) =>
-        acc.id === accountId
-          ? { ...acc, balance: acc.balance + amount }
-          : acc
-      )
+        acc.id === accountId ? { ...acc, balance: acc.balance + amount } : acc,
+      ),
     );
 
     logTransaction({
@@ -164,10 +158,8 @@ export const BankingProvider = ({ children }) => {
 
     setAccounts((prev) =>
       prev.map((acc) =>
-        acc.id === accountId
-          ? { ...acc, balance: acc.balance - amount }
-          : acc
-      )
+        acc.id === accountId ? { ...acc, balance: acc.balance - amount } : acc,
+      ),
     );
 
     logTransaction({
@@ -178,7 +170,12 @@ export const BankingProvider = ({ children }) => {
     });
   };
 
-  const transfer = (fromId, toId, amount, description = "Internal Transfer") => {
+  const transfer = (
+    fromId,
+    toId,
+    amount,
+    description = "Internal Transfer",
+  ) => {
     if (amount <= 0) throw new Error("Invalid amount");
 
     const from = getAccountById(fromId);
@@ -189,12 +186,10 @@ export const BankingProvider = ({ children }) => {
 
     setAccounts((prev) =>
       prev.map((acc) => {
-        if (acc.id === fromId)
-          return { ...acc, balance: acc.balance - amount };
-        if (acc.id === toId)
-          return { ...acc, balance: acc.balance + amount };
+        if (acc.id === fromId) return { ...acc, balance: acc.balance - amount };
+        if (acc.id === toId) return { ...acc, balance: acc.balance + amount };
         return acc;
-      })
+      }),
     );
 
     logTransaction({

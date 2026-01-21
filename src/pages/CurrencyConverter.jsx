@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { FaExchangeAlt, FaSync, FaCalculator } from "react-icons/fa";
 import toast from "react-hot-toast";

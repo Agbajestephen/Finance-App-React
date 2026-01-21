@@ -1,5 +1,3 @@
-"use client";
-
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useBanking } from "../contexts/BankingContext";
@@ -46,13 +44,12 @@ export default function DashboardLayout() {
     { id: "profile", label: "Profile", path: "/profile" },
     { id: "history", label: "History", path: "/history" },
     { id: "loans", label: "Loans", path: "/loans" },
-    { id: "services", label: "Services", path: "/services" },
+    
     {
       id: "currency-converter",
       label: "Currency Converter",
       path: "/currency-converter",
     },
-    { id: "privileges", label: "My Privileges", path: "/privileges" },
   ];
 
   const getPageTitle = () => {
@@ -247,33 +244,6 @@ export default function DashboardLayout() {
               {/* Theme Toggle */}
               <ThemeToggle />
 
-              {/* Notifications */}
-              <div className="dropdown dropdown-end">
-                <button className="btn btn-ghost btn-circle relative">
-                  <Bell size={20} />
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border border-base-100"></span>
-                </button>
-                <div className="dropdown-content menu p-4 shadow-2xl bg-base-100 rounded-box w-80 mt-2">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold">Notifications</h3>
-                    <span className="badge badge-primary badge-sm">3 new</span>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="p-3 rounded-lg bg-base-200">
-                      <p className="text-sm font-medium">Payment Received</p>
-                      <p className="text-xs text-base-content/60">
-                        From Barrio • $5,756
-                      </p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-base-200">
-                      <p className="text-sm font-medium">Card Update</p>
-                      <p className="text-xs text-base-content/60">
-                        VISA CTRM 12/22 updated
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               {/* Profile */}
               <div className="dropdown dropdown-end">

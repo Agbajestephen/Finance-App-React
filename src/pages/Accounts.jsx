@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useBanking } from "../contexts/BankingContext";
 import {
@@ -41,7 +39,7 @@ const Accounts = () => {
       const success = withdraw(
         selectedAccount.id,
         amount,
-        actionDescription || "Withdrawal"
+        actionDescription || "Withdrawal",
       );
       if (!success) {
         alert("Insufficient balance");
@@ -86,10 +84,7 @@ const Accounts = () => {
       {/* ACCOUNTS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {accounts.map((account) => (
-          <div
-            key={account.id}
-            className="card bg-white shadow-xl border"
-          >
+          <div key={account.id} className="card bg-white shadow-xl border">
             <div className="card-body">
               {/* HEADER */}
               <div className="flex justify-between items-start mb-4">
@@ -184,9 +179,7 @@ const Accounts = () => {
               <button
                 onClick={handleSubmitAction}
                 className={`btn ${
-                  actionType === "deposit"
-                    ? "btn-success"
-                    : "btn-error"
+                  actionType === "deposit" ? "btn-success" : "btn-error"
                 } text-white`}
               >
                 Confirm

@@ -15,8 +15,6 @@ import Accounts from "./pages/Accounts.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Profile from "./pages/Profile.jsx";
 import Loans from "./pages/Loans.jsx";
-import Services from "./pages/Services.jsx";
-import MyPrivileges from "./pages/MyPrivileges.jsx";
 import Setting from "./pages/Setting.jsx";
 import Signup from "./pages/SignUp.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
@@ -60,8 +58,6 @@ function App() {
               <Route path="transactions" element={<Transactions />} />
               <Route path="profile" element={<Profile />} />
               <Route path="loans" element={<Loans />} />
-              <Route path="services" element={<Services />} />
-              <Route path="privileges" element={<MyPrivileges />} />
               <Route path="currency-converter" element={<CurrencyConverter />} />
               <Route path="setting" element={<Setting />} />
             </Route>
