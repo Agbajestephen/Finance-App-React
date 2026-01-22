@@ -31,23 +31,23 @@ const Accounts = () => {
     const amount = Number(actionAmount);
     if (!amount || amount <= 0) return;
 
-    if (actionType === "deposit") {
-      deposit(selectedAccount.id, amount, actionDescription || "Deposit");
-    }
-
-    if (actionType === "withdraw") {
-      const success = withdraw(
-        selectedAccount.id,
-        amount,
-        actionDescription || "Withdrawal",
-      );
-      if (!success) {
-        alert("Insufficient balance");
-        return;
+    try {
+      if (actionType === "deposit") {
+        deposit(selectedAccount.id, amount, actionDescription || "Deposit");
       }
-    }
 
-    setShowActionModal(false);
+      if (actionType === "withdraw") {
+        withdraw(
+          selectedAccount.id,
+          amount,
+          actionDescription || "Withdrawal",
+        );
+      }
+
+      setShowActionModal(false);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const getIcon = (type) => {
