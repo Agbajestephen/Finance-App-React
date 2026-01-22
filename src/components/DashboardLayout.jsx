@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   PieChart,
+  Check,
 } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle.jsx";
 
@@ -26,6 +27,30 @@ export default function DashboardLayout() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "Welcome to Softbank!",
+      message: "Your account has been successfully set up.",
+      time: "2 hours ago",
+      read: false,
+    },
+    {
+      id: 2,
+      title: "Security Alert",
+      message: "New login detected from Chrome on Windows.",
+      time: "1 day ago",
+      read: false,
+    },
+    {
+      id: 3,
+      title: "Transaction Alert",
+      message: "You received ₦50,000 from John Doe.",
+      time: "2 days ago",
+      read: true,
+    },
+  ]);
 
   const handleLogout = async () => {
     try {
@@ -44,7 +69,7 @@ export default function DashboardLayout() {
     { id: "profile", label: "Profile", path: "/profile" },
     { id: "history", label: "History", path: "/history" },
     { id: "loans", label: "Loans", path: "/loans" },
-    
+
     {
       id: "currency-converter",
       label: "Currency Converter",
@@ -241,9 +266,120 @@ export default function DashboardLayout() {
                 <Search size={20} />
               </button>
 
+              {/* Notifications */}
+              <div className="dropdown dropdown-end">
+                <button
+                  className="btn btn-ghost btn-circle relative"
+                  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                >
+                  <Bell size={20} />
+                  {notifications.filter((n) => !n.read).length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {notifications.filter((n) => !n.read).length}
+                    </span>
+                  )}
+                </button>
+
+                <div
+                  className={`dropdown-content menu p-0 shadow-2xl bg-base-100 rounded-box w-80 mt-2 ${
+                    isNotificationsOpen ? "block" : "hidden"
+                  }`}
+                >
+                  <div className="p-4 border-b">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold">Notifications</h3>
+                      <button
+                        onClick={() => setIsNotificationsOpen(false)}
+                        className="btn btn-ghost btn-xs btn-circle"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-4 text-center text-base-content/60">
+                        No notifications
+                      </div>
+                    ) : (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`p-4 border-b hover:bg-base-200 cursor-pointer ${
+                            !notification.read ? "bg-blue-50" : ""
+                          }`}
+                          onClick={() => {
+                            setNotifications((prev) =>
+                              prev.map((n) =>
+                                n.id === notification.id
+                                  ? { ...n, read: true }
+                                  : n,
+                              ),
+                            );
+                          }}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div
+                              className={`w-2 h-2 rounded-full mt-2 ${
+                                !notification.read
+                                  ? "bg-blue-500"
+                                  : "bg-transparent"
+                              }`}
+                            />
+                            <div className="flex-1">
+                              <h4 className="font-medium text-sm">
+                                {notification.title}
+                              </h4>
+                              <p className="text-xs text-base-content/60 mt-1">
+                                {notification.message}
+                              </p>
+                              <p className="text-xs text-base-content/50 mt-2">
+                                {notification.time}
+                              </p>
+                            </div>
+                            {!notification.read && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setNotifications((prev) =>
+                                    prev.map((n) =>
+                                      n.id === notification.id
+                                        ? { ...n, read: true }
+                                        : n,
+                                    ),
+                                  );
+                                }}
+                                className="btn btn-ghost btn-xs"
+                              >
+                                <Check size={14} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {notifications.length > 0 && (
+                    <div className="p-3 border-t">
+                      <button
+                        onClick={() => {
+                          setNotifications((prev) =>
+                            prev.map((n) => ({ ...n, read: true })),
+                          );
+                        }}
+                        className="btn btn-ghost btn-sm w-full"
+                      >
+                        Mark all as read
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Theme Toggle */}
               <ThemeToggle />
-
 
               {/* Profile */}
               <div className="dropdown dropdown-end">
