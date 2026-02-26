@@ -41,7 +41,7 @@ const Accounts = () => {
       const success = withdraw(
         selectedAccount.id,
         amount,
-        actionDescription || "Withdrawal"
+        actionDescription || "Withdrawal" 
       );
       if (!success) {
         alert("Insufficient balance");
